@@ -1,0 +1,3 @@
+class SegmentDestination implements DestinationPlugin {
+
+}
