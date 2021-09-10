@@ -7,12 +7,12 @@ import 'settings.dart';
 
 // System Actions
 class System extends State {
-  late final Configuration _configuration;
-  late final Map<String, dynamic>? _integrations;
-  late final Settings? settings;
-  late bool running;
+  final Configuration _configuration;
+  final Map<String, dynamic>? integrations;
+  final Settings? settings;
+  bool running;
 
-  System(this._configuration, this._integrations, this.settings, this.running);
+  System(this._configuration, this.integrations, this.settings, this.running);
 }
 
 class UpdateSettingsAction implements Action {
@@ -24,7 +24,7 @@ class UpdateSettingsAction implements Action {
   State reduce(State state) {
     if (state is System) {
       var result = System(
-          state._configuration, state._integrations, settings, state.running);
+          state._configuration, state.integrations, settings, state.running);
       return result;
     } else {
       throw Exception("Could not update settings.");
@@ -44,7 +44,7 @@ class AddIntegrationAction implements Action {
       // we need to set any destination plugins to false in the
       // integrations payload.  this prevents them from being sent
       // by segment.com once an event reaches segment.
-      var integrations = state._integrations;
+      var integrations = state.integrations;
       if (integrations != null && integrations.isNotEmpty) {
         integrations[key] = false;
         return System(state._configuration, integrations, state.settings, state.running);
@@ -64,7 +64,7 @@ class RemoveIntegrationAction implements Action {
   @override
   State reduce(State state) {
     if (state is System) {
-      var integrations = state._integrations;
+      var integrations = state.integrations;
       if (integrations != null && integrations.isNotEmpty) {
         integrations.remove(key);
         return System(state._configuration, integrations, state.settings, state.running);
@@ -85,7 +85,7 @@ class ToggleRunningAction implements Action {
   @override
   State reduce(State state) {
     if (state is System) {
-      return System(state._configuration, state._integrations, state.settings, running);
+      return System(state._configuration, state.integrations, state.settings, running);
     } else {
       throw Exception("Could not toggle running state.");
     }
@@ -94,9 +94,9 @@ class ToggleRunningAction implements Action {
 
 // UserInfo Actions {
 class UserInfo extends State {
-  late final String anonymousId;
-  late final String? userId;
-  late final Map<String, dynamic>? traits;
+  final String anonymousId;
+  final String? userId;
+  final Map<String, dynamic>? traits;
 
   UserInfo(this.anonymousId, this.userId, this.traits);
 }
