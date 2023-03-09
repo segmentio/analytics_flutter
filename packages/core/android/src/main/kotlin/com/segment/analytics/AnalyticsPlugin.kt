@@ -1,0 +1,163 @@
+package com.segment.analytics
+
+import NativeContext
+import NativeContextApi
+import NativeContextApp
+import NativeContextDevice
+import NativeContextNetwork
+import NativeContextOS
+import NativeContextScreen
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
+import android.media.MediaDrm
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import java.security.MessageDigest
+import java.util.*
+
+val WIDEVINE_UUID = UUID(-0x121074568629b532L, -0x5c37d8232ae2de13L)
+
+/** AnalyticsPlugin */
+class AnalyticsPlugin : FlutterPlugin, NativeContextApi {
+    private var context: Context? = null
+
+    private fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        context = flutterPluginBinding.applicationContext
+        NativeContextApi.setUp(flutterPluginBinding.binaryMessenger, this)
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        NativeContextApi.setUp(binding.binaryMessenger, null)
+    }
+
+    /**
+     * Workaround for not able to get device id on Android 10 or above using DRM API
+     * {@see https://stackoverflow.com/questions/58103580/android-10-imei-no-longer-available-on-api-29-looking-for-alternatives}
+     * {@see https://developer.android.com/training/articles/user-data-ids}
+     */
+    private fun getUniqueId(): String? {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2)
+            return null
+
+        var wvDrm: MediaDrm? = null
+        return try {
+            wvDrm = MediaDrm(WIDEVINE_UUID)
+            val wideVineId = wvDrm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID)
+            val md = MessageDigest.getInstance("SHA-256")
+            md.update(wideVineId)
+            md.digest().toHexString()
+        } catch (e: Exception) {
+            null
+        } finally {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                wvDrm?.close()
+            } else @Suppress("DEPRECATION") {
+                wvDrm?.release()
+            }
+        }
+    }
+
+    private inline fun <reified T> getSystemService(context: Context, serviceConstant: String): T {
+        return context.getSystemService(serviceConstant) as T
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun getContext(
+        collectDeviceId: Boolean,
+        callback: (Result<NativeContext>) -> Unit
+    ) {
+        val displayMetrics = context!!.resources.displayMetrics
+        val packageManager = context!!.packageManager
+        val packageInfo = packageManager.getPackageInfo(context!!.packageName, 0)
+        val appBuild = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            packageInfo.longVersionCode.toString()
+        } else {
+            @Suppress("DEPRECATION")
+            packageInfo.versionCode.toString()
+        }
+        val deviceId = if (collectDeviceId) {
+            getUniqueId()
+        } else {
+            null
+        }
+
+        var wifiConnected: Boolean? = null
+        var cellularConnected: Boolean? = null
+        var bluetoothConnected: Boolean? = null
+
+        if (context!!.checkCallingOrSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+            val connectivityManager =
+                getSystemService<ConnectivityManager>(context!!, Context.CONNECTIVITY_SERVICE)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) @Suppress("DEPRECATION") {
+                connectivityManager.allNetworks.forEach {
+                    val capabilities = connectivityManager.getNetworkCapabilities(it)
+                    // we don't know which network is which at this point, so using
+                    // the or-map allows us to capture the value across all networks
+                    wifiConnected =
+                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+                    cellularConnected =
+                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+                    bluetoothConnected =
+                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ?: false
+                }
+            } else @Suppress("DEPRECATION") {
+                val wifiInfo =
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                wifiConnected = wifiInfo?.isConnected ?: false
+
+                val bluetoothInfo =
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH)
+                bluetoothConnected = bluetoothInfo?.isConnected ?: false
+
+                val cellularInfo =
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                cellularConnected = cellularInfo?.isConnected ?: false
+            }
+        }
+
+        callback(
+            Result.success(
+                NativeContext(
+                    app = NativeContextApp(
+                        build = appBuild,
+                        name = packageInfo.applicationInfo.loadLabel(
+                            packageManager
+                        ).toString(),
+                        namespace = packageInfo.packageName,
+                        version = packageInfo.versionName
+                    ),
+                    device = NativeContextDevice(
+                        id = deviceId,
+                        manufacturer = Build.MANUFACTURER,
+                        model = Build.MODEL,
+                        name = Build.DEVICE,
+                        type = "android"
+                    ),
+                    locale = Locale.getDefault().language + "-" + Locale.getDefault().country,
+                    network = NativeContextNetwork(
+                        cellular = cellularConnected,
+                        wifi = wifiConnected,
+                        bluetooth = bluetoothConnected,
+                    ),
+                    os = NativeContextOS(
+                        name = "Android",
+                        version = Build.VERSION.RELEASE,
+                    ),
+                    screen = NativeContextScreen(
+                        height = displayMetrics.heightPixels.toLong(),
+                        width = displayMetrics.widthPixels.toLong(),
+                        density = displayMetrics.density.toDouble(),
+                    ),
+                    timezone = TimeZone.getDefault().id,
+                    userAgent = System.getProperty("http.agent")
+                )
+            )
+        )
+    }
+}
