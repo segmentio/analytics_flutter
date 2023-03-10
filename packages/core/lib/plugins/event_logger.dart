@@ -12,7 +12,7 @@ class EventLogger extends DestinationPlugin {
 
   @override
   void configure(Analytics analytics) {
-    this.analytics = analytics;
+    pAnalytics = analytics;
   }
 
   @override

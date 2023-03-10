@@ -7,16 +7,17 @@ abstract class Plugin {
   final PluginType type;
 
   @protected
-  Analytics? analytics;
+  Analytics? pAnalytics;
+  Analytics? get analytics => pAnalytics;
 
   Plugin(this.type);
 
   void clear() {
-    analytics = null;
+    pAnalytics = null;
   }
 
   void configure(Analytics analytics) {
-    this.analytics = analytics;
+    pAnalytics = analytics;
   }
 
   void update(Map<String, dynamic> settings, ContextUpdateType type) {
@@ -30,7 +31,7 @@ abstract class Plugin {
 
   @mustCallSuper
   void shutdown() {
-    analytics = null;
+    pAnalytics = null;
   }
 }
 
@@ -133,7 +134,7 @@ abstract class DestinationPlugin extends EventPlugin {
 
   @override
   void configure(Analytics analytics) {
-    this.analytics = analytics;
+    pAnalytics = analytics;
     apply((plugin) => plugin.configure(analytics));
   }
 

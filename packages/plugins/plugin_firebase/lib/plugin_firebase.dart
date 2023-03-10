@@ -1,4 +1,4 @@
-library plugin_firebase;
+library analytics_plugin_firebase;
 
 import 'package:analytics/event.dart';
 import 'package:analytics/logger.dart';
