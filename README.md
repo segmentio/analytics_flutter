@@ -590,5 +590,7 @@ Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
 
 MIT
 
+Note: The Flutter name and logo are trademarks owned by Google.
+
 [circleci-image]: TODO
 [circleci-url]: https://app.circleci.com/pipelines/github/segmentio/analytics-flutter
