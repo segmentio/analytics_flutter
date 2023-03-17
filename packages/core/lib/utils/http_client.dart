@@ -45,13 +45,16 @@ class HTTPClient {
       if (response.statusCode < 300) {
         return true;
       } else if (response.statusCode < 400) {
-        reportInternalError(NetworkUnexpectedHTTPCode(response.statusCode));
+        reportInternalError(NetworkUnexpectedHTTPCode(response.statusCode),
+            analytics: _analytics.target);
         return false;
       } else if (response.statusCode == 429) {
-        reportInternalError(NetworkServerLimited(response.statusCode));
+        reportInternalError(NetworkServerLimited(response.statusCode),
+            analytics: _analytics.target);
         return false;
       } else {
-        reportInternalError(NetworkServerRejected(response.statusCode));
+        reportInternalError(NetworkServerRejected(response.statusCode),
+            analytics: _analytics.target);
         return false;
       }
     } catch (error) {
@@ -71,7 +74,8 @@ class HTTPClient {
       final response = await urlRequest.send();
 
       if (response.statusCode > 300) {
-        reportInternalError(NetworkUnexpectedHTTPCode(response.statusCode));
+        reportInternalError(NetworkUnexpectedHTTPCode(response.statusCode),
+            analytics: _analytics.target);
         return null;
       }
       final data = await response.stream.toBytes();
@@ -80,7 +84,8 @@ class HTTPClient {
           decoder.convert(utf8.decode(data)) as Map<String, dynamic>;
       return SegmentAPISettings.fromJson(jsonMap);
     } catch (error) {
-      reportInternalError(NetworkUnknown(error.toString()));
+      reportInternalError(NetworkUnknown(error.toString()),
+          analytics: _analytics.target);
       return null;
     }
   }

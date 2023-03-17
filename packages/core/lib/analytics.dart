@@ -3,6 +3,7 @@ library analytics;
 import 'dart:async';
 
 import 'package:analytics/client.dart';
+import 'package:analytics/errors.dart';
 import 'package:analytics/event.dart';
 import 'package:analytics/flush_policies/flush_policy.dart';
 import 'package:analytics/flush_policies/flush_policy_executor.dart';
@@ -48,10 +49,16 @@ class Analytics with ClientMethods {
     InjectContext(),
   ];
 
+  void error(Exception exception) {
+    reportInternalError(exception, analytics: this);
+  }
+
   Analytics(Configuration config, this._store,
       {HTTPClient Function(Analytics)? httpClient})
       : _state = StateManager(_store, System(true, false), config),
         _timeline = Timeline() {
+    _state.init(error);
+
     this.httpClient = httpClient == null ? HTTPClient(this) : httpClient(this);
 
     state.ready.then((_) => _onStateReady());

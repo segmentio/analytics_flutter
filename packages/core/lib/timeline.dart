@@ -119,7 +119,11 @@ class Timeline {
               result = await pluginResult;
             }
           } catch (error) {
-            reportInternalError(PluginError(error));
+            reportInternalError(
+                PluginError(
+                    "Destination ${(plugin as DestinationPlugin).key} failed to execute",
+                    error),
+                analytics: plugin.analytics);
             if (plugin.type == PluginType.destination) {
               log("Destination ${(plugin as DestinationPlugin).key} failed to execute: $error",
                   kind: LogFilterKind.warning);

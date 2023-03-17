@@ -28,6 +28,13 @@ class StateManager {
   final DeepLinkDataState deepLinkData;
   final UserInfoState userInfo;
 
+  void init(ErrorHandler errorHandler) {
+    filters.init(errorHandler);
+    deepLinkData.init(errorHandler);
+    userInfo.init(errorHandler);
+    context.init(errorHandler);
+  }
+
   StateManager(Store store, System system, Configuration configuration)
       : system = SystemState(system),
         configuration = ConfigurationState(configuration),
@@ -64,6 +71,7 @@ class NullableStateNotifier<T> extends StateNotifier<T?> {
 abstract class PersistedState<T> implements AsyncStateNotifier<T> {
   final Store _store;
   final NullableStateNotifier _notifier = NullableStateNotifier<T>();
+  ErrorHandler? _errorHandler;
   Future? _persistance;
   bool _hasUpdated = false;
   final String _key;
@@ -77,6 +85,7 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
     modifier(_notifier.state);
   }
 
+  final Future<T> Function() _initialiser;
   final Completer<void> _readyCompleter = Completer<void>();
   late Future<void> _ready;
   bool _isReady = false;
@@ -95,7 +104,11 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       _hasUpdated = false;
       final state = _notifier.state;
       if (state == null) {
-        reportInternalError(InconsistentStateError(_key));
+        if (_errorHandler != null) {
+          _errorHandler!(InconsistentStateError(_key));
+        } else {
+          reportInternalError(InconsistentStateError(_key));
+        }
       } else {}
       _persistance = _store
           .setPersisted(_key, toJson(state as T))
@@ -146,8 +159,8 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
     }
   }
 
-  PersistedState(this._key, this._store, Future<T> Function() initialiser) {
-    _ready = _readyCompleter.future;
+  void init(ErrorHandler errorHandler) {
+    this._errorHandler = errorHandler;
     addListener((state) {
       if (_persistance != null) {
         _hasUpdated = true;
@@ -162,7 +175,7 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       T v;
 
       if (rawV == null) {
-        final init = await initialiser();
+        final init = await _initialiser();
         _persistance = _store
             .setPersisted(_key, toJson(init))
             .whenComplete(_whenPersistenceComplete);
@@ -185,9 +198,13 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
     }).catchError((e) {
       _error = e;
       final wrappedError = ErrorLoadingStorage(e);
-      reportInternalError(wrappedError);
+      errorHandler(wrappedError);
       throw wrappedError;
     });
+  }
+
+  PersistedState(this._key, this._store, this._initialiser) {
+    _ready = _readyCompleter.future;
   }
 
   @override

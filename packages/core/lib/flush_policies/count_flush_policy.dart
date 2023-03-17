@@ -22,6 +22,7 @@ class CountFlushPolicy extends FlushPolicy {
 
   @override
   reset() {
+    super.reset();
     _count = 0;
   }
 }

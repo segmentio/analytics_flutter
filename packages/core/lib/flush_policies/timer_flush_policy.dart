@@ -32,6 +32,7 @@ class TimerFlushPolicy extends FlushPolicy {
 
   @override
   reset() {
+    super.reset();
     _startTimer();
   }
 }

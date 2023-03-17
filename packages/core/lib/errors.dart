@@ -1,3 +1,4 @@
+import 'package:analytics/analytics.dart';
 import 'package:analytics/logger.dart';
 
 class StorageUnableToCreate implements Exception {
@@ -91,8 +92,9 @@ class JSONUnableToDeserialize implements Exception {
 }
 
 class PluginError implements Exception {
+  final String msg;
   final Object inner;
-  PluginError(this.inner);
+  PluginError(this.msg, this.inner);
 }
 
 class InconsistentStateError implements Exception {
@@ -115,8 +117,14 @@ class ErrorLoadingStorage implements Exception {
 }
 
 void reportInternalError(Exception error,
-    {bool fatal = false, int? frameDepth}) {
+    {bool fatal = false, Analytics? analytics}) {
   log("An internal error occurred: $error", kind: LogFilterKind.error);
+
+  final errorHandler = analytics?.state.configuration.state.errorHandler;
+  if (errorHandler != null) {
+    errorHandler(error);
+  }
+
   if (fatal) {
     AssertionError("A critical error occurred: $error");
   }
