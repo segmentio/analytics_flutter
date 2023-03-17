@@ -90,33 +90,22 @@ You must pass at least the `writeKey`. Additional configuration options are list
   
 ### Client Options
 
-
-this.apiHost = HTTPClient.defaultAPIHost,
-      this.autoAddSegmentDestination = true,
-      this.collectDeviceId = false,
-      this.cdnHost = HTTPClient.defaultCDNHost,
-      this.defaultIntegrationSettings,
-      this.errorHandler,
-      this.flushPolicies,
-      this.appStateStream,
-      this.requestFactory,
-      this.trackApplicationLifecycleEvents = false,
-      this.trackDeeplinks = false,
-      this.debug = false,
-      this.maxBatchSize
-
 | Name                       | Default   | Description                                                                                                                                    |
 | -------------------------- | --------- | -----------------------------------------------------------------------------------------------------------------------------------------------|
 | `writeKey` **(REQUIRED)**  | ''        | Your Segment API key. |
-| `collectDeviceId`          | false     | Set to true to automatically collect the device Id.from the DRM API on Android devices. |
 | `debug`                    | false     | When set to false, it will not generate any info logs. |
-| `apiHost`                  | 'api.segment.io/v1' | Used to specify the regional Segment event endpoint |
+| `collectDeviceId`          | false     | Set to true to automatically collect the device ID from the DRM API on Android devices. |
 | `flushPolicies`            | count=30,time=20s | List of flush policies controlling when to send batches of events to the plugins |
+| `apiHost`                  | "api.segment.io/v1" | Used to specify the regional Segment event endpoint |
 | `cdnHost`            | "cdn-settings.segment.com/v1" | Used to specify the regional Segment settings endpoint |
 | `errorHandler`             | null      | Custom error handler. By default logs errors to the standard flutter logger |
-| `trackAppLifecycleEvents`  | false     | Enable automatic tracking for [app lifecycle events](https://segment.com/docs/connections/spec/mobile/#lifecycle-events): application installed, opened, updated, backgrounded) |
-| `trackDeepLinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link (Note: Requires additional setup on iOS, [see instructions](#ios-deep-link-tracking-setup)) |
+| `trackApplicationLifecycleEvents`  | false     | Enable automatic tracking for [app lifecycle events](https://segment.com/docs/connections/spec/mobile/#lifecycle-events): application installed, opened, updated, backgrounded) |
+| `trackDeeplinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link (Note: Requires additional setup on iOS, [see instructions](#ios-deep-link-tracking-setup)) |
 | `autoAddSegmentDestination`| true      | Set to false to skip adding the SegmentDestination plugin |
+| `defaultIntegrationSettings`| null | Plugin settings that will be used if the request to get the settings from Segment fails. |
+| `maxBatchSize`| true      | 100 | Maximum number of events to send to the API at once. |
+| `appStateStream`| null | Set to override the stream of application foreground or background events. |
+| `requestFactory`| true      | Set to override the factory to generate HTTP requests. Type: [RequestFactory](https://github.com/segmentio/analytics_flutter/blob/master/packages/core/lib/state.dart#L546) |
 
 
 ### iOS Deep Link Tracking Setup
