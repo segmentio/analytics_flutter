@@ -1,5 +1,7 @@
 # @segment/analytics-flutter
 
+**Library currently in pilot**
+
 The hassle-free way to add Segment analytics to your Flutter app.
 
 ## Table of Contents
