@@ -136,7 +136,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/ios"
 
 SPEC CHECKSUMS:
-  analytics: 696b4948885607aaf550a4f94d715588b27b88da
+  analytics: 687312b0561f4499b4b7fc3bcfa395feed3fa138
   analytics_plugin_idfa: 7eb5844bbab21477c5e934a8f896b42e4ecfa095
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
   firebase_analytics: e409b2098cace68b28209f9238cce19fce542c1b

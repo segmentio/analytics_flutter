@@ -100,32 +100,13 @@ You must pass at least the `writeKey`. Additional configuration options are list
 | `cdnHost`            | "cdn-settings.segment.com/v1" | Used to specify the regional Segment settings endpoint |
 | `errorHandler`             | null      | Custom error handler. By default logs errors to the standard flutter logger |
 | `trackApplicationLifecycleEvents`  | false     | Enable automatic tracking for [app lifecycle events](https://segment.com/docs/connections/spec/mobile/#lifecycle-events): application installed, opened, updated, backgrounded) |
-| `trackDeeplinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link (Note: Requires additional setup on iOS, [see instructions](#ios-deep-link-tracking-setup)) |
+| `trackDeeplinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link |
 | `autoAddSegmentDestination`| true      | Set to false to skip adding the SegmentDestination plugin |
 | `defaultIntegrationSettings`| null | Plugin settings that will be used if the request to get the settings from Segment fails. |
 | `maxBatchSize`| true      | 100 | Maximum number of events to send to the API at once. |
 | `appStateStream`| null | Set to override the stream of application foreground or background events. |
 | `requestFactory`| true      | Set to override the factory to generate HTTP requests. Type: [RequestFactory](https://github.com/segmentio/analytics_flutter/blob/master/packages/core/lib/state.dart#L546) |
 
-
-### iOS Deep Link Tracking Setup
-*Note: This is only required for iOS if you are using the `trackDeepLinks` option. Android does not require any additional setup*
-
-To track deep links in iOS you must add the following to your `AppDelegate.m` file:
-
-```objc
-  #import <segment_analytics_react_native-Swift.h>
-  
-  ...
-  
-- (BOOL)application:(UIApplication *)application
-            openURL: (NSURL *)url
-            options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-  
-  [AnalyticsReactNative trackDeepLink:url withOptions:options];  
-  return YES;
-}
-```
 
 ## Client methods
 

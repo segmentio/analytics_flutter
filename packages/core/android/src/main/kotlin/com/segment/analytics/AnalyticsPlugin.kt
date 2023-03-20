@@ -9,27 +9,42 @@ import NativeContextOS
 import NativeContextScreen
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaDrm
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
+import io.flutter.plugin.common.EventChannel.EventSink
+import io.flutter.plugin.common.PluginRegistry
 import java.security.MessageDigest
 import java.util.*
+
 
 val WIDEVINE_UUID = UUID(-0x121074568629b532L, -0x5c37d8232ae2de13L)
 
 /** AnalyticsPlugin */
-class AnalyticsPlugin : FlutterPlugin, NativeContextApi {
+class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHandler,  ActivityAware,
+    PluginRegistry.NewIntentListener {
     private var context: Context? = null
 
     private fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
+    private val eventsChannel = "analytics/deep_link_events"
+
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
         NativeContextApi.setUp(flutterPluginBinding.binaryMessenger, this)
+
+        val eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, eventsChannel)
+        eventChannel.setStreamHandler(this)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -62,6 +77,8 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi {
             }
         }
     }
+
+    private var changeReceiver: BroadcastReceiver? = null
 
     private inline fun <reified T> getSystemService(context: Context, serviceConstant: String): T {
         return context.getSystemService(serviceConstant) as T
@@ -159,5 +176,69 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi {
                 )
             )
         )
+    }
+
+    @NonNull
+    private fun createChangeReceiver(events: EventSink): BroadcastReceiver {
+        return object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent) {
+                val referringApplication = intent.getStringExtra("referringApplication")
+                // NOTE: assuming intent.getAction() is Intent.ACTION_VIEW
+                val dataString: String? = intent.dataString
+                if (dataString == null) {
+                    events.error("UNAVAILABLE", "Link unavailable", null)
+                } else {
+                    val data = mapOf("url" to dataString, "referringApplication" to referringApplication)
+                    events.success(data)
+                }
+            }
+        }
+    }
+
+    private fun handleIntent(context: Context, intent: Intent) {
+        val action = intent.action
+        if (Intent.ACTION_VIEW == action) {
+            if (changeReceiver != null) changeReceiver!!.onReceive(context, intent)
+        }
+    }
+
+    override fun onListen(arguments: Any?, events: EventSink?) {
+        if (events != null) {
+            this.changeReceiver = createChangeReceiver(events)
+        }
+    }
+
+    override fun onCancel(arguments: Any?) {
+        this.changeReceiver = null
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        binding.addOnNewIntentListener(this)
+        if (this.context != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+                binding.activity.intent.putExtra("referringApplication", binding.activity.referrer.toString())
+            }
+            this.handleIntent(this.context!!, binding.activity.intent)
+        }
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        binding.addOnNewIntentListener(this)
+        if (this.context != null) {
+            this.handleIntent(this.context!!, binding.activity.intent)
+        }
+    }
+
+    override fun onDetachedFromActivity() {
+    }
+
+    override fun onNewIntent(intent: Intent): Boolean {
+        if (this.context != null) {
+            this.handleIntent(this.context!!, intent)
+        }
+        return false
     }
 }

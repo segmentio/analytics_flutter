@@ -26,4 +26,10 @@ abstract class AnalyticsPlatform extends PlatformInterface {
 
   Future<NativeContext> getContext({bool collectDeviceId = false}) =>
       throw UnimplementedError('platformVersion() has not been implemented.');
+
+  /// A broadcast stream for receiving incoming link change events.
+  ///
+  /// The [Stream] emits opened links as [String]s.
+  Stream<Map<String, dynamic>> get linkStream => throw UnimplementedError(
+      'getLinksStream has not been implemented on the current platform.');
 }

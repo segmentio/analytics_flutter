@@ -2,7 +2,31 @@ import Flutter
 import UIKit
 import Foundation
 
-public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi {
+public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, FlutterStreamHandler, FlutterApplicationLifeCycleDelegate {
+    public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        _eventSink = events
+        return nil
+    }
+    
+    public func onCancel(withArguments arguments: Any?) -> FlutterError? {
+        _eventSink = nil
+        return nil
+    }
+    
+    var _eventSink:FlutterEventSink?;
+    public func application(_ application: UIApplication, open url: URL, sourceApplication: String, annotation: Any) -> Bool {
+        if (_eventSink != nil) {
+            _eventSink?(["url": url.absoluteString, "referringApplication": sourceApplication])
+        }
+        return true
+    }
+    public func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
+        if (_eventSink != nil) {
+            _eventSink?([url: url.absoluteString])
+        }
+        return true
+    }
+    
     internal static var device = VendorSystem.current
     
     func getContext(collectDeviceId: Bool, completion: @escaping (Result<NativeContext, Error>) -> Void) {
@@ -64,7 +88,10 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi {
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let messenger : FlutterBinaryMessenger = registrar.messenger()
-        let api : NativeContextApi & NSObjectProtocol = AnalyticsPlugin.init()
+        let api : NativeContextApi & NSObjectProtocol & AnalyticsPlugin = AnalyticsPlugin.init()
         NativeContextApiSetup.setUp(binaryMessenger: messenger, api: api)
+        
+        let channel:FlutterEventChannel = FlutterEventChannel(name: "analytics/deep_link_events", binaryMessenger: registrar.messenger())
+        channel.setStreamHandler(api)
     }
 }

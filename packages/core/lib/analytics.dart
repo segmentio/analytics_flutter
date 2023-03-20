@@ -80,6 +80,14 @@ class Analytics with ClientMethods {
   /// Executes when the state store is initialized.
   /// @param isReady
   void _onStateReady() {
+    if (state.configuration.state.trackDeeplinks) {
+      AnalyticsPlatform.instance.linkStream.listen((event) {
+        if (state.configuration.state.trackDeeplinks) {
+          _trackDeepLinkEvent(DeepLinkData.fromJson(event));
+        }
+      });
+    }
+
     for (var plugin in _pluginsToAdd) {
       _addPlugin(plugin);
     }
@@ -120,10 +128,6 @@ class Analytics with ClientMethods {
     if (settings != null && plugin.type == PluginType.destination) {
       state.integrations
           .addIntegration((plugin as DestinationPlugin).key, settings);
-      // store.settings.add(
-      //   (plugin as unknown as DestinationPlugin).key,
-      //   settings
-      // );
     }
 
     if (!state.isReady) {
@@ -191,17 +195,6 @@ class Analytics with ClientMethods {
 
     await Future.wait(
         getPluginsWithFlush(_timeline).map((plugin) => plugin.flush()));
-  }
-
-  Future trackDeepLinks() async {
-    if (state.configuration.state.trackDeeplinks) {
-      final deepLinkProperties = await state.deepLinkData.state;
-      _trackDeepLinkEvent(deepLinkProperties);
-
-      _deepLinkDataListener = state.deepLinkData.addListener((state) {
-        _trackDeepLinkEvent(state);
-      });
-    }
   }
 
   void _trackDeepLinkEvent(DeepLinkData deepLinkProperties) {
