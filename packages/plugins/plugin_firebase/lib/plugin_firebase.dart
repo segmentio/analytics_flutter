@@ -24,7 +24,7 @@ class FirebaseDestination extends DestinationPlugin {
         super('Firebase');
 
   @override
-  Future<RawEvent?>? identify(IdentifyEvent event) async {
+  Future<RawEvent?> identify(IdentifyEvent event) async {
     if (event.userId != null) {
       await FirebaseAnalytics.instance.setUserId(id: event.userId!);
     }
@@ -38,7 +38,7 @@ class FirebaseDestination extends DestinationPlugin {
   }
 
   @override
-  Future<RawEvent?>? track(TrackEvent event) async {
+  Future<RawEvent?> track(TrackEvent event) async {
     await firebaseFuture;
 
     final properties = propertyMapper(event.properties, propertiesMapper);
@@ -177,7 +177,7 @@ class FirebaseDestination extends DestinationPlugin {
   }
 
   @override
-  Future<RawEvent?>? screen(ScreenEvent event) async {
+  Future<RawEvent?> screen(ScreenEvent event) async {
     FirebaseAnalytics.instance
         .logScreenView(screenClass: event.name, screenName: event.name);
     return event;

@@ -125,7 +125,7 @@ class Timeline {
                     error),
                 analytics: plugin.analytics);
             if (plugin.type == PluginType.destination) {
-              log("Destination ${(plugin as DestinationPlugin).key} failed to execute: $error",
+              log("Destination ${plugin.key} failed to execute: $error",
                   kind: LogFilterKind.warning);
             }
           }

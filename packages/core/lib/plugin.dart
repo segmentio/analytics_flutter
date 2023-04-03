@@ -24,9 +24,9 @@ abstract class Plugin {
     // do nothing by default, user can override.
   }
 
-  Future<RawEvent?>? execute(RawEvent event) {
+  Future<RawEvent?> execute(RawEvent event) async {
     // do nothing by default, user can override.
-    return null;
+    return event;
   }
 
   @mustCallSuper
@@ -46,7 +46,7 @@ abstract class EventPlugin extends Plugin with Flushable, Resetable {
   EventPlugin(super.type);
 
   @override
-  Future<RawEvent?>? execute(RawEvent event) {
+  Future<RawEvent?> execute(RawEvent event) {
     switch (event.type) {
       case EventType.identify:
         return identify(event as IdentifyEvent);
@@ -63,23 +63,23 @@ abstract class EventPlugin extends Plugin with Flushable, Resetable {
 
   // Default implementations that forward the event. This gives plugin
   // implementors the chance to interject on an event.
-  Future<RawEvent?>? identify(IdentifyEvent event) async {
+  Future<RawEvent?> identify(IdentifyEvent event) async {
     return event;
   }
 
-  Future<RawEvent?>? track(TrackEvent event) async {
+  Future<RawEvent?> track(TrackEvent event) async {
     return event;
   }
 
-  Future<RawEvent?>? screen(ScreenEvent event) async {
+  Future<RawEvent?> screen(ScreenEvent event) async {
     return event;
   }
 
-  Future<RawEvent?>? alias(AliasEvent event) async {
+  Future<RawEvent?> alias(AliasEvent event) async {
     return event;
   }
 
-  Future<RawEvent?>? group(GroupEvent event) async {
+  Future<RawEvent?> group(GroupEvent event) async {
     return event;
   }
 
@@ -145,7 +145,7 @@ abstract class DestinationPlugin extends EventPlugin {
   }
 
   @override
-  Future<RawEvent?>? execute(RawEvent event) async {
+  Future<RawEvent?> execute(RawEvent event) async {
     if (!_isEnabled(event)) {
       return null;
     }

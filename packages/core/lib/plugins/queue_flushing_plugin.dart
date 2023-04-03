@@ -21,6 +21,8 @@ class QueueFlushingPlugin extends UtilityPlugin {
 
     _state = QueueState("queue_flushing_plugin", analytics.store,
         (json) => eventFromJson(json));
+
+    _state!.init(analytics.error);
   }
 
   @override

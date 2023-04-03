@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 double? extractRevenue(String key, Map<String, dynamic> properties) {
   if (!properties[key]) {
     return null;

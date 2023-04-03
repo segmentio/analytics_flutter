@@ -11,6 +11,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import android.util.Log
+import io.flutter.plugin.common.StandardMethodCodec
 import java.io.IOException
 
 /** PluginAdvertisingIdPlugin */
@@ -23,7 +24,11 @@ class PluginAdvertisingIdPlugin: FlutterPlugin, MethodCallHandler {
   private lateinit var context: Context
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "plugin_advertising_id")
+    val taskQueue =
+      flutterPluginBinding.binaryMessenger.makeBackgroundTaskQueue()
+    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "plugin_advertising_id",
+      StandardMethodCodec.INSTANCE,
+      taskQueue)
     channel.setMethodCallHandler(this)
     context = flutterPluginBinding.applicationContext
   }

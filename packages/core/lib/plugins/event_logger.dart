@@ -16,7 +16,7 @@ class EventLogger extends DestinationPlugin {
   }
 
   @override
-  Future<RawEvent?>? execute(RawEvent event) async {
+  Future<RawEvent?> execute(RawEvent event) async {
     log("${event.type.toString().toUpperCase()} event${event is TrackEvent ? " (${event.event})" : ''} saved: \n${jsonEncode(event.toJson())}",
         kind: logKind);
     return event;

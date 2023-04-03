@@ -227,8 +227,6 @@ class QueueState<T extends JSONSerialisable> extends PersistedState<List<T>> {
 
   Future add(T t) async {
     await modifyState((state) async => setState([...state, t]));
-    // final list = await state;
-    // setState([...list, t]);
   }
 
   void flush({int? number}) {
@@ -243,7 +241,6 @@ class QueueState<T extends JSONSerialisable> extends PersistedState<List<T>> {
 
   @override
   Map<String, dynamic> toJson(List<T> t) {
-    // final a = jsonEncode({"queue": t.map((e) => e.toJson()).toList()});
     return {"queue": t.map((e) => e.toJson()).toList()};
   }
 }

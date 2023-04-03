@@ -2,7 +2,12 @@
 
 **Library currently in pilot**
 
-The hassle-free way to add Segment analytics to your Flutter app.
+The hassle-free way to add Segment analytics to your Flutter app. Supports the following platforms:
+
+* Android
+* iOS
+* MacOS
+* Web
 
 ## Table of Contents
 
