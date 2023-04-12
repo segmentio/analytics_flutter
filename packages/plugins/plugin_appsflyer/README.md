@@ -4,10 +4,16 @@
 
 ## Installation
 
-You need to install the `analytics_plugin_appsflyer` plugin:
+Manually add this package to your `pubspec.yaml` file.
 
-```bash
-flutter pub add analytics_plugin_appsflyer
+```yaml
+dependencies: 
+
+  analytics_plugin_appsflyer: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/plugins/plugin_appsflyer
 ```
 
 ## Usage

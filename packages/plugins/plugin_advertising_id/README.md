@@ -4,10 +4,16 @@
 
 ## Installation
 
-You need to install the `analytics_plugin_advertising_id` plugin:
+Manually add this package to your `pubspec.yaml` file.
 
-```bash
-flutter pub add analytics_plugin_advertising_id
+```yaml
+dependencies: 
+
+  analytics_plugin_advertising_id: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/plugins/plugin_advertising_id
 ```
 
 This plugin requires a `compileSdkVersion` of at least 19. 
@@ -45,6 +51,7 @@ class _MyAppState extends State<MyApp> {
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## License
+
 ```
 MIT License
 

@@ -1,13 +1,18 @@
 # @segment/analytics-flutter
 
-**Library currently in pilot**
+> **Warning**
+> This project is currently only available in Pilot phase and is covered by Segment's First Access & Beta Preview Terms. We encourage you to try out this new library. Please provide feedback via Github issues/PRs, and feel free to submit pull requests.
 
-The hassle-free way to add Segment analytics to your Flutter app. Supports the following platforms:
+The hassle-free way to add Segment analytics to your Flutter[^1] app. 
+
+Supports the following platforms:
 
 * Android
 * iOS
 * MacOS
 * Web
+
+Some destination plugins might not support all platform functionality. Refer to their own Platform SDKs for more details.
 
 ## Table of Contents
 
@@ -18,8 +23,6 @@ The hassle-free way to add Segment analytics to your Flutter app. Supports the f
   - [Usage](#usage)
     - [Setting up the client](#setting-up-the-client)
     - [Client Options](#client-options)
-    - [iOS Deep Link Tracking Setup](#ios-deep-link-tracking-setup)
-    - [Usage with Client](#usage-with-client)
   - [Client methods](#client-methods)
     - [Track](#track)
     - [Screen](#screen)
@@ -39,7 +42,7 @@ The hassle-free way to add Segment analytics to your Flutter app. Supports the f
   - [Controlling Upload With Flush Policies](#controlling-upload-with-flush-policies)
   - [Adding or removing policies](#adding-or-removing-policies)
     - [Creating your own flush policies](#creating-your-own-flush-policies)
-  - [Custom logging](#custom-logging)
+  - [Custom Logging](#custom-logging)
   - [Handling errors](#handling-errors)
     - [Reporting errors from plugins](#reporting-errors-from-plugins)
   - [Contributing](#contributing)
@@ -48,17 +51,30 @@ The hassle-free way to add Segment analytics to your Flutter app. Supports the f
 
 ## Installation
 
-To install analytics-flutter to your flutter app, run the following command:
+Manually add this package to your `pubspec.yaml` file.
 
-```bash
-flutter pub add adjust_sdk
+```yaml
+dependencies: 
+  flutter: 
+    sdk: flutter 
+
+  # Main package
+  analytics: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/core 
 ```
 
-This will add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
+If you need any plugins you can add them too:
 
-```
-dependencies:
-  analytics: ^1.0.0
+```yaml
+  # Plugins
+  analytics_plugin_firebase:
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/plugins/plugin_firebase
 ```
 
 Now, in your Dart code, you can import the library as follows:
@@ -565,7 +581,7 @@ Before contributing, please also see our [code of conduct](CODE_OF_CONDUCT.md).
 
 MIT
 
-Note: The Flutter name and logo are trademarks owned by Google.
+[^1]: The Flutter name and logo are trademarks owned by Google.
 
 [circleci-image]: TODO
 [circleci-url]: https://app.circleci.com/pipelines/github/segmentio/analytics-flutter

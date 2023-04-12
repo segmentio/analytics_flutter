@@ -4,10 +4,16 @@
 
 ## Installation
 
-You need to install the `analytics_plugin_adjust` plugin:
+Manually add this package to your `pubspec.yaml` file.
 
-```bash
-flutter pub add analytics_plugin_adjust
+```yaml
+dependencies: 
+
+  analytics_plugin_adjust: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/plugins/plugin_adjust
 ```
 
 ## Usage

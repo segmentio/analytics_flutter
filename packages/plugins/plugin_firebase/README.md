@@ -4,10 +4,16 @@
 
 ## Installation
 
-You need to install the `analytics_plugin_firebase` plugin:
+Manually add this package to your `pubspec.yaml` file.
 
-```bash
-flutter pub add analytics_plugin_firebase
+```yaml
+dependencies: 
+
+  analytics_plugin_firebase: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/plugins/plugin_firebase
 ```
 
 You will then need to configure your Firebase settings as per the [core Firebase documentation](https://firebase.google.com/docs/flutter/setup?platform=web) by running:
