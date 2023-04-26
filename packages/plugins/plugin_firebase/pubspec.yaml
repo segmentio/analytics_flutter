@@ -13,8 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
   json_annotation: ^4.8.0
-  analytics:
-    path: ../../core
+  analytics: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/core 
 
 dev_dependencies:
   build_runner: ^2.3.3

@@ -10,8 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  analytics:
-    path: ../../core
+  analytics: 
+    git: 
+      url: https://github.com/segmentio/analytics_flutter
+      ref: main
+      path: packages/core 
   json_annotation: ^4.8.0
   adjust_sdk: ^4.31.0
 
