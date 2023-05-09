@@ -18,7 +18,7 @@ class ConcurrencyQueue<T> {
   bool get _isLocked => (_lock == true);
 
   bool _tryUnlock(Reducer<T> op) {
-    // If the file is unlo
+    // We process and lock right away if the file is unlocked
     if (!_isLocked) {
       _lock = true;
       _process(op);
@@ -29,9 +29,11 @@ class ConcurrencyQueue<T> {
 
   Future<T> _process(Reducer<T> op) async {
     final result = await op.operation();
+    // The actual operation future is resolved here so the caller doesn't await for the full queue
     op.completer.complete(result);
     _lock = false;
 
+    // When the process completes we trigger the next one right away if there's already a queue
     if (_queue.isNotEmpty) {
       final nextOp = _queue.first;
       if (_tryUnlock(nextOp)) {
