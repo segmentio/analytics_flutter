@@ -45,6 +45,7 @@ Some destination plugins might not support all platform functionality. Refer to 
   - [Custom Logging](#custom-logging)
   - [Handling errors](#handling-errors)
     - [Reporting errors from plugins](#reporting-errors-from-plugins)
+  - [Example App](#example-app)
   - [Contributing](#contributing)
   - [Code of Conduct](#code-of-conduct)
   - [License](#license)
@@ -568,6 +569,10 @@ try {
   );
 }
 ```
+
+## Example App
+
+See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
 
 ## Contributing
 

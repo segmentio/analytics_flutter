@@ -4,14 +4,14 @@ import 'package:analytics/errors.dart';
 import 'package:analytics/event.dart';
 import 'package:analytics/plugin.dart';
 import 'package:analytics/logger.dart';
+import 'package:analytics/utils/queue.dart';
 
 typedef TimelinePlugins = Map<PluginType, List<Plugin>>;
 typedef PluginClosure = void Function(Plugin);
 
 class Timeline {
   final TimelinePlugins _plugins = {};
-  Future<List<RawEvent?>>? _beforeFuture;
-  List<Future<RawEvent?>> _beforeQueue = [];
+  final _queue = ConcurrencyQueue<RawEvent?>();
 
   List<Plugin> getPlugins(PluginType? ofType) {
     if (ofType != null) {
@@ -69,18 +69,9 @@ class Timeline {
     // apply .before first, ensuring all .before phases for all events triggered
     // in a synchronous block are finished before moving onto the enrichment phase
 
-    final index = _beforeQueue.length;
-    _beforeQueue.add(applyPlugins(PluginType.before, incomingEvent));
-
-    _beforeFuture ??= Future.delayed(const Duration(microseconds: 1), () async {
-      final thisBeforeFutures = _beforeQueue;
-      _beforeQueue = [];
-      _beforeFuture = null;
-      return await Future.wait(thisBeforeFutures);
+    final beforeResult = await _queue.enqueue(() async {
+      return await applyPlugins(PluginType.before, incomingEvent);
     });
-
-    final beforeResults = await _beforeFuture!;
-    final beforeResult = beforeResults[index];
 
     if (beforeResult == null) {
       return null;
