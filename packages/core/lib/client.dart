@@ -49,7 +49,7 @@ List<FlushPolicy> defaultFlushPolicies = [
   CountFlushPolicy(30),
 ];
 
-class ScreenObserver with NavigatorObserver {
+class ScreenObserver extends NavigatorObserver {
   final StreamController<String> screenStreamController =
       StreamController.broadcast();
 
