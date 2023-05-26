@@ -144,13 +144,31 @@ abstract class DestinationPlugin extends EventPlugin {
     timeline.remove(plugin);
   }
 
-  @override
-  Future<RawEvent?> execute(RawEvent event) async {
+  Future<RawEvent?> process(RawEvent event) async {
     if (!_isEnabled(event)) {
       return null;
     }
 
-    return timeline.process(event);
+    final beforeResult = await timeline.applyPlugins(PluginType.before, event);
+    if (beforeResult == null) {
+      return null;
+    }
+
+    final enrichmentResult =
+        await timeline.applyPlugins(PluginType.enrichment, event);
+    if (enrichmentResult == null) {
+      return null;
+    }
+
+    await super.execute(enrichmentResult);
+
+    final afterResult = await timeline.applyPlugins(PluginType.after, event);
+    return afterResult;
+  }
+
+  @override
+  Future<RawEvent?> execute(RawEvent event) async {
+    return process(event);
   }
 }
 

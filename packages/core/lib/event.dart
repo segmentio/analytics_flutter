@@ -51,7 +51,6 @@ abstract class RawEvent with JSONSerialisable {
   Context? context;
 
   Map<String, dynamic>? integrations;
-  List<Map<String, dynamic>>? metrics;
 
   @JsonKey(name: "_metadata")
   DestinationMetadata? metadata;
