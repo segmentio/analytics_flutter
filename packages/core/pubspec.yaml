@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=2.19.2 <4.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
@@ -17,7 +17,7 @@ dependencies:
   json_annotation: ^4.8.0
   flutter_fgbg: ^0.2.2
   state_notifier: ^0.7.2
-  http: ^0.13.5
+  http: ^1.0.0
   logger: ^1.1.0
   path_provider: ^2.0.12
 
