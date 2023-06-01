@@ -30,3 +30,9 @@ pubspec.lock
 build/
 .flutter-plugins
 .flutter-plugins-dependencies
+
+# ASDF 
+.tool-versions
+
+# VSCode
+launch.json
