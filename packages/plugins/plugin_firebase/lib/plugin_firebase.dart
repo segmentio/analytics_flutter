@@ -40,97 +40,101 @@ class FirebaseDestination extends DestinationPlugin {
   @override
   Future<RawEvent?> track(TrackEvent event) async {
     await firebaseFuture;
-
-    final properties = propertyMapper(event.properties, propertiesMapper);
+    final properties = mapProperties(event.properties, mappings);
 
     try {
       switch (event.event) {
         case 'Product Clicked':
+          if (properties.containsKey('contentType') ||
+              properties.containsKey('itemId')) {
+            throw Exception("Missing properties: contentType and itemId");
+          }
+
           await FirebaseAnalytics.instance.logSelectContent(
-              contentType: properties('contentType'),
-              itemId: properties('itemId'));
+              contentType: properties['contentType'].toString(),
+              itemId: properties['itemId'].toString());
           break;
         case 'Product Viewed':
           await FirebaseAnalytics.instance.logViewItem(
-              currency: properties("currency", optional: true),
+              currency: properties["currency"]?.toString(),
               items: event.properties == null
                   ? null
-                  : [AnalyticsEventItemJson.fromJson(event.properties)],
-              value: properties("value", optional: true));
+                  : [AnalyticsEventItemJson(event.properties!)],
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Product Added':
           await FirebaseAnalytics.instance.logAddToCart(
-              currency: properties("currency", optional: true),
+              currency: properties["currency"]?.toString(),
               items: event.properties == null
                   ? null
-                  : [AnalyticsEventItemJson.fromJson(event.properties)],
-              value: properties("value", optional: true));
+                  : [AnalyticsEventItemJson(event.properties!)],
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Product Removed':
           await FirebaseAnalytics.instance.logRemoveFromCart(
-              currency: properties("currency", optional: true),
+              currency: properties["currency"]?.toString(),
               items: event.properties == null
                   ? null
-                  : [AnalyticsEventItemJson.fromJson(event.properties)],
-              value: properties("value", optional: true));
+                  : [AnalyticsEventItemJson(event.properties!)],
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Checkout Started':
           await FirebaseAnalytics.instance.logBeginCheckout(
-              coupon: properties("coupon", optional: true),
-              currency: properties("currency", optional: true),
-              items: properties("items", optional: true),
-              value: properties("value", optional: true));
+              coupon: properties["coupon"]?.toString(),
+              currency: properties["currency"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Promotion Viewed':
           await FirebaseAnalytics.instance.logViewPromotion(
-              creativeName: properties("creativeName", optional: true),
-              creativeSlot: properties("creativeSlot", optional: true),
-              items: properties("items", optional: true),
-              locationId: properties("locationdId", optional: true),
-              promotionId: properties("promotionId", optional: true),
-              promotionName: properties("promotionName", optional: true));
+              creativeName: properties["creativeName"]?.toString(),
+              creativeSlot: properties["creativeSlot"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              locationId: properties["locationdId"]?.toString(),
+              promotionId: properties["promotionId"]?.toString(),
+              promotionName: properties["promotionName"]?.toString());
           break;
         case 'Payment Info Entered':
           await FirebaseAnalytics.instance.logAddPaymentInfo(
-              coupon: properties("coupon", optional: true),
-              currency: properties("currency", optional: true),
-              items: properties("items", optional: true),
-              paymentType: properties("paymentType", optional: true),
-              value: properties("value", optional: true));
+              coupon: properties["coupon"]?.toString(),
+              currency: properties["currency"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              paymentType: properties["paymentType"]?.toString(),
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Order Completed':
           await FirebaseAnalytics.instance.logPurchase(
-              affiliation: properties("affiliation", optional: true),
-              coupon: properties("coupon", optional: true),
-              currency: properties("currency", optional: true),
-              items: properties("items", optional: true),
-              shipping: properties("shipping", optional: true),
-              tax: properties("tax", optional: true),
-              transactionId: properties("transactionId", optional: true),
-              value: properties("value", optional: true));
+              affiliation: properties["affiliation"]?.toString(),
+              coupon: properties["coupon"]?.toString(),
+              currency: properties["currency"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              shipping: double.tryParse(properties["shipping"].toString()),
+              tax: double.tryParse(properties["tax"].toString()),
+              transactionId: properties["transactionId"]?.toString(),
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Order Refunded':
           await FirebaseAnalytics.instance.logRefund(
-              affiliation: properties("affiliation", optional: true),
-              coupon: properties("coupon", optional: true),
-              currency: properties("currency", optional: true),
-              items: properties("items", optional: true),
-              shipping: properties("shipping", optional: true),
-              tax: properties("tax", optional: true),
-              transactionId: properties("transactionId", optional: true),
-              value: properties("value", optional: true));
+              affiliation: properties["affiliation"]?.toString(),
+              coupon: properties["coupon"]?.toString(),
+              currency: properties["currency"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              shipping: double.tryParse(properties["shipping"].toString()),
+              tax: double.tryParse(properties["tax"].toString()),
+              transactionId: properties["transactionId"]?.toString(),
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Product List Viewed':
           await FirebaseAnalytics.instance.logViewItemList(
-              itemListId: properties("itemListId", optional: true),
-              itemListName: properties("itemListName", optional: true),
-              items: properties("items", optional: true));
+              itemListId: properties["itemListId"]?.toString(),
+              itemListName: properties["itemListName"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>);
           break;
         case 'Product Added to Wishlist':
           await FirebaseAnalytics.instance.logAddToWishlist(
-              currency: properties("currency", optional: true),
-              items: properties("items", optional: true),
-              value: properties("value", optional: true));
+              currency: properties["currency"]?.toString(),
+              items: properties["items"] as List<AnalyticsEventItemJson>,
+              value: double.tryParse(properties["value"].toString()));
           break;
         case 'Cart Shared':
           if (event.properties == null ||
@@ -139,35 +143,55 @@ class FirebaseDestination extends DestinationPlugin {
           } else if (event.properties!['products'] is List) {
             await Future.wait(
                 (event.properties!['products'] as List).map((product) async {
-              final productProperties =
-                  propertyMapper(product, propertiesMapper);
-              await FirebaseAnalytics.instance.logShare(
-                  contentType: productProperties("contentType", optional: true),
-                  itemId: productProperties("itemId", optional: true),
-                  method: properties("method", optional: true));
+              final productProperties = mapProperties(product, mappings);
+              if (productProperties.containsKey("contentType") &&
+                  productProperties.containsKey("itemId") &&
+                  productProperties.containsKey("method")) {
+                await FirebaseAnalytics.instance.logShare(
+                    contentType: productProperties["contentType"].toString(),
+                    itemId: productProperties["itemId"].toString(),
+                    method: properties["method"].toString());
+              } else {
+                log("Error tracking Cart Shared, product missing properties. Required: contentType, itemId, method");
+              }
             }));
           } else {
             log("Error tracking event '${event.event}' for Firebase: products property must be a list of products");
           }
           break;
         case 'Product Shared':
+          if (!properties.containsKey("contentType") ||
+              !properties.containsKey("itemId") ||
+              !properties.containsKey("method")) {
+            throw Exception("Missing properties: contentType, itemId, method");
+          }
           await FirebaseAnalytics.instance.logShare(
-              contentType: properties("contentType", optional: true),
-              itemId: properties("itemId", optional: true),
-              method: properties("method", optional: true));
+              contentType: properties["contentType"].toString(),
+              itemId: properties["itemId"].toString(),
+              method: properties["method"].toString());
           break;
         case 'Products Searched':
+          if (!properties.containsKey("searchTerm")) {
+            throw Exception("Missing property: searchTerm");
+          }
+
           await FirebaseAnalytics.instance.logSearch(
-              searchTerm: properties("searchTerm"),
-              destination: properties("destination", optional: true),
-              endDate: properties("endDate", optional: true),
-              numberOfNights: properties("numberOfNights", optional: true),
+              searchTerm: properties["searchTerm"].toString(),
+              destination: properties["destination"]?.toString(),
+              endDate: properties["endDate"]?.toString(),
+              numberOfNights:
+                  int.tryParse(properties["numberOfNights"].toString()),
               numberOfPassengers:
-                  properties("numberOfPassengers", optional: true),
-              numberOfRooms: properties("numberOfRooms", optional: true),
-              origin: properties("origin", optional: true),
-              startDate: properties("startDate", optional: true),
-              travelClass: properties("travelClass", optional: true));
+                  int.tryParse(properties["numberOfPassengers"].toString()),
+              numberOfRooms:
+                  int.tryParse(properties["numberOfRooms"].toString()),
+              origin: properties["origin"]?.toString(),
+              startDate: properties["startDate"]?.toString(),
+              travelClass: properties["travelClass"]?.toString());
+          break;
+        default:
+          await FirebaseAnalytics.instance.logEvent(
+              name: sanitizeEventName(event.event), parameters: properties);
           break;
       }
     } catch (error) {

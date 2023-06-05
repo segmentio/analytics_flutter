@@ -42,9 +42,6 @@ TrackEvent _$TrackEventFromJson(Map<String, dynamic> json) => TrackEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..metrics = (json['metrics'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList()
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -58,7 +55,6 @@ Map<String, dynamic> _$TrackEventToJson(TrackEvent instance) =>
       'timestamp': instance.timestamp,
       'context': instance.context?.toJson(),
       'integrations': instance.integrations,
-      'metrics': instance.metrics,
       '_metadata': instance.metadata?.toJson(),
       'event': instance.event,
       'properties': instance.properties,
@@ -78,9 +74,6 @@ IdentifyEvent _$IdentifyEventFromJson(Map<String, dynamic> json) =>
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..metrics = (json['metrics'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList()
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -94,7 +87,6 @@ Map<String, dynamic> _$IdentifyEventToJson(IdentifyEvent instance) =>
       'timestamp': instance.timestamp,
       'context': instance.context?.toJson(),
       'integrations': instance.integrations,
-      'metrics': instance.metrics,
       '_metadata': instance.metadata?.toJson(),
       'traits': instance.traits?.toJson(),
     };
@@ -113,9 +105,6 @@ GroupEvent _$GroupEventFromJson(Map<String, dynamic> json) => GroupEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..metrics = (json['metrics'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList()
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -129,7 +118,6 @@ Map<String, dynamic> _$GroupEventToJson(GroupEvent instance) =>
       'timestamp': instance.timestamp,
       'context': instance.context?.toJson(),
       'integrations': instance.integrations,
-      'metrics': instance.metrics,
       '_metadata': instance.metadata?.toJson(),
       'groupId': instance.groupId,
       'traits': instance.traits?.toJson(),
@@ -146,9 +134,6 @@ AliasEvent _$AliasEventFromJson(Map<String, dynamic> json) => AliasEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..metrics = (json['metrics'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList()
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -162,7 +147,6 @@ Map<String, dynamic> _$AliasEventToJson(AliasEvent instance) =>
       'timestamp': instance.timestamp,
       'context': instance.context?.toJson(),
       'integrations': instance.integrations,
-      'metrics': instance.metrics,
       '_metadata': instance.metadata?.toJson(),
       'previousId': instance.previousId,
     };
@@ -179,9 +163,6 @@ ScreenEvent _$ScreenEventFromJson(Map<String, dynamic> json) => ScreenEvent(
           ? null
           : Context.fromJson(json['context'] as Map<String, dynamic>)
       ..integrations = json['integrations'] as Map<String, dynamic>?
-      ..metrics = (json['metrics'] as List<dynamic>?)
-          ?.map((e) => e as Map<String, dynamic>)
-          .toList()
       ..metadata = json['_metadata'] == null
           ? null
           : DestinationMetadata.fromJson(
@@ -195,7 +176,6 @@ Map<String, dynamic> _$ScreenEventToJson(ScreenEvent instance) =>
       'timestamp': instance.timestamp,
       'context': instance.context?.toJson(),
       'integrations': instance.integrations,
-      'metrics': instance.metrics,
       '_metadata': instance.metadata?.toJson(),
       'name': instance.name,
       'properties': instance.properties,
@@ -272,10 +252,12 @@ GroupTraits _$GroupTraitsFromJson(Map<String, dynamic> json) => GroupTraits(
       phone: json['phone'] as String?,
       plan: json['plan'] as String?,
       website: json['website'] as String?,
-    );
+    )..custom = json['custom'] as Map<String, dynamic>;
 
 Map<String, dynamic> _$GroupTraitsToJson(GroupTraits instance) {
-  final val = <String, dynamic>{};
+  final val = <String, dynamic>{
+    'custom': instance.custom,
+  };
 
   void writeNotNull(String key, dynamic value) {
     if (value != null) {
