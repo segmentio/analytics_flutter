@@ -25,7 +25,7 @@ void main() {
       when(httpClient.startBatchUpload(any, any))
           .thenAnswer((_) => Future.value(true));
 
-      Analytics analytics = Analytics(
+      Analytics analytics = Analytics.internal(
           Configuration("123",
               trackApplicationLifecycleEvents: false,
               appStateStream: () => Mocks.streamSubscription()),
@@ -45,7 +45,7 @@ void main() {
       when(httpClient.startBatchUpload(any, any))
           .thenAnswer((_) => Future.value(true));
 
-      Analytics analytics = Analytics(
+      Analytics analytics = Analytics.internal(
           Configuration("123",
               trackApplicationLifecycleEvents: true,
               appStateStream: () => Mocks.streamSubscription()),

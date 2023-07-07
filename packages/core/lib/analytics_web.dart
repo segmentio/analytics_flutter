@@ -6,7 +6,7 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 import 'package:analytics/analytics_platform_interface.dart';
 
-export 'package:analytics/client.dart';
+export 'package:analytics/client_methods.dart';
 
 /// A web implementation of the AnalyticsPlatform of the Analytics plugin.
 class AnalyticsPlatformImpl extends AnalyticsPlatform {

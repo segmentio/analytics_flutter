@@ -2,15 +2,18 @@ library analytics;
 
 import 'dart:async';
 
-import 'package:analytics/client.dart';
+import 'package:analytics/client_methods.dart';
 import 'package:analytics/errors.dart';
 import 'package:analytics/event.dart';
+import 'package:analytics/flush_policies/default_flush_policy.dart';
 import 'package:analytics/flush_policies/flush_policy.dart';
 import 'package:analytics/flush_policies/flush_policy_executor.dart';
 import 'package:analytics/logger.dart';
 import 'package:analytics/native_context.dart';
 import 'package:analytics/plugin.dart';
+import 'package:analytics/plugins/event_logger.dart';
 import 'package:analytics/plugins/segment_destination.dart';
+import 'package:analytics/screen_observer.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics/timeline.dart';
 import 'package:analytics/utils/lifecycle/lifecycle.dart';
@@ -24,6 +27,8 @@ import 'package:analytics/plugins/inject_user_info.dart';
 import 'package:analytics/plugins/inject_context.dart';
 
 class Analytics with ClientMethods {
+  static late final Analytics instance;
+
   static String version() => segmentVersion;
   static bool debug = false;
 
@@ -53,7 +58,28 @@ class Analytics with ClientMethods {
     reportInternalError(exception, analytics: this);
   }
 
-  Analytics(Configuration config, this._store,
+  factory Analytics.init(Configuration configuration) {
+    debug = configuration.debug;
+
+    if (configuration.flushPolicies == null) {
+      configuration = setFlushPolicies(configuration, defaultFlushPolicies);
+    }
+
+    instance = Analytics.internal(configuration, storeFactory());
+
+    if (debug) {
+      instance.addPlugin(EventLogger());
+    }
+
+    instance.init();
+    ScreenObserver().screenStream.listen((name) {
+      instance.screen(name);
+    });
+
+    return instance;
+  }
+
+  Analytics.internal(Configuration config, this._store,
       {HTTPClient Function(Analytics)? httpClient})
       : _state = StateManager(_store, System(true, false), config),
         _timeline = Timeline() {
