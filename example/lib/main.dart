@@ -1,4 +1,6 @@
+import 'package:analytics/analytics.dart';
 import 'package:analytics/event.dart';
+import 'package:analytics/screen_observer.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics_example/config.dart';
 import 'package:analytics_plugin_advertising_id/plugin_advertising_id.dart';
@@ -6,7 +8,6 @@ import 'package:analytics_plugin_idfa/plugin_idfa.dart';
 import 'package:analytics_example/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:analytics/client.dart';
 import 'package:analytics_plugin_firebase/plugin_firebase.dart'
     show FirebaseDestination;
 
@@ -22,18 +23,18 @@ class MyApp extends MaterialApp {
 }
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey,
-      debug: true, trackApplicationLifecycleEvents: false));
-
   @override
   void initState() {
     super.initState();
     initPlatformState();
 
-    analytics
+    Analytics.init(Configuration(writeKey,
+        debug: true, trackApplicationLifecycleEvents: false));
+
+    Analytics.instance
         .addPlugin(FirebaseDestination(DefaultFirebaseOptions.currentPlatform));
-    analytics.addPlugin(PluginAdvertisingId());
-    analytics.addPlugin(PluginIdfa());
+    Analytics.instance.addPlugin(PluginAdvertisingId());
+    Analytics.instance.addPlugin(PluginIdfa());
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -64,16 +65,16 @@ class _MyAppState extends State<MyApp> {
               ),
               TextButton(
                 onPressed: () {
-                  analytics
+                  Analytics.instance
                       .track("Test Event", properties: {"prop1": "value1"});
                 },
                 child: const Text('Track Product Viewed'),
               ),
               TextButton(
                 onPressed: () {
-                  analytics.track('Products Searched',
+                  Analytics.instance.track('Products Searched',
                       properties: {"query": 'blue roses'});
-                  analytics.track('Product List Viewed', properties: {
+                  Analytics.instance.track('Product List Viewed', properties: {
                     "list_id": 'hot_deals_1',
                     "category": 'Deals',
                     "products": [
@@ -97,13 +98,13 @@ class _MyAppState extends State<MyApp> {
                       }
                     ]
                   });
-                  analytics.track('Promotion Viewed', properties: {
+                  Analytics.instance.track('Promotion Viewed', properties: {
                     "promotion_id": 'promo_1',
                     "creative": 'top_banner_2',
                     "name": '75% store-wide shoe sale',
                     "position": 'home_banner_top'
                   });
-                  analytics.track('Product Clicked', properties: {
+                  Analytics.instance.track('Product Clicked', properties: {
                     "product_id": '507f1f77bcf86cd799439011',
                     "sku": 'G-32',
                     "category": 'Games',
@@ -117,7 +118,7 @@ class _MyAppState extends State<MyApp> {
                     "url": 'https://www.example.com/product/path',
                     "image_url": 'https://www.example.com/product/path.jpg'
                   });
-                  analytics.track('Product Shared', properties: {
+                  Analytics.instance.track('Product Shared', properties: {
                     "share_via": 'email',
                     "share_message": 'Hey, check out this item',
                     "recipient": 'friend@example.com',
@@ -131,7 +132,7 @@ class _MyAppState extends State<MyApp> {
                     "url": 'https://www.example.com/product/path',
                     "image_url": 'https://www.example.com/product/path.jpg'
                   });
-                  analytics.track('Cart Shared', properties: {
+                  Analytics.instance.track('Cart Shared', properties: {
                     "share_via": 'email',
                     "share_message": 'Hey, check out this item',
                     "recipient": 'friend@example.com',
@@ -146,13 +147,13 @@ class _MyAppState extends State<MyApp> {
               ),
               TextButton(
                 onPressed: () {
-                  analytics.reset();
+                  Analytics.instance.reset();
                 },
                 child: const Text('Reset'),
               ),
               TextButton(
                 onPressed: () {
-                  analytics.flush();
+                  Analytics.instance.flush();
                 },
                 child: const Text('Flush'),
               ),
@@ -173,7 +174,7 @@ class _MyAppState extends State<MyApp> {
               ),
               TextButton(
                 onPressed: () {
-                  analytics.identify(
+                  Analytics.instance.identify(
                       userId: "testUserId",
                       userTraits: UserTraits(name: "Test User"));
                 },
