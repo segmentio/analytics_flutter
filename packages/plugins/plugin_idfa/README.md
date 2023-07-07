@@ -9,10 +9,9 @@
 Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
-dependencies: 
-
-  analytics_plugin_idfa: 
-    git: 
+dependencies:
+  analytics_plugin_idfa:
+    git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main
       path: packages/plugins/plugin_idfa
@@ -24,40 +23,41 @@ You also need to ensure you have a description for `NSUserTrackingUsageDescripti
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance. 
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance.
 
 ```dart
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 import 'package:analytics_plugin_idfa/plugin_idfa.dart'
     show PluginIdfa;
 
 const writeKey = 'SEGMENT_API_KEY';
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey));
+  Analytics.init(Configuration(writeKey));
 
   @override
   void initState() {
     // ...
 
-    analytics
+    Analytics.instance
         .addPlugin(PluginIdfa());
   }
 }
 ```
+
 ## Customize IDFA Plugin Initialization
 
-To delay the `IDFA Plugin` initialization (ie. to avoid race condition with push notification prompt) implement the following: 
+To delay the `IDFA Plugin` initialization (ie. to avoid race condition with push notification prompt) implement the following:
 
 ```dart
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 import 'package:analytics_plugin_idfa/plugin_idfa.dart'
     show PluginIdfa;
 
 const writeKey = 'SEGMENT_API_KEY';
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey));
+  Analytics.init(Configuration(writeKey));
 
   @override
   void initState() {
@@ -65,11 +65,11 @@ class _MyAppState extends State<MyApp> {
 
     final idfaPlugin = PluginIdfa(shouldAskPermission: false);
 
-    analytics
+    Analytics.instance
         .addPlugin(idfaPlugin);
 
     // ...
-    
+
     idfaPlugin.requestTrackingPermission().then((enabled) {
       /**  ... */
     });
@@ -86,6 +86,7 @@ Please use Github issues, Pull Requests, or feel free to reach out to our [suppo
 Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
 
 ## License
+
 ```
 MIT License
 

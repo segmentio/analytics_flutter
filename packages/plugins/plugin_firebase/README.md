@@ -7,10 +7,9 @@
 Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
-dependencies: 
-
-  analytics_plugin_firebase: 
-    git: 
+dependencies:
+  analytics_plugin_firebase:
+    git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main
       path: packages/plugins/plugin_firebase
@@ -22,30 +21,30 @@ You will then need to configure your Firebase settings as per the [core Firebase
 flutterfire configure
 ```
 
-This will create a ```firebase_options.dart``` file under your ```lib``` folder.
+This will create a `firebase_options.dart` file under your `lib` folder.
 
 ## Usage
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `FirebaseDestination` instance. 
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `FirebaseDestination` instance.
 
 ```dart
 import 'firebase_options.dart';
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 import 'package:analytics_plugin_firebase/plugin_firebase.dart'
     show FirebaseDestination;
 
 const writeKey = 'SEGMENT_API_KEY';
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey));
+  Analytics.init(Configuration(writeKey));
 
   @override
   void initState() {
     // ...
 
-    analytics
+    Analytics.instance
         .addPlugin(FirebaseDestination(DefaultFirebaseOptions.currentPlatform));
   }
 }
@@ -60,6 +59,7 @@ Please use Github issues, Pull Requests, or feel free to reach out to our [suppo
 Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
 
 ## License
+
 ```
 MIT License
 

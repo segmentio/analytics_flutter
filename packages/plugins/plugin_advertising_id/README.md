@@ -7,16 +7,15 @@
 Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
-dependencies: 
-
-  analytics_plugin_advertising_id: 
-    git: 
+dependencies:
+  analytics_plugin_advertising_id:
+    git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main
       path: packages/plugins/plugin_advertising_id
 ```
 
-This plugin requires a `compileSdkVersion` of at least 19. 
+This plugin requires a `compileSdkVersion` of at least 19.
 
 See [Google Play Services documentation](https://developers.google.com/admob/android/quick-start) for `advertisingId` setup
 
@@ -24,23 +23,23 @@ See [Google Play Services documentation](https://developers.google.com/admob/and
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance. 
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance.
 
 ```dart
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 import 'package:analytics_plugin_advertising_id/plugin_advertising_id.dart'
     show PluginAdvertisingId;
 
 const writeKey = 'SEGMENT_API_KEY';
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey));
+  Analytics.init(Configuration(writeKey));
 
   @override
   void initState() {
     // ...
 
-    analytics
+    Analytics.instance
         .addPlugin(PluginAdvertisingId());
   }
 }

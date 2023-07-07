@@ -81,7 +81,7 @@ If you need any plugins you can add them too:
 Now, in your Dart code, you can import the library as follows:
 
 ```dart
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 ```
 
 ### Permissions
@@ -101,11 +101,11 @@ In your app's `AndroidManifest.xml` add the below line between the `<manifest>` 
 
 ### Setting up the client
 
-The package exposes a method called `createClient` which we can use to create the Segment Analytics client. This central client manages all our tracking events. It is recommended you add this as a property on your main app's state class.
+Call the `Analytics.init` method to create default segment client. **DO NOT** call `Analytics.internal`, it is for development purposes only.
 
 ```dart
 const writeKey = 'SEGMENT_API_KEY';
-final analytics = createClient(Configuration(writeKey));
+Analytics.init(Configuration(writeKey));
 ```
 
 You must pass at least the `writeKey`. Additional configuration options are listed below:
@@ -145,7 +145,7 @@ Future track(String event: string, {Map<String, dynamic>? properties});
 Example usage:
 
 ```dart
-analytics.track("View Product", properties: {
+Analytics.instance.track("View Product", properties: {
   "productId": 123,
   "productName": "Striped trousers"
 });
@@ -164,7 +164,7 @@ Future screen(String name: string, {Map<String, dynamic>? properties});
 Example usage:
 
 ```dart
-analytics.screen("ScreenName", properties: {
+Analytics.instance.screen("ScreenName", properties: {
   "productSlug": "example-product-123",
 });
 ```
@@ -184,7 +184,7 @@ Future identify({String? userId, UserTraits? userTraits});
 Example usage:
 
 ```dart
-analytics.identify(userId: "testUserId", userTraits: UserTraits(
+Analytics.instance.identify(userId: "testUserId", userTraits: UserTraits(
   username: "MisterWhiskers",
   email: "hello@test.com",
   custom: {
@@ -206,7 +206,7 @@ Future group(String groupId, {GroupTraits? groupTraits});
 Example usage:
 
 ```dart
-analytics.group("some-company", groupTraits: GroupTraits(
+Analytics.instance.group("some-company", groupTraits: GroupTraits(
   name: 'Segment',
   custom: {
     "region": "UK"
@@ -227,7 +227,7 @@ Future alias(String newUserId);
 Example usage:
 
 ```dart
-analytics.alias("user-123");
+Analytics.instance.alias("user-123");
 ```
 
 ### Reset
@@ -245,7 +245,7 @@ void reset();
 Example usage:
 
 ```dart
-analytics.reset();
+Analytics.instance.reset();
 ```
 
 ### Flush
@@ -261,21 +261,21 @@ Future flush();
 Example usage:
 
 ```dart
-analytics.flush();
+Analytics.instance.flush();
 ```
 
 ### (Advanced) Cleanup
 
 You probably don't need this!
 
-In case you need to reinitialize the client, that is, you've called `createClient` more than once for the same client in your application lifecycle, use this method _on the old client_ to clear any subscriptions and timers first.
+In case you need to reinitialize the client, that is, you've called `Analytics.init` more than once for the same client in your application lifecycle, use this method _on the old client_ to clear any subscriptions and timers first.
 
 ```dart
-var analytics = createClient(Configuration(writeKey));
+Analytics.init(Configuration(writeKey));
 
-analytics.cleanup();
+Analytics.instance.cleanup();
 
-analytics = createClient(Configuration(writeKey));
+Analytics.init(Configuration(writeKey));
 ```
 
 If you don't do this, the old client instance would still exist and retain the timers, making all your events fire twice.
@@ -321,7 +321,7 @@ Or if you prefer, you can pass `autoAddSegmentDestination = false` in the option
 You can add a plugin at any time through the `add()` method.
 
 ```dart
-import 'package:analytics/client.dart';
+import 'package:analytics/analytics.dart';
 import 'package:analytics/event.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics_plugin_advertising_id/plugin_advertising_id.dart';
@@ -332,17 +332,17 @@ import 'package:analytics_plugin_firebase/plugin_firebase.dart'
 const writeKey = 'SEGMENT_API_KEY';
 
 class _MyAppState extends State<MyApp> {
-  final analytics = createClient(Configuration(writeKey));
+  Analytics.init(Configuration(writeKey));
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
 
-    analytics
+    Analytics.instance.
         .addPlugin(FirebaseDestination(DefaultFirebaseOptions.currentPlatform));
-    analytics.addPlugin(PluginAdvertisingId());
-    analytics.addPlugin(PluginIdfa());
+    Analytics.instance..addPlugin(PluginAdvertisingId());
+    Analytics.instance..addPlugin(PluginIdfa());
   }
 }
 ```
@@ -415,7 +415,7 @@ To make use of flush policies you can set them in the configuration of the clien
 import 'package:analytics/flush_policies/count_flush_policy.dart';
 import 'package:analytics/flush_policies/timer_flush_policy.dart';
 
-final analytics = createClient(Configuration(/*...*/, flushPolicies: [
+Analytics.init(Configuration(/*...*/, flushPolicies: [
   CountFlushPolicy(10),
   TimerFlushPolicy(100000)
 ]));
@@ -438,9 +438,9 @@ For example you might want to disable flushes if you detect the user has no netw
 
 ```dart
 if (isConnected) {
-  analytics.addFlushPolicy(policiesIfNetworkIsUp);
+  Analytics.instance.addFlushPolicy(policiesIfNetworkIsUp);
 } else {
-  analytics.removeFlushPolicy(policiesIfNetworkIsUp)
+  Analytics.instance.removeFlushPolicy(policiesIfNetworkIsUp)
 }
 ```
 
@@ -538,16 +538,16 @@ final flushPolicies = [CountFlushPolicy(5), TimerFlushPolicy(500)];
 void errorHandler(Exception error) {
   if (error is NetworkServerLimited) {
     // Remove all flush policies
-    analytics.removeFlushPolicy(analytics.getFlushPolicies());
+    Analytics.instance.removeFlushPolicy(Analytics.instance.getFlushPolicies());
     // Add less persistent flush policies
-    analytics.addFlushPolicy([
+    Analytics.instance.addFlushPolicy([
       CountFlushPolicy(100),
       TimerFlushPolicy(5000)
     ]);
   }
 }
 
-final analytics = createClient(Configuration(writeKey),
+Analytics.init(Configuration(writeKey),
   errorHandler: errorHandler,
   flushPolicies: flushPolicies);
 ```
@@ -564,7 +564,7 @@ import 'package:analytics/errors.dart';
 try {
   distinctId = await mixpanel.getDistinctId();
 } catch (e) {
-  analytics.error(
+  Analytics.instance.error(
     PluginError('Error: Mixpanel error calling getDistinctId', e)
   );
 }
