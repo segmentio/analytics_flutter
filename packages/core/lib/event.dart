@@ -238,7 +238,9 @@ class GroupTraits extends JSONExtendableImpl {
       this.name,
       this.phone,
       this.plan,
-      this.website});
+      this.website,
+      Map<String, dynamic>? custom})
+      : super(custom: custom);
 
   factory GroupTraits.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(
