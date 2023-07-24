@@ -193,7 +193,8 @@ class FirebaseDestination extends DestinationPlugin {
           break;
         default:
           await FirebaseAnalytics.instance.logEvent(
-              name: sanitizeEventName(event.event), parameters: properties);
+              name: sanitizeEventName(event.event),
+              parameters: castParameterType(properties));
           break;
       }
     } catch (error) {

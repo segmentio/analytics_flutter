@@ -28,6 +28,16 @@ String sanitizeEventName(String eventName) {
   return eventName.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
 }
 
+Map<String, Object?> castParameterType(Map<String, Object?> properties) {
+  return properties.map((key, value) {
+    if (value is String || value is num || value == null) {
+      return MapEntry(key, value);
+    } else {
+      return MapEntry(key, value.toString());
+    }
+  });
+}
+
 @JsonSerializable()
 class AnalyticsEventItemJson extends AnalyticsEventItem {
   AnalyticsEventItemJson(Map<String, Object?> json)
