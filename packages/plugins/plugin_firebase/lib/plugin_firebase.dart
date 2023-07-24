@@ -17,10 +17,12 @@ import 'package:analytics_plugin_firebase/properties.dart';
 class FirebaseDestination extends DestinationPlugin {
   final Future<void> firebaseFuture;
 
-  FirebaseDestination(FirebaseOptions? firebaseOptions)
-      : firebaseFuture = Firebase.initializeApp(
-          options: firebaseOptions,
-        ),
+  FirebaseDestination([FirebaseOptions? firebaseOptions])
+      : firebaseFuture = firebaseOptions != null
+            ? Firebase.initializeApp(
+                options: firebaseOptions,
+              )
+            : Future.value(),
         super('Firebase');
 
   @override
