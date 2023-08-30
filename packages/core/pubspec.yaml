@@ -15,7 +15,6 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   uuid: ^3.0.7
   json_annotation: ^4.8.0
-  flutter_fgbg: ^0.2.2
   state_notifier: ^0.7.2
   http: ">=0.13.6 <2.0.0"
   logger: ^1.1.0
