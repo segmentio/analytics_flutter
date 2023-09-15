@@ -1,7 +1,6 @@
 import 'dart:async';
+import 'package:analytics/utils/lifecycle/lifecycle.dart';
 import 'package:flutter/widgets.dart';
-
-enum AppStatus { foreground, background }
 
 abstract class LifeCycle extends Stream<AppStatus> {}
 
