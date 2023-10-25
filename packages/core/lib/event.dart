@@ -613,7 +613,8 @@ UserTraits mergeUserTraits(UserTraits a, UserTraits b) {
       phone: a.phone ?? b.phone,
       title: a.title ?? b.title,
       username: a.username ?? b.username,
-      website: a.website ?? b.website);
+      website: a.website ?? b.website,
+      custom: a.custom.isEmpty ? b.custom : a.custom);
 }
 
 GroupTraits mergeGroupTraits(GroupTraits a, GroupTraits b) {
@@ -631,7 +632,8 @@ GroupTraits mergeGroupTraits(GroupTraits a, GroupTraits b) {
       name: a.name ?? b.name,
       phone: a.phone ?? b.phone,
       plan: a.plan ?? b.plan,
-      website: a.website ?? b.website);
+      website: a.website ?? b.website,
+      custom: a.custom.isEmpty ? b.custom : a.custom);
 }
 
 Company mergeCompany(Company a, Company b) {
