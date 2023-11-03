@@ -1,5 +1,7 @@
-import 'package:analytics/analytics_web.dart'
-    if (dart.library.io) 'package:analytics/analytics_pigeon.dart';
+import 'package:analytics/analytics_none.dart'
+    if (dart.library.io) 'package:analytics/analytics_pigeon.dart'
+    if (dart.library.html) 'package:analytics/analytics_web.dart';
+
 import 'package:analytics/native_context.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -30,6 +32,6 @@ abstract class AnalyticsPlatform extends PlatformInterface {
   /// A broadcast stream for receiving incoming link change events.
   ///
   /// The [Stream] emits opened links as [String]s.
-  Stream<Map<String, dynamic>> get linkStream => throw UnimplementedError(
-      'getLinksStream has not been implemented on the current platform.');
+  Stream<Map<String, dynamic>> get linkStream =>
+      throw UnimplementedError('getLinksStream has not been implemented on the current platform.');
 }
