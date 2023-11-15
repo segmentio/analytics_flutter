@@ -122,7 +122,7 @@ You must pass at least the `writeKey`. Additional configuration options are list
 | `cdnHost`            | "cdn-settings.segment.com/v1" | Used to specify the regional Segment settings endpoint |
 | `errorHandler`             | null      | Custom error handler. By default logs errors to the standard flutter logger |
 | `trackApplicationLifecycleEvents`  | false     | Enable automatic tracking for [app lifecycle events](https://segment.com/docs/connections/spec/mobile/#lifecycle-events): application installed, opened, updated, backgrounded) |
-| `trackDeeplinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link |
+| `trackDeeplinks`           | false     | Enable automatic tracking for when the user opens the app via a deep link. *NOTE: when sending this flag, the sdk plugin_appsflyer will ignore [onAppOpenAttribution](https://github.com/AppsFlyerSDK/appsflyer-flutter-plugin/blob/master/doc/Guides.md#Unified-deep-linking) |
 | `autoAddSegmentDestination`| true      | Set to false to skip adding the SegmentDestination plugin |
 | `defaultIntegrationSettings`| null | Plugin settings that will be used if the request to get the settings from Segment fails. |
 | `maxBatchSize`| true      | 100 | Maximum number of events to send to the API at once. |
