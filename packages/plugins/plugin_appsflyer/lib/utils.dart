@@ -1,5 +1,5 @@
 double? extractRevenue(String key, Map<String, dynamic> properties) {
-  if (nul == properties[key] ) {
+  if (properties[key] == null) {
     return null;
   }
 
