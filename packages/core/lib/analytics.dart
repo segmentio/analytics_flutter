@@ -317,12 +317,7 @@ class Analytics with ClientMethods {
       return;
     }
 
-    if (previousContext == null) {
-      track("Application Installed", properties: {
-        "version": context.app.version,
-        "build": context.app.build,
-      });
-    } else if (context.app.version != previousContext.app.version) {
+    if (context.app.version != previousContext.app.version) {
       track("Application Updated", properties: {
         "version": context.app.version,
         "build": context.app.build,
