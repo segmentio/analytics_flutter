@@ -35,6 +35,20 @@ class StoreImpl implements Store {
 
   Future<Map<String, dynamic>?> _readFromStorage(String fileKey) async {
     final fileName = _getFileName(fileKey);
+
+    String? anonymousId;
+    if (fileKey == "userInfo") {
+      final cookies = html.document.cookie?.split(";");
+      if (cookies != null && cookies.isNotEmpty) {
+        for (var cookie in cookies) {
+          final cookieParts = cookie.split("=");
+          if (cookieParts[0].trim() == "ajs_anonymous_id") {
+            anonymousId = cookieParts[1];
+          }
+        }
+      }
+    }
+
     MapEntry<String, String>? data;
     try {
       data = localStorage.entries.firstWhere((i) => i.key == fileName);
@@ -43,10 +57,28 @@ class StoreImpl implements Store {
     }
     if (data != null) {
       if (data.value == "{}") {
+        if (anonymousId != null) {
+          return {
+            "anonymousId": anonymousId,
+          };
+        }
+
         return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.
       }
-      return json.decode(data.value) as Map<String, dynamic>;
+
+      final jsonMap = json.decode(data.value) as Map<String, dynamic>;
+      if (anonymousId != null) {
+        jsonMap["anonymousId"] = anonymousId;
+      }
+
+      return jsonMap;
     } else {
+      if (anonymousId != null) {
+        return {
+          "anonymousId": anonymousId,
+        };
+      }
+
       return null;
     }
   }
