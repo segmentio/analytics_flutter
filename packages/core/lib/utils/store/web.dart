@@ -43,7 +43,7 @@ class StoreImpl implements Store {
           (i) => i.key == "ajs_anonymous_id",
         );
 
-        anonymousId = entry.value;
+        anonymousId = json.decode(entry.value);
       }
     } on StateError {
       anonymousId = null;
