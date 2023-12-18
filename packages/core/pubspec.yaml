@@ -17,7 +17,7 @@ dependencies:
   json_annotation: ^4.8.0
   state_notifier: ^0.7.2
   http: ">=0.13.6 <2.0.0"
-  logger: ^1.1.0
+  logger: ^2.0.2+1
   path_provider: ^2.0.12
 
 dev_dependencies:
