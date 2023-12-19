@@ -63,7 +63,7 @@ dependencies:
   analytics: 
     git: 
       url: https://github.com/segmentio/analytics_flutter
-      ref: main
+      ref: app_lifecycle_fix
       path: packages/core 
 ```
 
@@ -74,7 +74,7 @@ If you need any plugins you can add them too:
   analytics_plugin_firebase:
     git: 
       url: https://github.com/segmentio/analytics_flutter
-      ref: main
+      ref: app_lifecycle_fix
       path: packages/plugins/plugin_firebase
 ```
 
