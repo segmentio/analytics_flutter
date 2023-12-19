@@ -87,6 +87,7 @@ class NativeContextApp {
     this.name,
     this.namespace,
     this.version,
+    this.installed,
   });
 
   String? build;
@@ -97,12 +98,15 @@ class NativeContextApp {
 
   String? version;
 
+  String? installed;
+
   Object encode() {
     return <Object?>[
       build,
       name,
       namespace,
       version,
+      installed
     ];
   }
 

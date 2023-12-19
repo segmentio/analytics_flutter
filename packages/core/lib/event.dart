@@ -342,7 +342,7 @@ class Context extends JSONExtendableImpl {
       : super(custom: custom);
   Context.fromNative(NativeContext nativeContext, this.traits)
       : app = nativeContext.app == null
-            ? ContextApp("", "", "", "")
+            ? ContextApp("", "", "", "", "")
             : ContextApp.fromNative(nativeContext.app as NativeContextApp),
         device = nativeContext.device == null
             ? ContextDevice("", "", "", "")
@@ -389,15 +389,17 @@ class ContextApp extends JSONExtendableImpl {
   String name;
   String namespace;
   String version;
+  String? installed;
 
-  ContextApp(this.build, this.name, this.namespace, this.version,
+  ContextApp(this.build, this.name, this.namespace, this.version, this.installed,
       {Map<String, dynamic>? custom})
       : super(custom: custom);
   ContextApp.fromNative(NativeContextApp nativeContextApp)
       : build = nativeContextApp.build ?? "",
         name = nativeContextApp.name ?? "",
         namespace = nativeContextApp.namespace ?? "",
-        version = nativeContextApp.version ?? "";
+        version = nativeContextApp.version ?? "",
+        installed = nativeContextApp.installed ?? "";
 
   factory ContextApp.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(
@@ -408,7 +410,8 @@ class ContextApp extends JSONExtendableImpl {
     "build",
     "name",
     "namespace",
-    "version"
+    "version",
+    "installed"
   };
 }
 

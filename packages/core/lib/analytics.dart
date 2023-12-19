@@ -301,6 +301,11 @@ class Analytics with ClientMethods {
     final context = Context.fromNative(contexts[0] as NativeContext,
         (contexts[2] as UserInfo).userTraits ?? UserTraits());
     final previousContext = contexts[1] as Context?;
+    
+    final isInstalled = previousContext?.app.installed;
+    if(isInstalled == "") {
+      context.app.installed = "1";
+    } 
 
     state.context.setState(previousContext == null
         ? context
@@ -317,12 +322,17 @@ class Analytics with ClientMethods {
       return;
     }
 
-    if (context.app.version != previousContext.app.version) {
+    if (isInstalled == "") {
+      track("Application Installed", properties: {
+        "version": context.app.version,
+        "build": context.app.build,
+      });
+    } else if (context.app.version != previousContext?.app.version) {
       track("Application Updated", properties: {
         "version": context.app.version,
         "build": context.app.build,
-        "previous_version": previousContext.app.version,
-        "previous_build": previousContext.app.build,
+        "previous_version": previousContext?.app.version,
+        "previous_build": previousContext?.app.build,
       });
     }
 
