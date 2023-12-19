@@ -379,6 +379,7 @@ ContextApp _$ContextAppFromJson(Map<String, dynamic> json) => ContextApp(
       json['name'] as String,
       json['namespace'] as String,
       json['version'] as String,
+      json['installed'] as String?,
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
@@ -389,6 +390,7 @@ Map<String, dynamic> _$ContextAppToJson(ContextApp instance) =>
       'name': instance.name,
       'namespace': instance.namespace,
       'version': instance.version,
+      'installed': instance.installed,
     };
 
 ContextDevice _$ContextDeviceFromJson(Map<String, dynamic> json) =>
