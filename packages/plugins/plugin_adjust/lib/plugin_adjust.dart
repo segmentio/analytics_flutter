@@ -87,7 +87,7 @@ class AdjustDestination extends DestinationPlugin {
     }
 
     final token = mappedCustomEventToken(event.event, adjustSettings!);
-    if (token) {
+    if (token != null) {
       final adjEvent = AdjustEvent(token);
 
       final properties = event.properties;
