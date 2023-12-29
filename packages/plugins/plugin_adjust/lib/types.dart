@@ -10,7 +10,7 @@ class AdjustSettings {
   final bool? trackAttributionData;
   final bool? setDelay;
   final Map<String, String>? customEvents;
-  final double? delayTime;
+  final int? delayTime;
 
   AdjustSettings(this.appToken,
       {this.disabled = false,
