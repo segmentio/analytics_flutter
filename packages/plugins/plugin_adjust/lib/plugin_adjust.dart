@@ -66,7 +66,7 @@ class AdjustDestination extends DestinationPlugin {
     if (useDelay == true) {
       final delayTime = adjustSettings!.delayTime;
       if (delayTime != null) {
-        adjustConfig.delayStart = delayTime as double;
+        adjustConfig.delayStart = delayTime.toDouble();
       }
     }
 

@@ -33,7 +33,7 @@ class FirebaseDestination extends DestinationPlugin {
     if (event.traits != null) {
       await Future.wait(event.traits!.toJson().entries.map((entry) async {
         await FirebaseAnalytics.instance
-            .setUserProperty(name: entry.key, value: entry.value);
+            .setUserProperty(name: entry.key, value: entry.value.toString());
       }));
     }
     return event;
