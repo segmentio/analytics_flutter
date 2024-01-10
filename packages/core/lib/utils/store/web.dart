@@ -36,6 +36,7 @@ class StoreImpl implements Store {
   Future<Map<String, dynamic>?> _readFromStorage(String fileKey) async {
     final fileName = _getFileName(fileKey);
     MapEntry<String, String>? data;
+    String anonymousId;
     
     try {
       data = localStorage.entries.firstWhere((i) => i.key == fileName);
@@ -44,37 +45,17 @@ class StoreImpl implements Store {
     }
 
     if(fileKey  == "userInfo") {
-        String anonymousId;
-        try {
-          final entry = localStorage.entries.firstWhere(
-            (i) => i.key == "ajs_anonymous_id",
-          );
-          anonymousId = entry.value;
-        } on StateError {
-          anonymousId = '';
-        }
-
-        if (anonymousId.isEmpty) {
-          final cookies = html.document.cookie?.split(";");
-          if (cookies != null && cookies.isNotEmpty) {
-            for (var cookie in cookies) {
-              final cookieParts = cookie.split("=");
-              if (cookieParts[0].trim() == "ajs_anonymous_id") {
-                anonymousId = cookieParts[1];
-              }
-            }
-          }
-        }
-        if(data != null) {
-          final jsonDecoded = json.decode(data.value);
-          if(anonymousId.isNotEmpty){
-            jsonDecoded["anonymousId"] = anonymousId;
-          }
+      anonymousId = getExistingAnonymousId(data);
+      if(data != null) {
+        final jsonDecoded = json.decode(data.value);
+        if(anonymousId.isNotEmpty){
+          jsonDecoded["anonymousId"] = anonymousId;
           return jsonDecoded as Map<String, dynamic>;
-        } else if(anonymousId.isNotEmpty){
-          final json = {"anonymousId": anonymousId };
-          return json;
         }
+      } else if(anonymousId.isNotEmpty){
+        final json = {"anonymousId": anonymousId };
+        return json;
+      }
     }
 
     if (data != null) {
@@ -89,4 +70,29 @@ class StoreImpl implements Store {
 
   @override
   void dispose() {}
+
+  String getExistingAnonymousId(MapEntry<String, String>? data) {
+     String anonymousId;
+      try {
+        final entry = localStorage.entries.firstWhere(
+          (i) => i.key == "ajs_anonymous_id",
+        );
+        anonymousId = entry.value;
+      } on StateError {
+        anonymousId = '';
+      }
+
+      if (anonymousId.isEmpty) {
+        final cookies = html.document.cookie?.split(";");
+        if (cookies != null && cookies.isNotEmpty) {
+          for (var cookie in cookies) {
+            final cookieParts = cookie.split("=");
+            if (cookieParts[0].trim() == "ajs_anonymous_id") {
+              anonymousId = cookieParts[1];
+            }
+          }
+        }
+      }
+      return anonymousId.isEmpty ? '' : anonymousId;
+  }
 }

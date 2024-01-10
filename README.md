@@ -570,6 +570,12 @@ try {
 }
 ```
 
+## Platfom Specific
+
+### Web
+
+The code will use AJS anonymousId from cookies or localStorage if present.
+
 ## Example App
 
 See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
