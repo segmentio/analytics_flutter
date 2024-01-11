@@ -1,0 +1,3 @@
+[tools]
+ruby = "latest"
+cocoapods = "latest"
