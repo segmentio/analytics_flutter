@@ -1,7 +1,7 @@
 import 'package:analytics_plugin_adjust/types.dart';
 
-dynamic mappedCustomEventToken(String eventName, AdjustSettings settings) {
-  dynamic result;
+String? mappedCustomEventToken(String eventName, AdjustSettings settings) {
+  String? result;
   final tokens = settings.customEvents;
   if (tokens != null) {
     result = tokens[eventName];

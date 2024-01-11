@@ -13,7 +13,7 @@ AdjustSettings _$AdjustSettingsFromJson(Map<String, dynamic> json) =>
       customEvents: (json['customEvents'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
-      delayTime: json['delayTime'] as double?,
+      delayTime: json['delayTime'] as int?,
       setDelay: json['setDelay'] as bool?,
       setEnvironmentProduction: json['setEnvironmentProduction'] as bool?,
       setEventBufferingEnabled: json['setEventBufferingEnabled'] as bool?,

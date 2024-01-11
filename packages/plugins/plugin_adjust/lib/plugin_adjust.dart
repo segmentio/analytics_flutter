@@ -21,7 +21,11 @@ class AdjustDestination extends DestinationPlugin {
       return;
     }
 
-    adjustSettings = AdjustSettings.fromJson(adjustSettingsJson);
+    try {
+      adjustSettings = AdjustSettings.fromJson(adjustSettingsJson);
+    } catch (e) {
+      print(e);
+    }
 
     final environment = adjustSettings!.setEnvironmentProduction == true
         ? AdjustEnvironment.production
@@ -57,7 +61,7 @@ class AdjustDestination extends DestinationPlugin {
     if (useDelay == true) {
       final delayTime = adjustSettings!.delayTime;
       if (delayTime != null) {
-        adjustConfig.delayStart = delayTime!;
+        adjustConfig.delayStart = delayTime as double;
       }
     }
 
@@ -87,7 +91,7 @@ class AdjustDestination extends DestinationPlugin {
     }
 
     final token = mappedCustomEventToken(event.event, adjustSettings!);
-    if (token) {
+    if (token != null) {
       final adjEvent = AdjustEvent(token);
 
       final properties = event.properties;
