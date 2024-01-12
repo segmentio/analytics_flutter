@@ -1,14 +1,9 @@
 import 'package:analytics/event.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics_example/config.dart';
-import 'package:analytics_plugin_advertising_id/plugin_advertising_id.dart';
-import 'package:analytics_plugin_idfa/plugin_idfa.dart';
-import 'package:analytics_example/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:analytics/client.dart';
-import 'package:analytics_plugin_firebase/plugin_firebase.dart'
-    show FirebaseDestination;
 
 void main() {
   runApp(const MyApp());
@@ -23,17 +18,12 @@ class MyApp extends MaterialApp {
 
 class _MyAppState extends State<MyApp> {
   final analytics = createClient(Configuration(writeKey,
-      debug: true, trackApplicationLifecycleEvents: false));
+      debug: true, trackApplicationLifecycleEvents: true));
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
-
-    analytics
-        .addPlugin(FirebaseDestination(DefaultFirebaseOptions.currentPlatform));
-    analytics.addPlugin(PluginAdvertisingId());
-    analytics.addPlugin(PluginIdfa());
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.

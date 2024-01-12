@@ -15,6 +15,7 @@ import 'package:analytics/state.dart';
 import 'package:analytics/timeline.dart';
 import 'package:analytics/utils/lifecycle/lifecycle.dart';
 import 'package:analytics/utils/store/store.dart';
+import 'package:flutter/foundation.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:uuid/uuid.dart';
 import 'analytics_platform_interface.dart';
@@ -22,6 +23,7 @@ import 'package:analytics/version.dart';
 import 'package:analytics/utils/http_client.dart';
 import 'package:analytics/plugins/inject_user_info.dart';
 import 'package:analytics/plugins/inject_context.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Analytics with ClientMethods {
   static String version() => segmentVersion;
@@ -317,18 +319,27 @@ class Analytics with ClientMethods {
       return;
     }
 
-    if (previousContext == null) {
-      track("Application Installed", properties: {
-        "version": context.app.version,
-        "build": context.app.build,
-      });
-    } else if (context.app.version != previousContext.app.version) {
-      track("Application Updated", properties: {
-        "version": context.app.version,
-        "build": context.app.build,
-        "previous_version": previousContext.app.version,
-        "previous_build": previousContext.app.build,
-      });
+    // Set a flag on the first launch to track installations/updates
+    // We ignore this on web
+    if (!kIsWeb) {
+      const appInstalledFlag = "segment_app_installed";
+      final prefs = await SharedPreferences.getInstance();
+      final isAppInstalled = prefs.getBool(appInstalledFlag);
+
+      if (isAppInstalled != true) {
+        prefs.setBool(appInstalledFlag, true);
+        track("Application Installed", properties: {
+          "version": context.app.version,
+          "build": context.app.build,
+        });
+      } else if (context.app.version != previousContext?.app.version) {
+        track("Application Updated", properties: {
+          "version": context.app.version,
+          "build": context.app.build,
+          "previous_version": previousContext?.app.version,
+          "previous_build": previousContext?.app.build,
+        });
+      }
     }
 
     track("Application Opened", properties: {
