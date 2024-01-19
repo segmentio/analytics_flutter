@@ -3,6 +3,7 @@ library analytics_plugin_adjust;
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:adjust_sdk/adjust_event.dart';
+import 'package:analytics/errors.dart';
 import 'package:analytics/plugin.dart';
 import 'package:analytics_plugin_adjust/types.dart';
 import 'package:analytics_plugin_adjust/utils.dart';
@@ -24,7 +25,11 @@ class AdjustDestination extends DestinationPlugin {
     try {
       adjustSettings = AdjustSettings.fromJson(adjustSettingsJson);
     } catch (e) {
-      print(e);
+      analytics?.error(PluginError("Error couldn't parse Adjust settings", e));
+    }
+
+    if (adjustSettings == null) {
+      return;
     }
 
     final environment = adjustSettings!.setEnvironmentProduction == true
@@ -87,6 +92,10 @@ class AdjustDestination extends DestinationPlugin {
     final anonId = event.anonymousId;
     if (anonId != null && anonId.isNotEmpty) {
       Adjust.addSessionPartnerParameter('anonymous_id', anonId);
+    }
+
+    if (adjustSettings == null) {
+      return event;
     }
 
     final token = mappedCustomEventToken(event.event, adjustSettings!);
