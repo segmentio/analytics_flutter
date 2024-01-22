@@ -79,7 +79,6 @@ class AdjustDestination extends DestinationPlugin {
     if (anonId != null && anonId.isNotEmpty) {
       Adjust.addSessionPartnerParameter('anonymous_id', anonId);
     }
-    await identify(event);
     return event;
   }
 
