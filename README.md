@@ -574,7 +574,9 @@ try {
 
 ### Web
 
-The code will use AJS anonymousId from cookies or localStorage if present.
+`analytics_flutter` on web will check for `Analytics.JS` userInfo cookies/localStorage and reuse the `anonymousId` data.
+
+LocalStorage recovery only works when running in the same domain/subdomain.
 
 ## Example App
 
