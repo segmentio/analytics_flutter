@@ -570,6 +570,14 @@ try {
 }
 ```
 
+## Platfom Specific
+
+### Web
+
+`analytics_flutter` on web will check for `Analytics.JS` userInfo cookies/localStorage and reuse the `anonymousId` data.
+
+LocalStorage recovery only works when running in the same domain/subdomain.
+
 ## Example App
 
 See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.

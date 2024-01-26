@@ -36,11 +36,28 @@ class StoreImpl implements Store {
   Future<Map<String, dynamic>?> _readFromStorage(String fileKey) async {
     final fileName = _getFileName(fileKey);
     MapEntry<String, String>? data;
+    String anonymousId;
+    
     try {
       data = localStorage.entries.firstWhere((i) => i.key == fileName);
     } on StateError {
       data = null;
     }
+
+    if(fileKey  == "userInfo") {
+      anonymousId = getExistingAnonymousId(data);
+      if(data != null) {
+        final jsonDecoded = json.decode(data.value);
+        if(anonymousId.isNotEmpty){
+          jsonDecoded["anonymousId"] = anonymousId;
+          return jsonDecoded as Map<String, dynamic>;
+        }
+      } else if(anonymousId.isNotEmpty){
+        final json = {"anonymousId": anonymousId };
+        return json;
+      }
+    }
+
     if (data != null) {
       if (data.value == "{}") {
         return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.
@@ -53,4 +70,29 @@ class StoreImpl implements Store {
 
   @override
   void dispose() {}
+
+  String getExistingAnonymousId(MapEntry<String, String>? data) {
+     String anonymousId;
+      try {
+        final entry = localStorage.entries.firstWhere(
+          (i) => i.key == "ajs_anonymous_id",
+        );
+        anonymousId = entry.value;
+      } on StateError {
+        anonymousId = '';
+      }
+
+      if (anonymousId.isEmpty) {
+        final cookies = html.document.cookie?.split(";");
+        if (cookies != null && cookies.isNotEmpty) {
+          for (var cookie in cookies) {
+            final cookieParts = cookie.split("=");
+            if (cookieParts[0].trim() == "ajs_anonymous_id") {
+              anonymousId = cookieParts[1];
+            }
+          }
+        }
+      }
+      return anonymousId.isEmpty ? '' : anonymousId;
+  }
 }
