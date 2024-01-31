@@ -3,6 +3,7 @@ library analytics_plugin_adjust;
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:adjust_sdk/adjust_event.dart';
+import 'package:analytics/errors.dart';
 import 'package:analytics/plugin.dart';
 import 'package:analytics_plugin_adjust/types.dart';
 import 'package:analytics_plugin_adjust/utils.dart';
@@ -24,7 +25,11 @@ class AdjustDestination extends DestinationPlugin {
     try {
       adjustSettings = AdjustSettings.fromJson(adjustSettingsJson);
     } catch (e) {
-      print(e);
+      analytics?.error(PluginError("Error couldn't parse Adjust settings", e));
+    }
+
+    if (adjustSettings == null) {
+      return;
     }
 
     final environment = adjustSettings!.setEnvironmentProduction == true
@@ -61,7 +66,7 @@ class AdjustDestination extends DestinationPlugin {
     if (useDelay == true) {
       final delayTime = adjustSettings!.delayTime;
       if (delayTime != null) {
-        adjustConfig.delayStart = delayTime as double;
+        adjustConfig.delayStart = delayTime.toDouble();
       }
     }
 
@@ -79,7 +84,6 @@ class AdjustDestination extends DestinationPlugin {
     if (anonId != null && anonId.isNotEmpty) {
       Adjust.addSessionPartnerParameter('anonymous_id', anonId);
     }
-    await identify(event);
     return event;
   }
 
@@ -88,6 +92,10 @@ class AdjustDestination extends DestinationPlugin {
     final anonId = event.anonymousId;
     if (anonId != null && anonId.isNotEmpty) {
       Adjust.addSessionPartnerParameter('anonymous_id', anonId);
+    }
+
+    if (adjustSettings == null) {
+      return event;
     }
 
     final token = mappedCustomEventToken(event.event, adjustSettings!);
