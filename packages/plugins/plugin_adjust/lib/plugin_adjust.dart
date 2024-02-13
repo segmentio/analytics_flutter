@@ -3,10 +3,10 @@ library analytics_plugin_adjust;
 import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:adjust_sdk/adjust_event.dart';
-import 'package:analytics/errors.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics_plugin_adjust/types.dart';
-import 'package:analytics_plugin_adjust/utils.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics_plugin_adjust/types.dart';
+import 'package:segment_analytics_plugin_adjust/utils.dart';
 
 class AdjustDestination extends DestinationPlugin {
   AdjustDestination() : super("Adjust");
