@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:analytics/analytics.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/logger.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/logger.dart';
 
 class EventLogger extends DestinationPlugin {
   var logKind = LogFilterKind.debug;

@@ -1,9 +1,9 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/state.dart';
-import 'package:analytics_example/config.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/state.dart';
+import 'package:segment_analytics_example/config.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:analytics/client.dart';
+import 'package:segment_analytics/client.dart';
 
 void main() {
   runApp(const MyApp());

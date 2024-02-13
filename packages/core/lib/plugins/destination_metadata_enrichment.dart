@@ -1,5 +1,5 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
 
 class DestinationMetadataEnrichment extends UtilityPlugin {
   DestinationMetadataEnrichment(this._destinationKey)

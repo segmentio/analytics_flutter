@@ -1,8 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
-
-import 'package:flutter/foundation.dart';
-import 'package:uuid/uuid.dart';
 
 class Reducer<T> {
   final Future<T> Function() operation;

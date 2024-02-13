@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:analytics/errors.dart';
+import 'package:segment_analytics/errors.dart';
 
 import 'store.dart';
 

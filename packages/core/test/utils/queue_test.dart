@@ -1,4 +1,4 @@
-import 'package:analytics/utils/queue.dart';
+import 'package:segment_analytics/utils/queue.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class SimpleState {

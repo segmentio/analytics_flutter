@@ -1,5 +1,5 @@
-import 'package:analytics/errors.dart';
-import 'package:analytics/native_context.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/native_context.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 part 'event.g.dart';

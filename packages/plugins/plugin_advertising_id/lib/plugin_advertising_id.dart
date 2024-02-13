@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:analytics/analytics.dart';
-import 'package:analytics/plugin.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/plugin.dart';
 
 import 'plugin_advertising_id_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;

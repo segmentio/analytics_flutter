@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'package:analytics/analytics_platform_interface.dart';
-import 'package:analytics/errors.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/flush_policies/flush_policy.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/utils/lifecycle/lifecycle.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/utils/lifecycle/lifecycle.dart';
 import 'package:flutter/foundation.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:analytics/utils/http_client.dart';
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/utils/http_client.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 import 'package:uuid/uuid.dart';
 part 'state.g.dart';
 
