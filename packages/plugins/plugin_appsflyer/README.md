@@ -1,4 +1,4 @@
-# @segment/analytics_plugin_appsflyer
+# segment_analytics_plugin_appsflyer
 
 `DestinationPlugin` for [Appsflyer](https://www.appsflyer.com/). Wraps [`appsflyer_sdk`](https://pub.dev/packages/appsflyer_sdk).
 

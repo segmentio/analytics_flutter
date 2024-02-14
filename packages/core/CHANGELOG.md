@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Fix cocoapods
+
 ## 1.0.0
 
 - iOS, Android, Web, and MacOS support

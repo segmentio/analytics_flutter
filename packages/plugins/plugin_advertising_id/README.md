@@ -1,4 +1,4 @@
-# @segment/analytics_plugin_advertising_id
+# segment_analytics_plugin_advertising_id
 
 `EnrichmentPlugin` to collect advertisingId on Android
 

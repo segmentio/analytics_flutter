@@ -1,4 +1,4 @@
-# @segment/analytics_plugin_idfa
+# segment_analytics_plugin_idfa
 
 `Plugin` which retrieves IDFA data (iOS only). IDFA data will then be included in `event` payloads under `event.context.device`
 

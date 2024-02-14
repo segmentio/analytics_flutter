@@ -1,6 +1,6 @@
+import 'package:analytics_example/config.dart';
 import 'package:segment_analytics/event.dart';
 import 'package:segment_analytics/state.dart';
-import 'package:segment_analytics_example/config.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:segment_analytics/client.dart';

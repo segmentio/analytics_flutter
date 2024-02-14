@@ -1,4 +1,4 @@
-# @segment/analytics-flutter
+# segment_analytics
 
 > **Warning**
 > This project is currently only available in Beta phase and is covered by Segment's First Access & Beta Preview Terms. We encourage you to try out this new library. Please provide feedback via Github issues/PRs, and feel free to submit pull requests.
@@ -16,7 +16,7 @@ Some destination plugins might not support all platform functionality. Refer to 
 
 ## Table of Contents
 
-- [@segment/analytics-flutter](#segmentanalytics-flutter)
+- [segment_analytics](#segment_analytics)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
     - [Permissions](#permissions)
