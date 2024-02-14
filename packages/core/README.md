@@ -19,6 +19,7 @@ Some destination plugins might not support all platform functionality. Refer to 
 - [segment_analytics](#segment_analytics)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
+    - [Upgrading from Pilot](#upgrading-from-pilot)
     - [Permissions](#permissions)
   - [Usage](#usage)
     - [Setting up the client](#setting-up-the-client)
@@ -58,6 +59,28 @@ Run:
 
 ```dart
 import 'package:segment_analytics/client.dart';
+```
+
+### Upgrading from Pilot
+
+Since pilot phase we have renamed the package of this library from `analytics` to `segment_analytics`. Some changes have to be applied after upgrading to the v1 package:
+
+In your `pubspec.yaml` remove the `analytics` package and use `segment_analytics` instead.
+
+```diff
+-   analytics:
+-     git:
+-       url: https://github.com/segmentio/analytics_flutter
+-       ref: main
+-       path: packages/core
++   segment_analytics: ^1.0.1
+```
+
+In your dart files change the imports from `package:analytics` to `package:segment_analytics`:
+
+```diff
+- import 'package:analytics/client.dart';
++ import 'package:segment_analytics/client.dart';
 ```
 
 ### Permissions
