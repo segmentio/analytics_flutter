@@ -207,12 +207,12 @@ class Analytics with ClientMethods {
 
   @override
   Future track(String event, {Map<String, dynamic>? properties}) async {
-    await _process(TrackEvent(event, properties: properties));
+    await _process(TrackEvent(event, properties: properties ?? {}));
   }
 
   @override
   Future screen(String name, {Map<String, dynamic>? properties}) async {
-    final event = ScreenEvent(name, properties: properties);
+    final event = ScreenEvent(name, properties: properties ?? {});
 
     await _process(event);
   }
