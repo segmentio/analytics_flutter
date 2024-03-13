@@ -17,6 +17,5 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
   @override
   late final Stream<Map<String, dynamic>> linkStream = _eChannel
       .receiveBroadcastStream()
-      .map<Map<String, dynamic>>(
-          (dynamic link) => link as Map<String, dynamic>);
+      .map<Map<String, dynamic>>((dynamic link) => link.cast<String, dynamic>());
 }
