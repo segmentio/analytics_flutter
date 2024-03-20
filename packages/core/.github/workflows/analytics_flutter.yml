@@ -1,0 +1,52 @@
+name: Analytics Flutter Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '2.x'
+
+    - name: Get dependencies
+      run: flutter pub get
+
+    - name: Analyze Dart code
+      run: flutter analyze
+
+    - name: Run unit tests
+      run: flutter test
+
+    - name: Build APK
+      run: flutter build apk
+
+    - name: Build iOS
+      run: flutter build ios --no-codesign
+
+    - name: Archive and upload iOS artifacts
+      if: success() && startsWith(runner.os, 'macOS')
+      uses: actions/upload-artifact@v2
+      with:
+        name: ios-build
+        path: build/ios
+
+    - name: Archive and upload APK
+      if: success() && startsWith(runner.os, 'Linux')
+      uses: actions/upload-artifact@v2
+      with:
+        name: apk-build
+        path: build/app/outputs/flutter-apk/app-release.apk
