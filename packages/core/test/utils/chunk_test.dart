@@ -1,5 +1,5 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/utils/chunk.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/utils/chunk.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

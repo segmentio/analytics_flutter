@@ -1,4 +1,4 @@
-import 'package:analytics_plugin_idfa/native_idfa.dart';
+import 'package:segment_analytics_plugin_idfa/native_idfa.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'plugin_idfa_pigeon.dart';

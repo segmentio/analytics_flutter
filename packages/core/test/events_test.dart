@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:analytics/analytics_platform_interface.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/native_context.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/native_context.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class MockPlatform extends AnalyticsPlatform {

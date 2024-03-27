@@ -1,6 +1,6 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/state.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/state.dart';
 
 class InjectUserInfo extends PlatformPlugin {
   InjectUserInfo() : super(PluginType.before);

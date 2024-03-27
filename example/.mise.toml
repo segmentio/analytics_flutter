@@ -1,3 +1,4 @@
 [tools]
 ruby = "latest"
 cocoapods = "latest"
+java = "17"

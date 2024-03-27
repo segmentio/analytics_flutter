@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:analytics/analytics.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/flush_policies/count_flush_policy.dart';
-import 'package:analytics/flush_policies/flush_policy.dart';
-import 'package:analytics/flush_policies/startup_flush_policy.dart';
-import 'package:analytics/flush_policies/timer_flush_policy.dart';
-import 'package:analytics/plugins/event_logger.dart';
-import 'package:analytics/state.dart';
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/flush_policies/count_flush_policy.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
+import 'package:segment_analytics/flush_policies/startup_flush_policy.dart';
+import 'package:segment_analytics/flush_policies/timer_flush_policy.dart';
+import 'package:segment_analytics/plugins/event_logger.dart';
+import 'package:segment_analytics/state.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 import 'package:flutter/widgets.dart';
 
 Analytics createClient(Configuration configuration) {

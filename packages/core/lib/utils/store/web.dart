@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
 
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 
 class StoreImpl implements Store {
   html.Storage get localStorage => html.window.localStorage;

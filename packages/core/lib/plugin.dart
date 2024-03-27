@@ -1,6 +1,6 @@
-import 'package:analytics/analytics.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/timeline.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/timeline.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class Plugin {

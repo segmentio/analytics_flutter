@@ -2,10 +2,10 @@ library analytics_plugin_appsflyer;
 
 import 'dart:convert';
 
-import 'package:analytics/analytics.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics_plugin_appsflyer/types.dart';
-import 'package:analytics_plugin_appsflyer/utils.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics_plugin_appsflyer/types.dart';
+import 'package:segment_analytics_plugin_appsflyer/utils.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
 
 class AppsFlyerDestination extends DestinationPlugin {

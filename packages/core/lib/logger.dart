@@ -1,4 +1,4 @@
-import 'package:analytics/analytics.dart';
+import 'package:segment_analytics/analytics.dart';
 import 'package:logger/logger.dart';
 
 /// The foundation for building out a special logger. If logs need to be directed to a certain area, this is the

@@ -252,7 +252,8 @@ GroupTraits _$GroupTraitsFromJson(Map<String, dynamic> json) => GroupTraits(
       phone: json['phone'] as String?,
       plan: json['plan'] as String?,
       website: json['website'] as String?,
-    )..custom = json['custom'] as Map<String, dynamic>;
+      custom: json['custom'] as Map<String, dynamic>?,
+    );
 
 Map<String, dynamic> _$GroupTraitsToJson(GroupTraits instance) {
   final val = <String, dynamic>{

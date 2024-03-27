@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:html' as html show window;
 
-import 'package:analytics/native_context.dart';
+import 'package:segment_analytics/native_context.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-import 'package:analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
 
-export 'package:analytics/client.dart';
+export 'package:segment_analytics/client.dart';
 
 /// A web implementation of the AnalyticsPlatform of the Analytics plugin.
 class AnalyticsPlatformImpl extends AnalyticsPlatform {

@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:analytics/analytics.dart';
-import 'package:analytics/errors.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/state.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/state.dart';
 import 'package:http/http.dart' as http;
 
 class HTTPClient {

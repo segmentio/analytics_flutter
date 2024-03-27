@@ -1,7 +1,7 @@
-import 'package:analytics/analytics.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/state.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/state.dart';
 
 typedef OnFlush = Future Function(List<RawEvent> events);
 

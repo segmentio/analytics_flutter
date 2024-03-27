@@ -1,4 +1,4 @@
-import 'package:analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:flutter/services.dart';
 
 import 'native_context.dart';

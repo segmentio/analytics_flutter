@@ -1,7 +1,7 @@
-import 'package:analytics/analytics.dart';
-import 'package:analytics/analytics_platform_interface.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/state.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 

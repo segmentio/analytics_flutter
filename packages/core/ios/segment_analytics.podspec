@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint analytics.podspec` to validate before publishing.
+# Run `pod lib lint segment_analytics.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'analytics'
+  s.name             = 'segment_analytics'
   s.version          = '0.0.1'
   s.summary          = 'The hassle-free way to add Segment analytics to your Flutter app.'
   s.description      = <<-DESC

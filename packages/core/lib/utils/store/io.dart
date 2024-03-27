@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:analytics/errors.dart';
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StoreImpl with Store {

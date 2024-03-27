@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0
 
-* Initial version, based off the React Native implementation (@segment/analytics-react-native-plugin-firebase) v0.3.2
+- Initial version, based off the React Native implementation (@segment/analytics-react-native-plugin-firebase) v0.3.2

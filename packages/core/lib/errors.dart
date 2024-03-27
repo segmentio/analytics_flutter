@@ -1,5 +1,5 @@
-import 'package:analytics/analytics.dart';
-import 'package:analytics/logger.dart';
+import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/logger.dart';
 
 class StorageUnableToCreate implements Exception {
   final String msg;
