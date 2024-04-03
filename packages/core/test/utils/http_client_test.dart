@@ -2,6 +2,7 @@ import 'package:analytics/analytics.dart';
 import 'package:analytics/logger.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics/utils/http_client.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
@@ -10,6 +11,7 @@ import '../mocks/mocks.dart';
 import '../mocks/mocks.mocks.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   group("HTTP Client", () {
     setUp(() {
       LogFactory.logger = Mocks.logTarget();

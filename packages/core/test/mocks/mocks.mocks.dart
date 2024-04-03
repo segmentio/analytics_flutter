@@ -47,7 +47,7 @@ class _FakeUri_1 extends _i1.SmartFake implements Uri {
         );
 }
 
-class _FakeByteStream_2 extends _i1.SmartFake implements _i3.ByteStream {
+class _FakeByteStream_2 extends _i1.SmartFake{
   _FakeByteStream_2(
     Object parent,
     Invocation parentInvocation,
