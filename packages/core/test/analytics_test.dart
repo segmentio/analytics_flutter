@@ -2,12 +2,14 @@ import 'package:analytics/analytics.dart';
 import 'package:analytics/analytics_platform_interface.dart';
 import 'package:analytics/logger.dart';
 import 'package:analytics/state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
 import 'mocks/mocks.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   group("analytics", () {
     setUp(() {
       AnalyticsPlatform.instance = MockPlatform();
