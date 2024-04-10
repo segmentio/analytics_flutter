@@ -69,10 +69,7 @@ class SegmentDestination extends DestinationPlugin with Flushable {
   @override
   void update(Map<String, dynamic> settings, ContextUpdateType type) {
     super.update(settings, type);
-    if (settings[segmentDestinationKey] != null &&
-        settings[segmentDestinationKey]['apiHost'] != null) {
-      _apiHost = '${settings[segmentDestinationKey]['apiHost']}';
-    }
+    _apiHost = settings[segmentDestinationKey]?['apiHost'];
   }
 
   @override
