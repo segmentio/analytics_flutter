@@ -12,6 +12,7 @@ const segmentDestinationKey = 'Segment.io';
 
 class SegmentDestination extends DestinationPlugin with Flushable {
   late final QueueFlushingPlugin _queuePlugin;
+  String? _apiHost;
 
   SegmentDestination() : super(segmentDestinationKey) {
     _queuePlugin = QueueFlushingPlugin(_sendEvents);
@@ -32,7 +33,8 @@ class SegmentDestination extends DestinationPlugin with Flushable {
     await Future.forEach(chunkedEvents, (batch) async {
       try {
         final succeeded = await analytics?.httpClient.startBatchUpload(
-            analytics!.state.configuration.state.writeKey, batch);
+            analytics!.state.configuration.state.writeKey, batch,
+            host: _apiHost);
         if (succeeded == null || !succeeded) {
           numFailedEvents += batch.length;
         }
@@ -62,6 +64,15 @@ class SegmentDestination extends DestinationPlugin with Flushable {
     // Enrich events with the Destination metadata
     add(DestinationMetadataEnrichment(segmentDestinationKey));
     add(_queuePlugin);
+  }
+
+  @override
+  void update(Map<String, dynamic> settings, ContextUpdateType type) {
+    super.update(settings, type);
+    if (settings[segmentDestinationKey] != null &&
+        settings[segmentDestinationKey]['apiHost'] != null) {
+      _apiHost = '${settings[segmentDestinationKey]['apiHost']}';
+    }
   }
 
   @override
