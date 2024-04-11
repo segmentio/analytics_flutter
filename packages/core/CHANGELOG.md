@@ -17,3 +17,7 @@
 - Strongly typed, including User Traits and Context objects and plugin settings
 - Fully asynchronous and concurrency safe state and persistence management
 - Example app showing off usage of the SDK
+
+## 1.0.2
+
+- Fixed an issue with EU Workspaces not respecting the proper apiHost

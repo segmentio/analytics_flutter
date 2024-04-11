@@ -28,7 +28,7 @@ class HTTPClient {
   ///   - batch: The array of the events, considered a batch of events.
   ///   - completion: The closure executed when done. Passes if the task should be retried or not if failed.
   Future<bool> startBatchUpload(String writeKey, List<RawEvent> batch,
-      {String? host = null}) async {
+      {String? host}) async {
     final apihost = _analytics.target!.state.configuration.state.apiHost ??
         host ??
         defaultAPIHost;

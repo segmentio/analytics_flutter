@@ -76,10 +76,10 @@ In your `pubspec.yaml` remove the `analytics` package and use `segment_analytics
 +   segment_analytics: ^1.0.1
 ```
 
-In your dart files change the imports from `package:analytics` to `package:segment_analytics`:
+In your dart files change the imports from `package:segment_analytics` to `package:segment_analytics`:
 
 ```diff
-- import 'package:analytics/client.dart';
+- import 'package:segment_analytics/client.dart';
 + import 'package:segment_analytics/client.dart';
 ```
 
