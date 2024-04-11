@@ -516,7 +516,7 @@ class Configuration {
   final int? maxBatchSize;
   final Map<String, dynamic>? defaultIntegrationSettings;
   final bool autoAddSegmentDestination;
-  final String apiHost;
+  final String? apiHost;
   final String cdnHost;
 
   final RequestFactory? requestFactory;
@@ -524,7 +524,7 @@ class Configuration {
   final ErrorHandler? errorHandler;
 
   Configuration(this.writeKey,
-      {this.apiHost = HTTPClient.defaultAPIHost,
+      {this.apiHost,
       this.autoAddSegmentDestination = true,
       this.collectDeviceId = false,
       this.cdnHost = HTTPClient.defaultCDNHost,

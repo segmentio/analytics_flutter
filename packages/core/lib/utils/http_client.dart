@@ -27,9 +27,12 @@ class HTTPClient {
   ///   - key: The write key the events are assocaited with.
   ///   - batch: The array of the events, considered a batch of events.
   ///   - completion: The closure executed when done. Passes if the task should be retried or not if failed.
-  Future<bool> startBatchUpload(String writeKey, List<RawEvent> batch) async {
-    Uri uploadURL =
-        _url(_analytics.target!.state.configuration.state.apiHost, "/b");
+  Future<bool> startBatchUpload(String writeKey, List<RawEvent> batch,
+      {String? host = null}) async {
+    final apihost = _analytics.target!.state.configuration.state.apiHost ??
+        host ??
+        defaultAPIHost;
+    Uri uploadURL = _url(apihost, "/b");
 
     try {
       var urlRequest = _configuredRequest(uploadURL, "POST",

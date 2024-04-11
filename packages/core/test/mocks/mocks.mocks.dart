@@ -419,8 +419,9 @@ class MockHTTPClient extends _i1.Mock implements _i9.HTTPClient {
   @override
   _i4.Future<bool> startBatchUpload(
     String? writeKey,
-    List<_i10.RawEvent>? batch,
-  ) =>
+    List<_i10.RawEvent>? batch, {
+    String? host = null,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #startBatchUpload,
@@ -428,6 +429,7 @@ class MockHTTPClient extends _i1.Mock implements _i9.HTTPClient {
             writeKey,
             batch,
           ],
+          {#host: host},
         ),
         returnValue: _i4.Future<bool>.value(false),
         returnValueForMissingStub: _i4.Future<bool>.value(false),

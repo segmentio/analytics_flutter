@@ -36,3 +36,6 @@ build/
 
 # VSCode
 launch.json
+
+#Coverage
+coverage/
