@@ -10,6 +10,7 @@ import 'package:analytics/flush_policies/flush_policy_executor.dart';
 import 'package:analytics/logger.dart';
 import 'package:analytics/native_context.dart';
 import 'package:analytics/plugin.dart';
+import 'package:analytics/plugins/inject_token.dart';
 import 'package:analytics/plugins/segment_destination.dart';
 import 'package:analytics/state.dart';
 import 'package:analytics/timeline.dart';
@@ -68,6 +69,10 @@ class Analytics with ClientMethods {
     if (config.autoAddSegmentDestination) {
       final segmentDestination = SegmentDestination();
       addPlugin(segmentDestination);
+    }
+
+    if(config.token != null) {
+      _platformPlugins.add(InjectToken(config.token!));
     }
 
     // Setup platform specific plugins

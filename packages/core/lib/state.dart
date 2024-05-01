@@ -523,6 +523,8 @@ class Configuration {
   final StreamSubscription<AppStatus> Function()? appStateStream;
   final ErrorHandler? errorHandler;
 
+  final String? token;
+
   Configuration(this.writeKey,
       {this.apiHost,
       this.autoAddSegmentDestination = true,
@@ -536,7 +538,8 @@ class Configuration {
       this.trackApplicationLifecycleEvents = false,
       this.trackDeeplinks = false,
       this.debug = false,
-      this.maxBatchSize});
+      this.maxBatchSize,
+      this.token});
 }
 
 typedef ErrorHandler = void Function(Exception);
@@ -555,5 +558,6 @@ Configuration setFlushPolicies(
       maxBatchSize: a.maxBatchSize,
       requestFactory: a.requestFactory,
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
-      trackDeeplinks: a.trackDeeplinks);
+      trackDeeplinks: a.trackDeeplinks,
+      token: a.token);
 }
