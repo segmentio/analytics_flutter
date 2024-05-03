@@ -420,7 +420,7 @@ class MockHTTPClient extends _i1.Mock implements _i9.HTTPClient {
   _i4.Future<bool> startBatchUpload(
     String? writeKey,
     List<_i10.RawEvent>? batch, {
-    String? host = null,
+    String? host,
   }) =>
       (super.noSuchMethod(
         Invocation.method(

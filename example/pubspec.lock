@@ -260,10 +260,10 @@ packages:
     dependency: "direct main"
     description:
       name: segment_analytics
-      sha256: "13e5c0ff0071638d947bbf0f0d8664eeb1d0e7b20274313e60cb1c589dbf6f92"
+      sha256: fa6e2df7c5703d0d4830c0629ff6af7e2d1a7fd88c051636c5b82f3a8fc88f55
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   shared_preferences:
     dependency: transitive
     description:
