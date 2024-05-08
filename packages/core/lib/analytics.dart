@@ -59,7 +59,7 @@ class Analytics with ClientMethods {
       {HTTPClient Function(Analytics)? httpClient})
       : _state = StateManager(_store, System(true, false), config),
         _timeline = Timeline() {
-    _state.init(error);
+    _state.init(error, config.storageJson!);
 
     this.httpClient = httpClient == null ? HTTPClient(this) : httpClient(this);
 
