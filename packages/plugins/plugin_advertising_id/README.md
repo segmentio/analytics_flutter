@@ -23,7 +23,7 @@ See [Google Play Services documentation](https://developers.google.com/admob/and
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance.
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `AdvertisingIdDestination` instance. 
 
 ```dart
 import 'package:segment_analytics/client.dart';

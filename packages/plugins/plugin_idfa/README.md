@@ -23,7 +23,7 @@ You also need to ensure you have a description for `NSUserTrackingUsageDescripti
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `AppsFlyerDestination` instance.
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `PluginIdfa` instance. 
 
 ```dart
 import 'package:segment_analytics/client.dart';
