@@ -1,4 +1,4 @@
-import 'package:analytics/map_transform.dart';
+import 'package:segment_analytics/map_transform.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:json_annotation/json_annotation.dart';
 

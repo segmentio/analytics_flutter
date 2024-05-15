@@ -1,4 +1,4 @@
-import 'package:analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:flutter/services.dart';
 
 import 'native_context.dart';
@@ -17,6 +17,5 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
   @override
   late final Stream<Map<String, dynamic>> linkStream = _eChannel
       .receiveBroadcastStream()
-      .map<Map<String, dynamic>>(
-          (dynamic link) => link as Map<String, dynamic>);
+      .map<Map<String, dynamic>>((dynamic link) => link.cast<String, dynamic>());
 }

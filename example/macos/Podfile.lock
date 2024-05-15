@@ -1,29 +1,36 @@
 PODS:
-  - analytics (0.0.1):
-    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - segment_analytics (0.0.1):
+    - FlutterMacOS
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
-  - analytics (from `Flutter/ephemeral/.symlinks/plugins/analytics/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin`)
+  - segment_analytics (from `Flutter/ephemeral/.symlinks/plugins/segment_analytics/macos`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 EXTERNAL SOURCES:
-  analytics:
-    :path: Flutter/ephemeral/.symlinks/plugins/analytics/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   path_provider_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/darwin
+  segment_analytics:
+    :path: Flutter/ephemeral/.symlinks/plugins/segment_analytics/macos
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
 
 SPEC CHECKSUMS:
-  analytics: cccd9da15e53ea20a05037b59e6f6534be856e2b
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  segment_analytics: f958dfc243c0c66e8f3be016c8cd3c2e7501071f
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2

@@ -1,5 +1,5 @@
-import 'package:analytics_plugin_idfa/native_idfa.dart';
-import 'package:analytics_plugin_idfa/plugin_idfa_platform_interface.dart';
+import 'package:segment_analytics_plugin_idfa/native_idfa.dart';
+import 'package:segment_analytics_plugin_idfa/plugin_idfa_platform_interface.dart';
 
 /// An implementation of [AnalyticsPlatform] that uses Pigeon.
 class PigeonPluginIdfa extends PluginIdfaPlatform {

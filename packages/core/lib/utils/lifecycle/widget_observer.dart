@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:analytics/utils/lifecycle/lifecycle.dart';
+import 'package:segment_analytics/utils/lifecycle/lifecycle.dart';
 import 'package:flutter/widgets.dart';
 
 class WidgetObserverLifecycle extends LifeCycle with WidgetsBindingObserver {

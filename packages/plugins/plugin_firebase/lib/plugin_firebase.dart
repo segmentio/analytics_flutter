@@ -1,9 +1,9 @@
 library analytics_plugin_firebase;
 
-import 'package:analytics/event.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/map_transform.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/map_transform.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart'
@@ -12,7 +12,7 @@ import 'package:firebase_core/firebase_core.dart'
 export 'package:firebase_core/firebase_core.dart'
     show FirebaseOptions, Firebase;
 
-import 'package:analytics_plugin_firebase/properties.dart';
+import 'package:segment_analytics_plugin_firebase/properties.dart';
 
 class FirebaseDestination extends DestinationPlugin {
   final Future<void> firebaseFuture;

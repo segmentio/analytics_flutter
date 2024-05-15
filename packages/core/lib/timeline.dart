@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:analytics/errors.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/utils/queue.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/utils/queue.dart';
 
 typedef TimelinePlugins = Map<PluginType, List<Plugin>>;
 typedef PluginClosure = void Function(Plugin);

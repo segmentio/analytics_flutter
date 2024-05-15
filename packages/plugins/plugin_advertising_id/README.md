@@ -1,4 +1,4 @@
-# @segment/analytics_plugin_advertising_id
+# segment_analytics_plugin_advertising_id
 
 `EnrichmentPlugin` to collect advertisingId on Android
 
@@ -7,16 +7,15 @@
 Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
-dependencies: 
-
-  analytics_plugin_advertising_id: 
-    git: 
+dependencies:
+  analytics_plugin_advertising_id:
+    git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main
       path: packages/plugins/plugin_advertising_id
 ```
 
-This plugin requires a `compileSdkVersion` of at least 19. 
+This plugin requires a `compileSdkVersion` of at least 19.
 
 See [Google Play Services documentation](https://developers.google.com/admob/android/quick-start) for `advertisingId` setup
 
@@ -27,8 +26,8 @@ Follow the [instructions for adding plugins](https://github.com/segmentio/analyt
 In your code where you initialize the analytics client call the `.add(plugin)` method with an `AdvertisingIdDestination` instance. 
 
 ```dart
-import 'package:analytics/client.dart';
-import 'package:analytics_plugin_advertising_id/plugin_advertising_id.dart'
+import 'package:segment_analytics/client.dart';
+import 'package:segment_analytics_plugin_advertising_id/plugin_advertising_id.dart'
     show PluginAdvertisingId;
 
 const writeKey = 'SEGMENT_API_KEY';

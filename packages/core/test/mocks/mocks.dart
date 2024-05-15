@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:analytics/analytics_platform_interface.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/native_context.dart';
-import 'package:analytics/utils/http_client.dart';
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/native_context.dart';
+import 'package:segment_analytics/utils/http_client.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 

@@ -2,27 +2,27 @@ library analytics;
 
 import 'dart:async';
 
-import 'package:analytics/client.dart';
-import 'package:analytics/errors.dart';
-import 'package:analytics/event.dart';
-import 'package:analytics/flush_policies/flush_policy.dart';
-import 'package:analytics/flush_policies/flush_policy_executor.dart';
-import 'package:analytics/logger.dart';
-import 'package:analytics/native_context.dart';
-import 'package:analytics/plugin.dart';
-import 'package:analytics/plugins/segment_destination.dart';
-import 'package:analytics/state.dart';
-import 'package:analytics/timeline.dart';
-import 'package:analytics/utils/lifecycle/lifecycle.dart';
-import 'package:analytics/utils/store/store.dart';
+import 'package:segment_analytics/client.dart';
+import 'package:segment_analytics/errors.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
+import 'package:segment_analytics/flush_policies/flush_policy_executor.dart';
+import 'package:segment_analytics/logger.dart';
+import 'package:segment_analytics/native_context.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/plugins/segment_destination.dart';
+import 'package:segment_analytics/state.dart';
+import 'package:segment_analytics/timeline.dart';
+import 'package:segment_analytics/utils/lifecycle/lifecycle.dart';
+import 'package:segment_analytics/utils/store/store.dart';
 import 'package:flutter/foundation.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:uuid/uuid.dart';
 import 'analytics_platform_interface.dart';
-import 'package:analytics/version.dart';
-import 'package:analytics/utils/http_client.dart';
-import 'package:analytics/plugins/inject_user_info.dart';
-import 'package:analytics/plugins/inject_context.dart';
+import 'package:segment_analytics/version.dart';
+import 'package:segment_analytics/utils/http_client.dart';
+import 'package:segment_analytics/plugins/inject_user_info.dart';
+import 'package:segment_analytics/plugins/inject_context.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Analytics with ClientMethods {

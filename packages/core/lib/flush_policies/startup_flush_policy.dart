@@ -1,4 +1,4 @@
-import 'package:analytics/flush_policies/flush_policy.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
 
 class StartupFlushPolicy extends FlushPolicy {
   @override
