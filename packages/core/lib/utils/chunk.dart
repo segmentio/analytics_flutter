@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:analytics/event.dart';
+import 'package:segment_analytics/event.dart';
 
 List<List<T>> chunk<T extends JSONSerialisable>(List<T> array, int count,
     {int? maxKB}) {

@@ -1,6 +1,6 @@
-import 'package:analytics/analytics_web.dart'
-    if (dart.library.io) 'package:analytics/analytics_pigeon.dart';
-import 'package:analytics/native_context.dart';
+import 'package:segment_analytics/analytics_web.dart'
+    if (dart.library.io) 'package:segment_analytics/analytics_pigeon.dart';
+import 'package:segment_analytics/native_context.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 abstract class AnalyticsPlatform extends PlatformInterface {

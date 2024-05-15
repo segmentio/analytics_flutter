@@ -1,5 +1,5 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/flush_policies/flush_policy.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
 
 typedef OnFlush = void Function();
 

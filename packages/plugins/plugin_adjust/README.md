@@ -1,4 +1,4 @@
-# @segment/analytics_plugin_adjust
+# segment_analytics_plugin_adjust
 
 `DestinationPlugin` for [Adjust](https://www.adjust.com/). Wraps [`adjust_sdk`](https://pub.dev/packages/adjust_sdk).
 
@@ -7,10 +7,9 @@
 Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
-dependencies: 
-
-  analytics_plugin_adjust: 
-    git: 
+dependencies:
+  analytics_plugin_adjust:
+    git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main
       path: packages/plugins/plugin_adjust
@@ -20,11 +19,11 @@ dependencies:
 
 Follow the [instructions for adding plugins](https://github.com/segmentio/analytics_flutter_#adding-plugins) on the main Analytics client:
 
-In your code where you initialize the analytics client call the `.add(plugin)` method with an `AdjustDestination` instance. 
+In your code where you initialize the analytics client call the `.add(plugin)` method with an `AdjustDestination` instance.
 
 ```dart
-import 'package:analytics/client.dart';
-import 'package:analytics_plugin_adjust/plugin_adjust.dart'
+import 'package:segment_analytics/client.dart';
+import 'package:segment_analytics_plugin_adjust/plugin_adjust.dart'
     show AdjustDestination;
 
 const writeKey = 'SEGMENT_API_KEY';
@@ -51,6 +50,7 @@ Please use Github issues, Pull Requests, or feel free to reach out to our [suppo
 Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
 
 ## License
+
 ```
 MIT License
 

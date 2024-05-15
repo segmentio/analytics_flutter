@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:analytics/plugin.dart';
-import 'package:analytics_plugin_idfa/native_idfa.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics_plugin_idfa/native_idfa.dart';
 
 import 'plugin_idfa_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
