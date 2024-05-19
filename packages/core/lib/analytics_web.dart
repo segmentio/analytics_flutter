@@ -14,20 +14,18 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
 
   /// Returns a [String] containing the version of the platform.
   @override
-  Future<NativeContext> getContext({bool collectDeviceId = false}) =>
-      Future.value(
-        NativeContext(
-          app: NativeContextApp(
-            name: web.window.navigator.appName,
-            version: web.window.navigator.appVersion,
-            namespace: web.window.navigator.appCodeName,
-          ),
-          userAgent: web.window.navigator.userAgent,
-          locale: web.window.navigator.language,
-          screen: NativeContextScreen(
-            height: web.window.screen.height,
-            width: web.window.screen.width,
-          ),
+  Future<NativeContext> getContext({bool collectDeviceId = false}) async =>
+      NativeContext(
+        app: NativeContextApp(
+          name: web.window.navigator.appName,
+          version: web.window.navigator.appVersion,
+          namespace: web.window.navigator.appCodeName,
+        ),
+        userAgent: web.window.navigator.userAgent,
+        locale: web.window.navigator.language,
+        screen: NativeContextScreen(
+          height: web.window.screen.height,
+          width: web.window.screen.width,
         ),
       );
 }
