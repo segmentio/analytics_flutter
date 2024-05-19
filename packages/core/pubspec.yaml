@@ -23,6 +23,7 @@ dependencies:
   path_provider: ^2.0.12
   flutter_fgbg: ^0.3.0
   shared_preferences: ^2.2.2
+  web: ^0.5.1
 
 dev_dependencies:
   build_runner: ^2.3.3
