@@ -63,7 +63,7 @@ class ScreenObserver extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    final name = route.settings.name;
+    final name = previousRoute?.settings.name;
     if (name != null) {
       screenStreamController.add(name);
     }
