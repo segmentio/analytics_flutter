@@ -1,7 +1,8 @@
-import 'package:segment_analytics/analytics.dart';
-import 'package:segment_analytics/analytics_platform_interface.dart';
-import 'package:segment_analytics/logger.dart';
-import 'package:segment_analytics/state.dart';
+import 'package:analytics/analytics.dart';
+import 'package:analytics/analytics_platform_interface.dart';
+import 'package:analytics/event.dart';
+import 'package:analytics/logger.dart';
+import 'package:analytics/state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -10,6 +11,13 @@ import 'mocks/mocks.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // Define arguments
+  String writeKey = '123456789abcdefghi';
+  List<RawEvent> batch = [
+    TrackEvent("Event 1"),
+    TrackEvent("Event 2"),
+    TrackEvent("Event 3"),
+  ];
   group("analytics", () {
     setUp(() {
       AnalyticsPlatform.instance = MockPlatform();
@@ -24,7 +32,7 @@ void main() {
       final httpClient = Mocks.httpClient();
       when(httpClient.settingsFor(any))
           .thenAnswer((_) => Future.value(SegmentAPISettings({})));
-      when(httpClient.startBatchUpload(any, any))
+      when(httpClient.startBatchUpload(writeKey, batch))
           .thenAnswer((_) => Future.value(true));
 
       Analytics analytics = Analytics(
@@ -36,7 +44,7 @@ void main() {
       await analytics.init();
 
       verify(httpClient.settingsFor(any));
-      verifyNever(httpClient.startBatchUpload(any, any));
+      verifyNever(httpClient.startBatchUpload(writeKey, batch));
     });
     test(
         "it fetches settings and fires track event when tracking lifecycle events",
@@ -44,7 +52,7 @@ void main() {
       final httpClient = Mocks.httpClient();
       when(httpClient.settingsFor(any))
           .thenAnswer((_) => Future.value(SegmentAPISettings({})));
-      when(httpClient.startBatchUpload(any, any))
+      when(httpClient.startBatchUpload(writeKey, batch))
           .thenAnswer((_) => Future.value(true));
 
       Analytics analytics = Analytics(
@@ -56,7 +64,7 @@ void main() {
       await analytics.init();
 
       verify(httpClient.settingsFor(any));
-      verify(httpClient.startBatchUpload(any, any));
+      verify(httpClient.startBatchUpload(writeKey, batch));
     });
   });
 }
