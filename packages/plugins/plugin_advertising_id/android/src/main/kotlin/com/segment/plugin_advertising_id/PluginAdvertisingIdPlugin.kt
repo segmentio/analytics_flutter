@@ -41,6 +41,7 @@ class PluginAdvertisingIdPlugin: FlutterPlugin, MethodCallHandler {
 
         if (isLimitAdTrackingEnabled) {
           result.success(null)
+          return
         }
 
         val id = advertisingInfo.id

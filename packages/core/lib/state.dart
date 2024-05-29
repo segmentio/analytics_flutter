@@ -28,11 +28,11 @@ class StateManager {
   final DeepLinkDataState deepLinkData;
   final UserInfoState userInfo;
 
-  void init(ErrorHandler errorHandler) {
-    filters.init(errorHandler);
-    deepLinkData.init(errorHandler);
-    userInfo.init(errorHandler);
-    context.init(errorHandler);
+  void init(ErrorHandler errorHandler, bool storageJson) {
+    filters.init(errorHandler, storageJson);
+    deepLinkData.init(errorHandler, storageJson);
+    userInfo.init(errorHandler, storageJson);
+    context.init(errorHandler, storageJson);
   }
 
   StateManager(Store store, System system, Configuration configuration)
@@ -159,15 +159,17 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
     }
   }
 
-  void init(ErrorHandler errorHandler) {
+  void init(ErrorHandler errorHandler, bool storageJson) {
     this._errorHandler = errorHandler;
     addListener((state) {
       if (_persistance != null) {
         _hasUpdated = true;
       } else {
-        _persistance = _store
-            .setPersisted(_key, toJson(state))
-            .whenComplete(_whenPersistenceComplete);
+        _persistance = storageJson 
+            ? _store
+              .setPersisted(_key, toJson(state))
+              .whenComplete(_whenPersistenceComplete) 
+            : null;
       }
     });
     _store.ready.then<void>((_) async {
@@ -176,9 +178,11 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
 
       if (rawV == null) {
         final init = await _initialiser();
-        _persistance = _store
-            .setPersisted(_key, toJson(init))
-            .whenComplete(_whenPersistenceComplete);
+        _persistance = storageJson 
+            ? _store
+              .setPersisted(_key, toJson(init))
+              .whenComplete(_whenPersistenceComplete) 
+            : null;
         _notifier.nonNullState = init;
         v = init;
       } else {
@@ -522,6 +526,7 @@ class Configuration {
   final RequestFactory? requestFactory;
   final StreamSubscription<AppStatus> Function()? appStateStream;
   final ErrorHandler? errorHandler;
+  final bool? storageJson;
 
   final String? token;
 
@@ -539,7 +544,9 @@ class Configuration {
       this.trackDeeplinks = false,
       this.debug = false,
       this.maxBatchSize,
-      this.token});
+      this.storageJson = true,
+      this.token
+      });
 }
 
 typedef ErrorHandler = void Function(Exception);
@@ -559,5 +566,6 @@ Configuration setFlushPolicies(
       requestFactory: a.requestFactory,
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
       trackDeeplinks: a.trackDeeplinks,
+      storageJson: a.storageJson,
       token: a.token);
 }
