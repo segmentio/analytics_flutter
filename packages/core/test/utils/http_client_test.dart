@@ -1,4 +1,5 @@
 import 'package:segment_analytics/analytics.dart';
+import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:segment_analytics/logger.dart';
 import 'package:segment_analytics/state.dart';
 import 'package:segment_analytics/utils/http_client.dart';
@@ -14,6 +15,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   group("HTTP Client", () {
     setUp(() {
+      AnalyticsPlatform.instance = MockPlatform();
       LogFactory.logger = Mocks.logTarget();
     });
     test("It logs on bad response for get Settings", () async {

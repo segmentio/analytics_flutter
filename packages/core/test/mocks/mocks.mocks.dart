@@ -417,9 +417,9 @@ class MockStreamSubscription<T> extends _i1.Mock
 /// See the documentation for Mockito's code generation for more information.
 class MockHTTPClient extends _i1.Mock implements _i9.HTTPClient {
   @override
-  _i5.Future<bool> startBatchUpload(
+  _i4.Future<bool> startBatchUpload(
     String writeKey,
-    List<_i9.RawEvent> batch,
+    List<_i10.RawEvent> batch,
     {String? host}
   ) =>
       (super.noSuchMethod(

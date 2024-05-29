@@ -1,5 +1,5 @@
-import 'package:analytics/event.dart';
-import 'package:analytics/plugin.dart';
+import 'package:segment_analytics/event.dart';
+import 'package:segment_analytics/plugin.dart';
 
 class InjectToken extends PlatformPlugin {
   InjectToken(this.token) : super(PluginType.before);
