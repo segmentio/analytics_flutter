@@ -418,10 +418,10 @@ class MockStreamSubscription<T> extends _i1.Mock
 class MockHTTPClient extends _i1.Mock implements _i9.HTTPClient {
   @override
   _i4.Future<bool> startBatchUpload(
-    String? writeKey,
-    List<_i10.RawEvent>? batch, {
-    String? host,
-  }) =>
+    String writeKey,
+    List<_i10.RawEvent> batch,
+    {String? host}
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #startBatchUpload,

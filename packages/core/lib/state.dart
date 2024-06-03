@@ -528,6 +528,8 @@ class Configuration {
   final ErrorHandler? errorHandler;
   final bool? storageJson;
 
+  final String? token;
+
   Configuration(this.writeKey,
       {this.apiHost,
       this.autoAddSegmentDestination = true,
@@ -542,7 +544,8 @@ class Configuration {
       this.trackDeeplinks = false,
       this.debug = false,
       this.maxBatchSize,
-      this.storageJson = true
+      this.storageJson = true,
+      this.token
       });
 }
 
@@ -563,5 +566,6 @@ Configuration setFlushPolicies(
       requestFactory: a.requestFactory,
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
       trackDeeplinks: a.trackDeeplinks,
-      storageJson: a.storageJson);
+      storageJson: a.storageJson,
+      token: a.token);
 }

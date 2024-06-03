@@ -7,7 +7,7 @@ class WidgetObserverLifecycle extends LifeCycle with WidgetsBindingObserver {
   final StreamController<AppLifecycleState> _streamController =
       StreamController<AppLifecycleState>.broadcast();
 
-  LifeCycleImpl() {
+  lifeCycleImpl() {
     WidgetsBinding.instance.addObserver(this);
   }
 

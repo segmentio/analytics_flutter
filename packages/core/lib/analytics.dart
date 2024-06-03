@@ -23,6 +23,7 @@ import 'package:segment_analytics/version.dart';
 import 'package:segment_analytics/utils/http_client.dart';
 import 'package:segment_analytics/plugins/inject_user_info.dart';
 import 'package:segment_analytics/plugins/inject_context.dart';
+import 'package:segment_analytics/plugins/inject_token.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Analytics with ClientMethods {
@@ -68,6 +69,10 @@ class Analytics with ClientMethods {
     if (config.autoAddSegmentDestination) {
       final segmentDestination = SegmentDestination();
       addPlugin(segmentDestination);
+    }
+
+    if(config.token != null) {
+      _platformPlugins.add(InjectToken(config.token!));
     }
 
     // Setup platform specific plugins
