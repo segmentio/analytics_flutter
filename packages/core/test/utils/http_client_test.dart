@@ -46,5 +46,35 @@ void main() {
       verify(mockRequest.send());
       verify((LogFactory.logger as MockLogTarget).parseLog(captureAny));
     });
+
+    test("It logs on bad response 429", () async {
+      final mockRequest = Mocks.request();
+      when(mockRequest.send()).thenAnswer(
+          (_) => Future.value(StreamedResponse(const Stream.empty(), 429)));
+      when(mockRequest.url).thenAnswer((_) => Uri.parse("http://segment.io"));
+      HTTPClient client = HTTPClient(Analytics(
+          Configuration("123", requestFactory: (_) => mockRequest),
+          Mocks.store()));
+
+      await client.startBatchUpload("123", []);
+
+      verify(mockRequest.send());
+      verify((LogFactory.logger as MockLogTarget).parseLog(captureAny));
+    });
+
+     test("It logs on bad response 500", () async {
+      final mockRequest = Mocks.request();
+      when(mockRequest.send()).thenAnswer(
+          (_) => Future.value(StreamedResponse(const Stream.empty(), 500)));
+      when(mockRequest.url).thenAnswer((_) => Uri.parse("http://segment.io"));
+      HTTPClient client = HTTPClient(Analytics(
+          Configuration("123", requestFactory: (_) => mockRequest),
+          Mocks.store()));
+
+      await client.startBatchUpload("123", []);
+
+      verify(mockRequest.send());
+      verify((LogFactory.logger as MockLogTarget).parseLog(captureAny));
+    });
   });
 }

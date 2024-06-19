@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
+import 'package:segment_analytics/flush_policies/flush_policy.dart';
 import 'package:segment_analytics/logger.dart';
 import 'package:segment_analytics/native_context.dart';
 import 'package:segment_analytics/utils/http_client.dart';
@@ -13,7 +16,11 @@ import 'package:mockito/annotations.dart';
   MockSpec<Request>(),
   MockSpec<StreamSubscription>(),
   MockSpec<HTTPClient>(),
-  MockSpec<Store>()
+  MockSpec<Store>(),
+  MockSpec<FlushPolicy>(),
+  MockSpec<Logger>(),
+  MockSpec<NativeContextApi>(),
+  MockSpec<WidgetsBinding>()
 ])
 import 'mocks.mocks.dart';
 
@@ -37,4 +44,5 @@ class Mocks {
       MockStreamSubscription<T>();
   static MockHTTPClient httpClient() => MockHTTPClient();
   static MockStore store() => MockStore();
+  static MockFlushPolicy flushPolicy() => MockFlushPolicy();
 }
