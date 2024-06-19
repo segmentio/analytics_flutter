@@ -1,14 +1,13 @@
-// test/inject_token_test.dart
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:segment_analytics/analytics.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:segment_analytics/event.dart';
-import 'package:segment_analytics/plugins/inject_context.dart';
+import 'package:mockito/mockito.dart';
+import 'package:segment_analytics/plugin.dart';
+import 'package:segment_analytics/plugins/destination_metadata_enrichment.dart';
 import 'package:segment_analytics/state.dart';
 
 import '../mocks/mocks.dart';
-
 
 void main() {
   String writeKey = '123';
@@ -17,33 +16,37 @@ void main() {
     TrackEvent("Event 2"),
     TrackEvent("Event 3"),
   ];
-  group('InjectContext Tests', () {
-    late InjectContext injectContext;
-
-    setUp(() async {
+  final Map<String, dynamic> settings = {
+      'integrations': "12345abcdef"
+    };
+  group('DestinationMetadataEnrichment', () {
+    late DestinationMetadataEnrichment plugin;
+    late RawEvent event;
+    late Analytics mockAnalytics;
+    setUp(() async{
       AnalyticsPlatform.instance = MockPlatform();
-    });
- 
-    test('should inject token into event context', () async {
+      plugin = DestinationMetadataEnrichment('destinationKey');
       final httpClient = Mocks.httpClient();
       when(httpClient.settingsFor(writeKey))
           .thenAnswer((_) => Future.value(SegmentAPISettings({})));
       when(httpClient.startBatchUpload(writeKey, batch))
           .thenAnswer((_) => Future.value(true));
-      Analytics analytics = Analytics(
+      mockAnalytics = Analytics(
           Configuration("123",
               trackApplicationLifecycleEvents: false,
               appStateStream: () => Mocks.streamSubscription()),
           Mocks.store(),
           httpClient: (_) => httpClient);
-      await analytics.init();
+      await mockAnalytics.init();
+      mockAnalytics.state.integrations.state = settings;
+      mockAnalytics.addPlugin(plugin);
+      plugin.pAnalytics = mockAnalytics;
+      event = TrackEvent('test_event');
+    });
 
-      injectContext = InjectContext();
-      injectContext.pAnalytics = analytics;
-
-      final resultEvent = await injectContext.execute(TrackEvent("Test"));
-
-      expect(resultEvent.context!.instanceId, isNotNull);
+    test('bundled keys are correctly added excluding the destinationKey', () async {
+      final resultEvent = await plugin.execute(event);
+      expect(resultEvent.metadata?.bundled, isNot(contains('unbundledIntegrations')));
     });
   });
 }

@@ -10,7 +10,8 @@ enum AppStatus { foreground, background }
 
 abstract class LifeCycle extends Stream<AppStatus> {}
 
-LifeCycle _getLifecycleStream() {
+@visibleForTesting
+LifeCycle getLifecycleStream() {
   if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
     // For iOS and Android we will use the FgBg Lifecycle listener as it reports directly from native level
     // ignoring native popups
@@ -22,4 +23,4 @@ LifeCycle _getLifecycleStream() {
   }
 }
 
-final LifeCycle lifecycle = _getLifecycleStream();
+final LifeCycle lifecycle = getLifecycleStream();

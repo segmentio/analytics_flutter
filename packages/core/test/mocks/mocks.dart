@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:segment_analytics/flush_policies/flush_policy.dart';
@@ -19,6 +20,7 @@ import 'package:mockito/annotations.dart';
   MockSpec<FlushPolicy>(),
   MockSpec<Logger>(),
   MockSpec<NativeContextApi>(),
+  MockSpec<WidgetsBinding>()
 ])
 import 'mocks.mocks.dart';
 
