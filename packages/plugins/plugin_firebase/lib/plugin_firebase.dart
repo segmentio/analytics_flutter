@@ -47,14 +47,14 @@ class FirebaseDestination extends DestinationPlugin {
     try {
       switch (event.event) {
         case 'Product Clicked':
-          if (properties.containsKey('contentType') ||
+          if (properties.containsKey('name') ||
               properties.containsKey('itemId')) {
-            throw Exception("Missing properties: contentType and itemId");
+            throw Exception("Missing properties: name and itemId");
           }
 
-          await FirebaseAnalytics.instance.logSelectContent(
-              contentType: properties['contentType'].toString(),
-              itemId: properties['itemId'].toString());
+          await FirebaseAnalytics.instance.logSelectItem(
+              itemListName: properties['name'].toString(),
+              itemListId: properties['itemId'].toString());
           break;
         case 'Product Viewed':
           await FirebaseAnalytics.instance.logViewItem(
