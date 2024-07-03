@@ -47,10 +47,10 @@ class FirebaseDestination extends DestinationPlugin {
     try {
       switch (event.event) {
         case 'Product Clicked':
-          if (properties.containsKey('list_id') ||
+          if (!(properties.containsKey('list_id') ||
               properties.containsKey('list_name') || 
               properties.containsKey('name') ||
-              properties.containsKey('itemId')) {
+              properties.containsKey('itemId')) ) {
             throw Exception("Missing properties: list_name, list_id, name and itemID");
           }
 
