@@ -1,6 +1,6 @@
 name: segment_analytics_plugin_idfa
 description: The hassle-free way to add Segment analytics to your Flutter app.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/segmentio/analytics_flutter#readme
 repository: https://github.com/segmentio/analytics_flutter/tree/main/packages/plugins/plugin_idfa#readme
 issue_tracker: https://github.com/segmentio/analytics_flutter/issues
