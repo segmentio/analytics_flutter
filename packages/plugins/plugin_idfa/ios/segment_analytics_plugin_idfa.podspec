@@ -3,7 +3,7 @@
 # Run `pod lib lint plugin_idfa.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'analytics_plugin_idfa'
+  s.name             = 'segment_analytics_plugin_idfa'
   s.version          = '0.0.1'
   s.summary          = 'The hassle-free way to add Segment analytics to your Flutter app.'
   s.description      = <<-DESC

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html' as html;
 
 import 'package:segment_analytics/utils/store/store.dart';
+import 'package:web/web.dart' as web;
 
 class StoreImpl implements Store {
-  html.Storage get localStorage => html.window.localStorage;
+  web.Storage get localStorage => web.window.localStorage;
 
   @override
   Future<Map<String, dynamic>?> getPersisted(String key) {
@@ -17,52 +17,45 @@ class StoreImpl implements Store {
 
   @override
   Future setPersisted(String key, Map<String, dynamic> value) {
-    return _writeToStorage(key, value);
+    _writeToStorage(key, value);
+    return Future.value();
   }
 
   String _getFileName(String fileKey) {
     return "analytics-flutter-$fileKey.json";
   }
 
-  Future<void> _writeToStorage(
-      String fileKey, Map<String, dynamic> data) async {
-    localStorage.update(
+  void _writeToStorage(String fileKey, Map<String, dynamic> data) {
+    localStorage.setItem(
       _getFileName(fileKey),
-      (val) => json.encode(data),
-      ifAbsent: () => json.encode(data),
+      json.encode(data),
     );
   }
 
   Future<Map<String, dynamic>?> _readFromStorage(String fileKey) async {
     final fileName = _getFileName(fileKey);
-    MapEntry<String, String>? data;
+    final data = localStorage.getItem(fileName);
     String anonymousId;
-    
-    try {
-      data = localStorage.entries.firstWhere((i) => i.key == fileName);
-    } on StateError {
-      data = null;
-    }
 
-    if(fileKey  == "userInfo") {
-      anonymousId = getExistingAnonymousId(data);
-      if(data != null) {
-        final jsonDecoded = json.decode(data.value);
-        if(anonymousId.isNotEmpty){
+    if (fileKey == "userInfo") {
+      anonymousId = getExistingAnonymousId();
+      if (data != null) {
+        final jsonDecoded = json.decode(data);
+        if (anonymousId.isNotEmpty) {
           jsonDecoded["anonymousId"] = anonymousId;
           return jsonDecoded as Map<String, dynamic>;
         }
-      } else if(anonymousId.isNotEmpty){
-        final json = {"anonymousId": anonymousId };
+      } else if (anonymousId.isNotEmpty) {
+        final json = {"anonymousId": anonymousId};
         return json;
       }
     }
 
     if (data != null) {
-      if (data.value == "{}") {
+      if (data == "{}") {
         return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.
       }
-      return json.decode(data.value) as Map<String, dynamic>;
+      return json.decode(data) as Map<String, dynamic>;
     } else {
       return null;
     }
@@ -71,28 +64,20 @@ class StoreImpl implements Store {
   @override
   void dispose() {}
 
-  String getExistingAnonymousId(MapEntry<String, String>? data) {
-     String anonymousId;
-      try {
-        final entry = localStorage.entries.firstWhere(
-          (i) => i.key == "ajs_anonymous_id",
-        );
-        anonymousId = entry.value;
-      } on StateError {
-        anonymousId = '';
-      }
+  String getExistingAnonymousId() {
+    var anonymousId = localStorage.getItem("ajs_anonymous_id");
 
-      if (anonymousId.isEmpty) {
-        final cookies = html.document.cookie?.split(";");
-        if (cookies != null && cookies.isNotEmpty) {
-          for (var cookie in cookies) {
-            final cookieParts = cookie.split("=");
-            if (cookieParts[0].trim() == "ajs_anonymous_id") {
-              anonymousId = cookieParts[1];
-            }
+    if (anonymousId?.isEmpty ?? true) {
+      final cookies = web.document.cookie.split(";");
+      if (cookies.isNotEmpty) {
+        for (var cookie in cookies) {
+          final cookieParts = cookie.split("=");
+          if (cookieParts[0].trim() == "ajs_anonymous_id") {
+            anonymousId = cookieParts[1];
           }
         }
       }
-      return anonymousId.isEmpty ? '' : anonymousId;
+    }
+    return anonymousId ?? '';
   }
 }
