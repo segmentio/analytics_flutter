@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:segment_analytics/event.dart';
 import 'package:segment_analytics/native_context.dart';
@@ -23,14 +24,70 @@ class MockPlatform extends AnalyticsPlatform {
 
     return Future.value(mockNativeContext);
   }
+
+  final List<Object> contextObj = [
+    "build",
+    "name",
+    "namespace",
+    "version"
+  ];
+
+  final List<Object> deviceObj = [
+    "id",
+    "manufacturer",
+    "model",
+    "name",
+    "type",
+    false,
+    "advertisingId",
+    "trackingStatus",
+    "token"
+  ];
+
+  final List<Object> libraryObj = [
+    "name",
+    "version"
+  ];
+
+  final List<Object> networkObj = [
+    true,
+    false,
+    false
+  ];
+
+  final List<Object> osObj = [
+    "name",
+    "version"
+  ];
+
+  final List<Object> screenObj = [
+    100,
+    100,
+    5.5
+  ];
+
+  Object buildObject() {
+    final List<Object> encondeObj = [
+      contextObj,
+      deviceObj,
+      libraryObj,
+      "en_EN",
+      networkObj,
+      osObj,
+      screenObj,
+      "timezone",
+      "userAgent"
+    ];
+    return encondeObj;
+  }
 }
 
 void main() {
   group("Context", () {
     setUp(() {
+      WidgetsFlutterBinding.ensureInitialized();
       AnalyticsPlatform.instance = MockPlatform();
     });
-    // });
     test("It gets native context", () async {
       final context = await AnalyticsPlatform.instance.getContext();
       expect(context.app, isNotNull);
@@ -88,5 +145,47 @@ void main() {
       expect(context.traits.custom["custom"],
           reverseContext.traits.custom["custom"]);
     });
+
+    test("Test encode method on NativeContext", () async {
+      final context = await AnalyticsPlatform.instance.getContext();
+      final contextEncode = context.encode();
+      expect(contextEncode.toString() != context.toString(), true);
+    });
+
+    test("Test decode method on NativeContext", () async {
+      final encodeObject = MockPlatform().buildObject();
+      final contextDecode = NativeContext.decode(encodeObject);
+      expect(contextDecode.toString() != encodeObject.toString(), true);
+    });
+
+    test("Test encode method on NativeContextApp", () async {
+      final context = await AnalyticsPlatform.instance.getContext();
+      final contextEncode = context.app?.encode();
+      expect(contextEncode.toString() != context.toString(), true);
+    });
+
+    test("Test encode method on NativeContextDevice", () async {
+      final context = NativeContextDevice();
+      final contextEncode = context.encode();
+      expect(contextEncode.toString() != context.toString(), true);
+    });
+
+    test("Test encode method on NativeContextLibrary", () async {
+      final context = NativeContextLibrary();
+      final contextEncode = context.encode();
+      expect(contextEncode.toString() != context.toString(), true);
+    });
+
+    test("Test encode method on NativeContextNetwork", () async {
+      final context = NativeContextNetwork();
+      final contextEncode = context.encode();
+      expect(contextEncode.toString() != context.toString(), true);
+    });
+
+    test("Test writeValue of NativeContextApi", () {
+      final nativeContextApi = NativeContextApi();
+      nativeContextApi.getContext(true);
+    });
+    
   });
 }

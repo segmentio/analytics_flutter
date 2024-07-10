@@ -788,10 +788,6 @@ class MockFlushPolicy extends _i1.Mock implements _i22.FlushPolicy {
         returnValueForMissingStub: false,
       ) as bool);
 
-  get startCalled => true;
-
-  get onEventCalled => true;
-
   @override
   set shouldFlush(bool? shouldFlush) => super.noSuchMethod(
         Invocation.setter(

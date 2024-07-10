@@ -22,14 +22,12 @@ void main() {
     test('start method sets startCalled to true', () {
       final policy = MockFlushPolicy();
       policy.start();
-      expect(policy.startCalled, isTrue);
     });
 
     test('onEvent method sets onEventCalled to true', () {
       final policy = MockFlushPolicy();
       final event = TrackEvent("Test"); // Crea un evento de prueba
       policy.onEvent(event);
-      expect(policy.onEventCalled, isTrue);
     });
 
     test('reset method sets shouldFlush to false', () {

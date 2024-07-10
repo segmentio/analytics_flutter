@@ -3,7 +3,6 @@ import 'package:segment_analytics/analytics.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:segment_analytics/event.dart';
 import 'package:mockito/mockito.dart';
-import 'package:segment_analytics/plugin.dart';
 import 'package:segment_analytics/plugins/destination_metadata_enrichment.dart';
 import 'package:segment_analytics/state.dart';
 

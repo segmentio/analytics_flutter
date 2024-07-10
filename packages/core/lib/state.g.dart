@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-
+// coverage:ignore-file
 part of 'state.dart';
 
 // **************************************************************************
@@ -189,7 +189,7 @@ Map<String, dynamic> _$TransformerConfigToJson(TransformerConfig instance) {
 TransformerConfigSample _$TransformerConfigSampleFromJson(
         Map<String, dynamic> json) =>
     TransformerConfigSample(
-      json['percent'] as int,
+      (json['percent'] as num).toInt(),
       json['path'] as String,
     );
 
