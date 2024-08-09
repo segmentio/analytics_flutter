@@ -27,11 +27,11 @@ class StoreImpl with Store {
     final serialized = json.encode(data);
     final buffer = utf8.encode(serialized);
 
-    file = await file.lock();
-    file = await file.setPosition(0);
-    file = await file.writeFrom(buffer);
-    file = await file.truncate(buffer.length);
-    await file.unlock();
+    file.lockSync(FileLock.blockingExclusive);
+    file.setPositionSync(0);
+    file.writeFromSync(buffer);
+    file.truncateSync(buffer.length);
+    file.unlockSync();
   }
 
   Future<Map<String, dynamic>?> _readFile(String fileKey) async {
@@ -39,10 +39,12 @@ class StoreImpl with Store {
     if (file == null) {
       return null;
     }
-    final length = await file.length();
-    file = await file.setPosition(0);
+    file = await file.lock(FileLock.blockingShared);
+    final length = file.lengthSync();
+    file.setPositionSync(0);
     final buffer = Uint8List(length);
-    await file.readInto(buffer);
+    file.readIntoSync(buffer);
+    file.unlockSync();
     final contentText = utf8.decode(buffer);
     if (contentText == "{}") {
       return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.

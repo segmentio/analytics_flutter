@@ -165,10 +165,10 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       if (_persistance != null) {
         _hasUpdated = true;
       } else {
-        _persistance = storageJson 
+        _persistance = storageJson
             ? _store
-              .setPersisted(_key, toJson(state))
-              .whenComplete(_whenPersistenceComplete) 
+                .setPersisted(_key, toJson(state))
+                .whenComplete(_whenPersistenceComplete)
             : null;
       }
     });
@@ -178,10 +178,10 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
 
       if (rawV == null) {
         final init = await _initialiser();
-        _persistance = storageJson 
+        _persistance = storageJson
             ? _store
-              .setPersisted(_key, toJson(init))
-              .whenComplete(_whenPersistenceComplete) 
+                .setPersisted(_key, toJson(init))
+                .whenComplete(_whenPersistenceComplete)
             : null;
         _notifier.nonNullState = init;
         v = init;
@@ -201,16 +201,9 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       return;
     }).catchError((e) {
       _error = e;
-      // Clean file if exist a format error
-      if(_error.toString().contains("FormatException")) {
-        _store.setPersisted(_key, {});
-        log("Clean file $_key with format error",
-          kind: LogFilterKind.warning);
-      } else {
-        final wrappedError = ErrorLoadingStorage(e);
-        errorHandler(wrappedError);
-        throw wrappedError;
-      }
+      final wrappedError = ErrorLoadingStorage(e);
+      errorHandler(wrappedError);
+      throw wrappedError;
     });
   }
 
@@ -552,8 +545,7 @@ class Configuration {
       this.debug = false,
       this.maxBatchSize,
       this.storageJson = true,
-      this.token
-      });
+      this.token});
 }
 
 typedef ErrorHandler = void Function(Exception);
