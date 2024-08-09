@@ -32,6 +32,7 @@ class StoreImpl with Store {
     file.writeFromSync(buffer);
     file.truncateSync(buffer.length);
     file.unlockSync();
+    file.closeSync();
   }
 
   Future<Map<String, dynamic>?> _readFile(String fileKey) async {
@@ -45,6 +46,7 @@ class StoreImpl with Store {
     final buffer = Uint8List(length);
     file.readIntoSync(buffer);
     file.unlockSync();
+    file.closeSync();
     final contentText = utf8.decode(buffer);
     if (contentText == "{}") {
       return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.
