@@ -173,7 +173,15 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       }
     });
     _store.ready.then<void>((_) async {
-      final rawV = await _store.getPersisted(_key);
+      var rawV;
+      try {
+        rawV = await _store.getPersisted(_key);
+      } on FormatException catch (e) {
+        _store.setPersisted(_key, {});
+        log("Clean file $_key with format error", kind: LogFilterKind.warning);
+        final wrappedError = ErrorLoadingStorage(e);
+        errorHandler(wrappedError);
+      }
       T v;
 
       if (rawV == null) {
