@@ -177,6 +177,9 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       try {
         rawV = await _store.getPersisted(_key);
       } on FormatException catch (e) {
+        // Addressing https://github.com/segmentio/analytics_flutter/issues/74
+        // File corruption should be less likely with removal of async code in writes
+        // Existing corrupted files are cleaned up here without failing initialization
         _store.setPersisted(_key, {});
         log("Clean file $_key with format error", kind: LogFilterKind.warning);
         final wrappedError = ErrorLoadingStorage(e);
