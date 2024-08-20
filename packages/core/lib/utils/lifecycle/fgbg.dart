@@ -4,7 +4,7 @@ import 'package:segment_analytics/utils/lifecycle/lifecycle.dart';
 import 'package:flutter_fgbg/flutter_fgbg.dart';
 
 class FGBGLifecycle extends LifeCycle {
-  final _stream = FGBGEvents.stream;
+  final _stream = FGBGEvents.instance.stream;
 
   @override
   StreamSubscription<AppStatus> listen(void Function(AppStatus event)? onData,
