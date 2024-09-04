@@ -165,23 +165,34 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       if (_persistance != null) {
         _hasUpdated = true;
       } else {
-        _persistance = storageJson 
+        _persistance = storageJson
             ? _store
-              .setPersisted(_key, toJson(state))
-              .whenComplete(_whenPersistenceComplete) 
+                .setPersisted(_key, toJson(state))
+                .whenComplete(_whenPersistenceComplete)
             : null;
       }
     });
     _store.ready.then<void>((_) async {
-      final rawV = await _store.getPersisted(_key);
+      Map<String, dynamic>? rawV;
+      try {
+        rawV = await _store.getPersisted(_key);
+      } on FormatException catch (e) {
+        // Addressing https://github.com/segmentio/analytics_flutter/issues/74
+        // File corruption should be less likely with removal of async code in writes
+        // Existing corrupted files are cleaned up here without failing initialization
+        _store.setPersisted(_key, {});
+        log("Clean file $_key with format error", kind: LogFilterKind.warning);
+        final wrappedError = ErrorLoadingStorage(e);
+        errorHandler(wrappedError);
+      }
       T v;
 
       if (rawV == null) {
         final init = await _initialiser();
-        _persistance = storageJson 
+        _persistance = storageJson
             ? _store
-              .setPersisted(_key, toJson(init))
-              .whenComplete(_whenPersistenceComplete) 
+                .setPersisted(_key, toJson(init))
+                .whenComplete(_whenPersistenceComplete)
             : null;
         _notifier.nonNullState = init;
         v = init;
@@ -201,16 +212,9 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       return;
     }).catchError((e) {
       _error = e;
-      // Clean file if exist a format error
-      if(_error.toString().contains("FormatException")) {
-        _store.setPersisted(_key, {});
-        log("Clean file $_key with format error",
-          kind: LogFilterKind.warning);
-      } else {
-        final wrappedError = ErrorLoadingStorage(e);
-        errorHandler(wrappedError);
-        throw wrappedError;
-      }
+      final wrappedError = ErrorLoadingStorage(e);
+      errorHandler(wrappedError);
+      throw wrappedError;
     });
   }
 
@@ -552,8 +556,7 @@ class Configuration {
       this.debug = false,
       this.maxBatchSize,
       this.storageJson = true,
-      this.token
-      });
+      this.token});
 }
 
 typedef ErrorHandler = void Function(Exception);
