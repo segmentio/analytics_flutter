@@ -13,7 +13,7 @@ void main() {
 
         expect(policy.shouldFlush, isFalse); // Initially shouldFlush is false
 
-        async.elapse(Duration(milliseconds: 1000)); // Advance time by 1 second
+        async.elapse(const Duration(milliseconds: 1000)); // Advance time by 1 second
         expect(policy.shouldFlush, isTrue); // After 1 second, shouldFlush should be true
       });
     });
@@ -24,14 +24,14 @@ void main() {
         final event = TrackEvent("Test"); // Asegúrate de definir RawEvent o usa un mock si es una clase compleja
         policy.start();
 
-        async.elapse(Duration(milliseconds: 500)); // Advance time by 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by 0.5 second
         expect(policy.shouldFlush, isFalse); // shouldFlush is still false
 
         policy.onEvent(event); // Reset the timer
-        async.elapse(Duration(milliseconds: 500)); // Advance time by another 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by another 0.5 second
         expect(policy.shouldFlush, isFalse); // shouldFlush is still false because the timer was reset
 
-        async.elapse(Duration(milliseconds: 500)); // Advance time by another 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by another 0.5 second
         expect(policy.shouldFlush, isTrue); // After 1 second from the reset, shouldFlush should be true
       });
     });
@@ -41,14 +41,14 @@ void main() {
         final policy = TimerFlushPolicy(1000); // 1000 milliseconds = 1 second
         policy.start();
 
-        async.elapse(Duration(milliseconds: 500)); // Advance time by 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by 0.5 second
         expect(policy.shouldFlush, isFalse); // shouldFlush is still false
 
         policy.reset(); // Reset the timer
-        async.elapse(Duration(milliseconds: 500)); // Advance time by another 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by another 0.5 second
         expect(policy.shouldFlush, isFalse); // shouldFlush is still false because the timer was reset
 
-        async.elapse(Duration(milliseconds: 500)); // Advance time by another 0.5 second
+        async.elapse(const Duration(milliseconds: 500)); // Advance time by another 0.5 second
         expect(policy.shouldFlush, isTrue); // After 1 second from the reset, shouldFlush should be true
       });
     });

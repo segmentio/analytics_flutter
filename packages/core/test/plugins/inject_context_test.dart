@@ -39,6 +39,7 @@ void main() {
       await analytics.init();
 
       injectContext = InjectContext();
+      // ignore: invalid_use_of_protected_member
       injectContext.pAnalytics = analytics;
 
       final resultEvent = await injectContext.execute(TrackEvent("Test"));

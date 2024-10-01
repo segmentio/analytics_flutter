@@ -39,6 +39,7 @@ void main() {
       await analytics.init();
 
       injectToken = InjectToken('test-token');
+      // ignore: invalid_use_of_protected_member
       injectToken.pAnalytics = analytics;
 
       final resultEvent = await injectToken.execute(TrackEvent("Test"));

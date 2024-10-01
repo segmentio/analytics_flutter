@@ -1,4 +1,3 @@
-// test/event_logger_test.dart
 import 'package:flutter_test/flutter_test.dart';
 import 'package:logger/logger.dart';
 import 'package:mockito/mockito.dart';
@@ -26,7 +25,7 @@ void main() {
 
     test('should configure with analytics instance', () {
       eventLogger.configure(mockAnalytics);
-
+      // ignore: invalid_use_of_protected_member
       expect(eventLogger.pAnalytics, mockAnalytics);
     });
 

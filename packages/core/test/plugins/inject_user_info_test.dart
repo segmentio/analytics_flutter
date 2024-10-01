@@ -43,6 +43,7 @@ void main() {
       userInfo = InjectUserInfo();
       UserInfo user = UserInfo("abcdefg123456789", userTraits: userT, groupTraits: groupT);
       analytics.state.userInfo.setState(user);
+      // ignore: invalid_use_of_protected_member
       userInfo.pAnalytics = analytics;
 
       final resultEvent = await userInfo.execute(IdentifyEvent(traits: userT));

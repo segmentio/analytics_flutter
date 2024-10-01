@@ -39,6 +39,7 @@ void main() {
       await mockAnalytics.init();
       mockAnalytics.state.integrations.state = settings;
       mockAnalytics.addPlugin(plugin);
+      // ignore: invalid_use_of_protected_member
       plugin.pAnalytics = mockAnalytics;
       event = TrackEvent('test_event');
     });
