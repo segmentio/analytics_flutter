@@ -38,7 +38,7 @@ class HTTPClient {
       var urlRequest = _configuredRequest(uploadURL, "POST",
           body: jsonEncode({
             "batch": batch.map((e) => e.toJson()).toList(),
-            "sentAt": DateTime.now().toIso8601String(),
+            "sentAt": DateTime.now().toUtc().toIso8601String(),
             "writeKey": _analytics.target!.state.configuration.state.writeKey,
           }));
       var f = urlRequest.send().then(http.Response.fromStream);
