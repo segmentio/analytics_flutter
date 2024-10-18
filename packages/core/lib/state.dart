@@ -261,7 +261,7 @@ class QueueState<T extends JSONSerialisable> extends PersistedState<List<T>> {
 }
 
 class SystemState extends StateNotifier<System> {
-  SystemState(System system) : super(system);
+  SystemState(super.system);
 
   set isRunning(bool isRunning) {
     state = System(state.isEnabled, isRunning);
@@ -494,7 +494,7 @@ class TransformerConfigMap {
 }
 
 class IntegrationsState extends StateNotifier<Map<String, dynamic>> {
-  IntegrationsState(Map<String, dynamic> integrations) : super(integrations);
+  IntegrationsState(super.integrations);
 
   @override
   Map<String, dynamic> get state => super.state;
@@ -510,7 +510,7 @@ class IntegrationsState extends StateNotifier<Map<String, dynamic>> {
 }
 
 class ConfigurationState extends StateNotifier<Configuration> {
-  ConfigurationState(Configuration configuration) : super(configuration);
+  ConfigurationState(super.configuration);
 
   @override
   Configuration get state => super.state;
