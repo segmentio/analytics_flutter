@@ -185,7 +185,7 @@ UserTraits _$UserTraitsFromJson(Map<String, dynamic> json) => UserTraits(
       address: json['address'] == null
           ? null
           : Address.fromJson(json['address'] as Map<String, dynamic>),
-      age: json['age'] as int?,
+      age: (json['age'] as num?)?.toInt(),
       avatar: json['avatar'] as String?,
       birthday: json['birthday'] as String?,
       company: json['company'] == null
@@ -310,7 +310,7 @@ Map<String, dynamic> _$AddressToJson(Address instance) {
 }
 
 Company _$CompanyFromJson(Map<String, dynamic> json) => Company(
-      employeeCount: json['employeeCount'] as int?,
+      employeeCount: (json['employeeCount'] as num?)?.toInt(),
       id: json['id'] as String?,
       industry: json['industry'] as String?,
       name: json['name'] as String?,
@@ -471,8 +471,8 @@ Map<String, dynamic> _$ContextNetworkToJson(ContextNetwork instance) =>
 
 ContextScreen _$ContextScreenFromJson(Map<String, dynamic> json) =>
     ContextScreen(
-      json['height'] as int,
-      json['width'] as int,
+      (json['height'] as num).toInt(),
+      (json['width'] as num).toInt(),
       density: (json['density'] as num?)?.toDouble(),
       custom: json['custom'] as Map<String, dynamic>?,
     );
