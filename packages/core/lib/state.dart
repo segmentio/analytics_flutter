@@ -244,8 +244,14 @@ class QueueState<T extends JSONSerialisable> extends PersistedState<List<T>> {
     await modifyState((state) async => setState([...state, t]));
   }
 
-  void flush({int? number}) {
-    setState([]);
+  Future<void> flush({int? number}) async{
+    final events = await state;
+    if(number==null || number >= events.length){
+      setState([]);
+      return;
+    }
+    events.removeRange(0, number);
+    setEvents(events);
   }
 
   @override
