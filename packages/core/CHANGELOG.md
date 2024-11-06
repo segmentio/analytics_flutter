@@ -1,3 +1,8 @@
+## 1.1.2
+
+- Fix timestamp timezone
+- Fix reported version
+
 ## 1.1.1
 
 - Update dependencies
