@@ -577,7 +577,7 @@ mixin JSONExtendable {
 
 void applyRawEventData(RawEvent event) {
   event.messageId ??= const Uuid().v4();
-  event.timestamp ??= DateTime.now().toIso8601String();
+  event.timestamp ??= DateTime.now().toUtc().toIso8601String();
 }
 
 UserTraits mergeUserTraits(UserTraits a, UserTraits b) {
