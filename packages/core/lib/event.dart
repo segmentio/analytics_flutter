@@ -182,8 +182,7 @@ class UserTraits extends JSONExtendableImpl {
       this.title,
       this.username,
       this.website,
-      Map<String, dynamic>? custom})
-      : super(custom: custom);
+      super.custom});
 
   factory UserTraits.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(
@@ -239,8 +238,7 @@ class GroupTraits extends JSONExtendableImpl {
       this.phone,
       this.plan,
       this.website,
-      Map<String, dynamic>? custom})
-      : super(custom: custom);
+      super.custom});
 
   factory GroupTraits.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(
@@ -277,8 +275,7 @@ class Address extends JSONExtendableImpl {
       this.postalCode,
       this.state,
       this.street,
-      Map<String, dynamic>? custom})
-      : super(custom: custom);
+      super.custom});
 
   factory Address.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(json, _$AddressFromJson, Address._builtInKeys);
@@ -307,8 +304,7 @@ class Company extends JSONExtendableImpl {
       this.industry,
       this.name,
       this.plan,
-      Map<String, dynamic>? custom})
-      : super(custom: custom);
+      super.custom});
 
   factory Company.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(json, _$CompanyFromJson, Company._builtInKeys);
@@ -338,8 +334,7 @@ class Context extends JSONExtendableImpl {
 
   Context(this.app, this.device, this.library, this.locale, this.network,
       this.os, this.screen, this.timezone, this.traits,
-      {this.instanceId, Map<String, dynamic>? custom})
-      : super(custom: custom);
+      {this.instanceId, super.custom});
   Context.fromNative(NativeContext nativeContext, this.traits)
       : app = nativeContext.app == null
             ? ContextApp("", "", "", "")
@@ -391,8 +386,7 @@ class ContextApp extends JSONExtendableImpl {
   String version;
 
   ContextApp(this.build, this.name, this.namespace, this.version,
-      {Map<String, dynamic>? custom})
-      : super(custom: custom);
+      {super.custom});
   ContextApp.fromNative(NativeContextApp nativeContextApp)
       : build = nativeContextApp.build ?? "",
         name = nativeContextApp.name ?? "",
@@ -431,8 +425,7 @@ class ContextDevice extends JSONExtendableImpl {
       this.advertisingId,
       this.token,
       this.trackingStatus,
-      Map<String, dynamic>? custom})
-      : super(custom: custom);
+      super.custom});
   ContextDevice.fromNative(NativeContextDevice nativeContextDevice)
       : id = nativeContextDevice.id,
         manufacturer = nativeContextDevice.manufacturer ?? "",
@@ -467,8 +460,7 @@ class ContextLibrary extends JSONExtendableImpl {
   String name;
   String version;
 
-  ContextLibrary(this.name, this.version, {Map<String, dynamic>? custom})
-      : super(custom: custom);
+  ContextLibrary(this.name, this.version, {super.custom});
   ContextLibrary.fromNative(NativeContextLibrary nativeContextLibrary)
       : name = nativeContextLibrary.name ?? "",
         version = nativeContextLibrary.version ?? "";
@@ -486,8 +478,7 @@ class ContextOS extends JSONExtendableImpl {
   String name;
   String version;
 
-  ContextOS(this.name, this.version, {Map<String, dynamic>? custom})
-      : super(custom: custom);
+  ContextOS(this.name, this.version, {super.custom});
   ContextOS.fromNative(NativeContextOS nativeContextOS)
       : name = nativeContextOS.name ?? "",
         version = nativeContextOS.version ?? "";
@@ -505,8 +496,7 @@ class ContextNetwork extends JSONExtendableImpl {
   bool cellular;
   bool wifi;
 
-  ContextNetwork(this.cellular, this.wifi, {Map<String, dynamic>? custom})
-      : super(custom: custom);
+  ContextNetwork(this.cellular, this.wifi, {super.custom});
   ContextNetwork.fromNative(NativeContextNetwork nativeContextNetwork)
       : cellular = nativeContextNetwork.cellular ?? false,
         wifi = nativeContextNetwork.wifi ?? false;
@@ -526,8 +516,7 @@ class ContextScreen extends JSONExtendableImpl {
   double? density; // android only
 
   ContextScreen(this.height, this.width,
-      {this.density, Map<String, dynamic>? custom})
-      : super(custom: custom);
+      {this.density, super.custom});
   ContextScreen.fromNative(NativeContextScreen nativeContextScreen)
       : height = nativeContextScreen.height ?? 0,
         width = nativeContextScreen.width ?? 0,
@@ -588,7 +577,7 @@ mixin JSONExtendable {
 
 void applyRawEventData(RawEvent event) {
   event.messageId ??= const Uuid().v4();
-  event.timestamp ??= DateTime.now().toIso8601String();
+  event.timestamp ??= DateTime.now().toUtc().toIso8601String();
 }
 
 UserTraits mergeUserTraits(UserTraits a, UserTraits b) {
