@@ -26,7 +26,7 @@ void main() {
 
     test('onEvent method sets onEventCalled to true', () {
       final policy = MockFlushPolicy();
-      final event = TrackEvent("Test"); // Crea un evento de prueba
+      final event = TrackEvent("Test");
       policy.onEvent(event);
     });
 

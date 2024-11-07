@@ -338,40 +338,9 @@ class _FakeViewConfiguration_25 extends _i1.SmartFake
         );
 }
 
-class _FakeSceneBuilder_26 extends _i1.SmartFake implements _i9.SceneBuilder {
-  _FakeSceneBuilder_26(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakePictureRecorder_27 extends _i1.SmartFake
-    implements _i9.PictureRecorder {
-  _FakePictureRecorder_27(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeCanvas_28 extends _i1.SmartFake implements _i9.Canvas {
-  _FakeCanvas_28(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeSemanticsHandle_29 extends _i1.SmartFake
+class _FakeSemanticsHandle_26 extends _i1.SmartFake
     implements _i12.SemanticsHandle {
-  _FakeSemanticsHandle_29(
+  _FakeSemanticsHandle_26(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -380,9 +349,9 @@ class _FakeSemanticsHandle_29 extends _i1.SmartFake
         );
 }
 
-class _FakeSemanticsUpdateBuilder_30 extends _i1.SmartFake
+class _FakeSemanticsUpdateBuilder_27 extends _i1.SmartFake
     implements _i9.SemanticsUpdateBuilder {
-  _FakeSemanticsUpdateBuilder_30(
+  _FakeSemanticsUpdateBuilder_27(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -1842,24 +1811,24 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       );
 
   @override
-  _i4.Future<bool> handlePopRoute() => (super.noSuchMethod(
+  _i4.Future<void> handlePopRoute() => (super.noSuchMethod(
         Invocation.method(
           #handlePopRoute,
           [],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i4.Future<bool> handlePushRoute(String? route) => (super.noSuchMethod(
+  _i4.Future<void> handlePushRoute(String? route) => (super.noSuchMethod(
         Invocation.method(
           #handlePushRoute,
           [route],
         ),
-        returnValue: _i4.Future<bool>.value(false),
-        returnValueForMissingStub: _i4.Future<bool>.value(false),
-      ) as _i4.Future<bool>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
   void handleAppLifecycleStateChanged(_i9.AppLifecycleState? state) =>
@@ -1867,15 +1836,6 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
         Invocation.method(
           #handleAppLifecycleStateChanged,
           [state],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void handleViewFocusChanged(_i9.ViewFocusEvent? event) => super.noSuchMethod(
-        Invocation.method(
-          #handleViewFocusChanged,
-          [event],
         ),
         returnValueForMissingStub: null,
       );
@@ -2669,72 +2629,6 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       ) as _i12.ViewConfiguration);
 
   @override
-  _i9.SceneBuilder createSceneBuilder() => (super.noSuchMethod(
-        Invocation.method(
-          #createSceneBuilder,
-          [],
-        ),
-        returnValue: _FakeSceneBuilder_26(
-          this,
-          Invocation.method(
-            #createSceneBuilder,
-            [],
-          ),
-        ),
-        returnValueForMissingStub: _FakeSceneBuilder_26(
-          this,
-          Invocation.method(
-            #createSceneBuilder,
-            [],
-          ),
-        ),
-      ) as _i9.SceneBuilder);
-
-  @override
-  _i9.PictureRecorder createPictureRecorder() => (super.noSuchMethod(
-        Invocation.method(
-          #createPictureRecorder,
-          [],
-        ),
-        returnValue: _FakePictureRecorder_27(
-          this,
-          Invocation.method(
-            #createPictureRecorder,
-            [],
-          ),
-        ),
-        returnValueForMissingStub: _FakePictureRecorder_27(
-          this,
-          Invocation.method(
-            #createPictureRecorder,
-            [],
-          ),
-        ),
-      ) as _i9.PictureRecorder);
-
-  @override
-  _i9.Canvas createCanvas(_i9.PictureRecorder? recorder) => (super.noSuchMethod(
-        Invocation.method(
-          #createCanvas,
-          [recorder],
-        ),
-        returnValue: _FakeCanvas_28(
-          this,
-          Invocation.method(
-            #createCanvas,
-            [recorder],
-          ),
-        ),
-        returnValueForMissingStub: _FakeCanvas_28(
-          this,
-          Invocation.method(
-            #createCanvas,
-            [recorder],
-          ),
-        ),
-      ) as _i9.Canvas);
-
-  @override
   void initMouseTracker([_i12.MouseTracker? tracker]) => super.noSuchMethod(
         Invocation.method(
           #initMouseTracker,
@@ -2806,14 +2700,14 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
           #ensureSemantics,
           [],
         ),
-        returnValue: _FakeSemanticsHandle_29(
+        returnValue: _FakeSemanticsHandle_26(
           this,
           Invocation.method(
             #ensureSemantics,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeSemanticsHandle_29(
+        returnValueForMissingStub: _FakeSemanticsHandle_26(
           this,
           Invocation.method(
             #ensureSemantics,
@@ -2829,14 +2723,14 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
           #createSemanticsUpdateBuilder,
           [],
         ),
-        returnValue: _FakeSemanticsUpdateBuilder_30(
+        returnValue: _FakeSemanticsUpdateBuilder_27(
           this,
           Invocation.method(
             #createSemanticsUpdateBuilder,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeSemanticsUpdateBuilder_30(
+        returnValueForMissingStub: _FakeSemanticsUpdateBuilder_27(
           this,
           Invocation.method(
             #createSemanticsUpdateBuilder,
