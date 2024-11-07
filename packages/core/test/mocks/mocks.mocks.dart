@@ -9,13 +9,13 @@ import 'dart:developer' as _i27;
 import 'dart:typed_data' as _i15;
 import 'dart:ui' as _i9;
 
-import 'package:flutter/foundation.dart' as _i7;
+import 'package:flutter/foundation.dart' as _i8;
 import 'package:flutter/gestures.dart' as _i11;
 import 'package:flutter/rendering.dart' as _i12;
 import 'package:flutter/scheduler.dart' as _i26;
 import 'package:flutter/services.dart' as _i10;
 import 'package:flutter/src/widgets/binding.dart' as _i25;
-import 'package:flutter/src/widgets/focus_manager.dart' as _i8;
+import 'package:flutter/src/widgets/focus_manager.dart' as _i7;
 import 'package:flutter/src/widgets/framework.dart' as _i13;
 import 'package:flutter/src/widgets/platform_menu_bar.dart' as _i6;
 import 'package:http/http.dart' as _i3;
@@ -107,19 +107,8 @@ class _FakePlatformMenuDelegate_5 extends _i1.SmartFake
         );
 }
 
-class _FakeValueNotifier_6<T> extends _i1.SmartFake
-    implements _i7.ValueNotifier<T> {
-  _FakeValueNotifier_6(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFocusManager_7 extends _i1.SmartFake implements _i8.FocusManager {
-  _FakeFocusManager_7(
+class _FakeFocusManager_6 extends _i1.SmartFake implements _i7.FocusManager {
+  _FakeFocusManager_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -128,13 +117,13 @@ class _FakeFocusManager_7 extends _i1.SmartFake implements _i8.FocusManager {
         );
 
   @override
-  String toString({_i7.DiagnosticLevel? minLevel = _i7.DiagnosticLevel.info}) =>
+  String toString({_i8.DiagnosticLevel? minLevel = _i8.DiagnosticLevel.info}) =>
       super.toString();
 }
 
-class _FakeSingletonFlutterWindow_8 extends _i1.SmartFake
+class _FakeSingletonFlutterWindow_7 extends _i1.SmartFake
     implements _i9.SingletonFlutterWindow {
-  _FakeSingletonFlutterWindow_8(
+  _FakeSingletonFlutterWindow_7(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -143,9 +132,20 @@ class _FakeSingletonFlutterWindow_8 extends _i1.SmartFake
         );
 }
 
-class _FakePlatformDispatcher_9 extends _i1.SmartFake
+class _FakePlatformDispatcher_8 extends _i1.SmartFake
     implements _i9.PlatformDispatcher {
-  _FakePlatformDispatcher_9(
+  _FakePlatformDispatcher_8(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeValueNotifier_9<T> extends _i1.SmartFake
+    implements _i8.ValueNotifier<T> {
+  _FakeValueNotifier_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -274,7 +274,7 @@ class _FakePipelineOwner_20 extends _i1.SmartFake
         );
 
   @override
-  String toString({_i7.DiagnosticLevel? minLevel = _i7.DiagnosticLevel.info}) =>
+  String toString({_i8.DiagnosticLevel? minLevel = _i8.DiagnosticLevel.info}) =>
       super.toString();
 }
 
@@ -288,7 +288,7 @@ class _FakeRenderView_21 extends _i1.SmartFake implements _i12.RenderView {
         );
 
   @override
-  String toString({_i7.DiagnosticLevel? minLevel = _i7.DiagnosticLevel.info}) =>
+  String toString({_i8.DiagnosticLevel? minLevel = _i8.DiagnosticLevel.info}) =>
       super.toString();
 }
 
@@ -323,7 +323,7 @@ class _FakeWidget_24 extends _i1.SmartFake implements _i13.Widget {
         );
 
   @override
-  String toString({_i7.DiagnosticLevel? minLevel = _i7.DiagnosticLevel.info}) =>
+  String toString({_i8.DiagnosticLevel? minLevel = _i8.DiagnosticLevel.info}) =>
       super.toString();
 }
 
@@ -1231,47 +1231,17 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       );
 
   @override
-  bool get debugShowWidgetInspectorOverride => (super.noSuchMethod(
-        Invocation.getter(#debugShowWidgetInspectorOverride),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-
-  @override
-  set debugShowWidgetInspectorOverride(bool? value) => super.noSuchMethod(
-        Invocation.setter(
-          #debugShowWidgetInspectorOverride,
-          value,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  _i7.ValueNotifier<bool> get debugShowWidgetInspectorOverrideNotifier =>
-      (super.noSuchMethod(
-        Invocation.getter(#debugShowWidgetInspectorOverrideNotifier),
-        returnValue: _FakeValueNotifier_6<bool>(
-          this,
-          Invocation.getter(#debugShowWidgetInspectorOverrideNotifier),
-        ),
-        returnValueForMissingStub: _FakeValueNotifier_6<bool>(
-          this,
-          Invocation.getter(#debugShowWidgetInspectorOverrideNotifier),
-        ),
-      ) as _i7.ValueNotifier<bool>);
-
-  @override
-  _i8.FocusManager get focusManager => (super.noSuchMethod(
+  _i7.FocusManager get focusManager => (super.noSuchMethod(
         Invocation.getter(#focusManager),
-        returnValue: _FakeFocusManager_7(
+        returnValue: _FakeFocusManager_6(
           this,
           Invocation.getter(#focusManager),
         ),
-        returnValueForMissingStub: _FakeFocusManager_7(
+        returnValueForMissingStub: _FakeFocusManager_6(
           this,
           Invocation.getter(#focusManager),
         ),
-      ) as _i8.FocusManager);
+      ) as _i7.FocusManager);
 
   @override
   bool get firstFrameRasterized => (super.noSuchMethod(
@@ -1311,11 +1281,11 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   _i9.SingletonFlutterWindow get window => (super.noSuchMethod(
         Invocation.getter(#window),
-        returnValue: _FakeSingletonFlutterWindow_8(
+        returnValue: _FakeSingletonFlutterWindow_7(
           this,
           Invocation.getter(#window),
         ),
-        returnValueForMissingStub: _FakeSingletonFlutterWindow_8(
+        returnValueForMissingStub: _FakeSingletonFlutterWindow_7(
           this,
           Invocation.getter(#window),
         ),
@@ -1324,11 +1294,11 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   _i9.PlatformDispatcher get platformDispatcher => (super.noSuchMethod(
         Invocation.getter(#platformDispatcher),
-        returnValue: _FakePlatformDispatcher_9(
+        returnValue: _FakePlatformDispatcher_8(
           this,
           Invocation.getter(#platformDispatcher),
         ),
-        returnValueForMissingStub: _FakePlatformDispatcher_9(
+        returnValueForMissingStub: _FakePlatformDispatcher_8(
           this,
           Invocation.getter(#platformDispatcher),
         ),
@@ -1342,17 +1312,17 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       ) as bool);
 
   @override
-  _i7.ValueNotifier<int?> get accessibilityFocus => (super.noSuchMethod(
+  _i8.ValueNotifier<int?> get accessibilityFocus => (super.noSuchMethod(
         Invocation.getter(#accessibilityFocus),
-        returnValue: _FakeValueNotifier_6<int?>(
+        returnValue: _FakeValueNotifier_9<int?>(
           this,
           Invocation.getter(#accessibilityFocus),
         ),
-        returnValueForMissingStub: _FakeValueNotifier_6<int?>(
+        returnValueForMissingStub: _FakeValueNotifier_9<int?>(
           this,
           Invocation.getter(#accessibilityFocus),
         ),
-      ) as _i7.ValueNotifier<int?>);
+      ) as _i8.ValueNotifier<int?>);
 
   @override
   _i10.HardwareKeyboard get keyboard => (super.noSuchMethod(
@@ -1698,15 +1668,6 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       );
 
   @override
-  void resetInternalState() => super.noSuchMethod(
-        Invocation.method(
-          #resetInternalState,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
   void initServiceExtensions() => super.noSuchMethod(
         Invocation.method(
           #initServiceExtensions,
@@ -1972,7 +1933,7 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   void registerSignalServiceExtension({
     required String? name,
-    required _i7.AsyncCallback? callback,
+    required _i8.AsyncCallback? callback,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -1989,8 +1950,8 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   void registerBoolServiceExtension({
     required String? name,
-    required _i7.AsyncValueGetter<bool>? getter,
-    required _i7.AsyncValueSetter<bool>? setter,
+    required _i8.AsyncValueGetter<bool>? getter,
+    required _i8.AsyncValueSetter<bool>? setter,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -2008,8 +1969,8 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   void registerNumericServiceExtension({
     required String? name,
-    required _i7.AsyncValueGetter<double>? getter,
-    required _i7.AsyncValueSetter<double>? setter,
+    required _i8.AsyncValueGetter<double>? getter,
+    required _i8.AsyncValueSetter<double>? setter,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -2043,8 +2004,8 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   void registerStringServiceExtension({
     required String? name,
-    required _i7.AsyncValueGetter<String>? getter,
-    required _i7.AsyncValueSetter<String>? setter,
+    required _i8.AsyncValueGetter<String>? getter,
+    required _i8.AsyncValueSetter<String>? setter,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -2062,7 +2023,7 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
   @override
   void registerServiceExtension({
     required String? name,
-    required _i7.ServiceExtensionCallback? callback,
+    required _i8.ServiceExtensionCallback? callback,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -2212,6 +2173,15 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
         Invocation.method(
           #removeTimingsCallback,
           [callback],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void resetLifecycleState() => super.noSuchMethod(
+        Invocation.method(
+          #resetLifecycleState,
+          [],
         ),
         returnValueForMissingStub: null,
       );
