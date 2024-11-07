@@ -382,8 +382,9 @@ class Analytics with ClientMethods {
   Future _process(RawEvent event) async {
     applyRawEventData(event);
     if (state.isReady) {
+      final processedEvent = await _timeline.process(event);
       _flushPolicyExecuter.notify(event);
-      return _timeline.process(event);
+      return processedEvent;
     } else {
       _pendingEvents.add(event);
       return event;

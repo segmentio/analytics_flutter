@@ -1,3 +1,14 @@
+## 1.1.2
+
+- Fix timestamp timezone
+- Fix reported version
+
+## 1.1.1
+
+- Update dependencies
+- Fixed event loss issue with flush
+- Fixed timezone conversion issue
+
 ## 1.1.0
 
 - Cleared out malformed files on error and reduced chance of files not writing completely if program exits prematurely

@@ -42,7 +42,6 @@ class QueueFlushingPlugin extends UtilityPlugin {
         if (!_isPendingUpload) {
           _isPendingUpload = true;
           await _onFlush(events);
-          _state!.flush();
         }
       } finally {
         _isPendingUpload = false;
