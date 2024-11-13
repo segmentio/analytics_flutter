@@ -1,3 +1,4 @@
+
 import 'package:segment_analytics/analytics_platform_interface.dart';
 import 'package:flutter/services.dart';
 
@@ -7,11 +8,13 @@ import 'native_context.dart';
 class AnalyticsPlatformImpl extends AnalyticsPlatform {
   static const EventChannel _eChannel =
       EventChannel('analytics/deep_link_events');
-  final NativeContextApi _api = NativeContextApi();
+  NativeContextApi api;
+
+  AnalyticsPlatformImpl({NativeContextApi? api}) : api = api ?? NativeContextApi();
 
   @override
   Future<NativeContext> getContext({bool collectDeviceId = false}) {
-    return _api.getContext(collectDeviceId);
+    return api.getContext(collectDeviceId);
   }
 
   @override

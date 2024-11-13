@@ -15,10 +15,10 @@ class SegmentDestination extends DestinationPlugin with Flushable {
   String? _apiHost;
 
   SegmentDestination() : super(segmentDestinationKey) {
-    _queuePlugin = QueueFlushingPlugin(_sendEvents);
+    _queuePlugin = QueueFlushingPlugin(sendEvents);
   }
 
-  Future _sendEvents(List<RawEvent> events) async {
+  Future sendEvents(List<RawEvent> events) async {
     if (events.isEmpty) {
       return;
     }
