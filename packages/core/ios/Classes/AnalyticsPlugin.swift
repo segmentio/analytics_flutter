@@ -3,8 +3,10 @@ import UIKit
 import Foundation
 
 public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, FlutterStreamHandler, FlutterApplicationLifeCycleDelegate {
+    private var pendingDeeplinkEventsQueue:[[String:String]] = []
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         _eventSink = events
+        processPendingDeeplinkEventsQueue();
         return nil
     }
     
@@ -17,16 +19,29 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
     public func application(_ application: UIApplication, open url: URL, sourceApplication: String, annotation: Any) -> Bool {
         if (_eventSink != nil) {
             _eventSink?(["url": url.absoluteString, "referringApplication": sourceApplication])
+        }else{
+            pendingDeeplinkEventsQueue.append(["url": url.absoluteString, "referringApplication": sourceApplication]);
         }
         return true
     }
     public func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         if (_eventSink != nil) {
             _eventSink?([url: url.absoluteString])
+        }else{
+            pendingDeeplinkEventsQueue.append(["url": url.absoluteString]);
         }
         return true
     }
-    
+    private func processPendingDeeplinkEventsQueue() -> Void{
+
+        if(_eventSink == nil || pendingDeeplinkEventsQueue.isEmpty){
+            return;
+        }
+        while(!pendingDeeplinkEventsQueue.isEmpty){
+            let eventData:[String:String] = pendingDeeplinkEventsQueue.removeFirst();
+            _eventSink?(eventData);
+        }
+    }
     internal static var device = VendorSystem.current
     
     func getContext(collectDeviceId: Bool, completion: @escaping (Result<NativeContext, Error>) -> Void) {
