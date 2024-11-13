@@ -31,10 +31,10 @@ import java.util.*
 val WIDEVINE_UUID = UUID(-0x121074568629b532L, -0x5c37d8232ae2de13L)
 
 /** AnalyticsPlugin */
-class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHandler,  ActivityAware,
+class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHandler, ActivityAware,
     PluginRegistry.NewIntentListener {
     private var context: Context? = null
-
+    private val pendingDeeplinkEventsQueue: Queue<Intent> = LinkedList()
     private fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
     private val eventsChannel = "analytics/deep_link_events"
@@ -198,13 +198,31 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
     private fun handleIntent(context: Context, intent: Intent) {
         val action = intent.action
         if (Intent.ACTION_VIEW == action) {
-            if (changeReceiver != null) changeReceiver!!.onReceive(context, intent)
+            if (changeReceiver != null) {
+                changeReceiver!!.onReceive(context, intent)
+            } else {
+                pendingDeeplinkEventsQueue.add(intent.cloneFilter())
+            }
+        }
+    }
+
+    private fun processPendingDeeplinkEventsQueue() {
+        if (pendingDeeplinkEventsQueue.isEmpty() ||
+            this.context == null ||
+            changeReceiver == null
+        ) {
+            return
+        }
+        while (pendingDeeplinkEventsQueue.isNotEmpty()) {
+            val intent = pendingDeeplinkEventsQueue.poll()
+            changeReceiver?.onReceive(context, intent)
         }
     }
 
     override fun onListen(arguments: Any?, events: EventSink?) {
         if (events != null) {
             this.changeReceiver = createChangeReceiver(events)
+            processPendingDeeplinkEventsQueue()
         }
     }
 
@@ -216,7 +234,10 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
         binding.addOnNewIntentListener(this)
         if (this.context != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                binding.activity.intent.putExtra("referringApplication", binding.activity.referrer.toString())
+                binding.activity.intent.putExtra(
+                    "referringApplication",
+                    binding.activity.referrer.toString()
+                )
             }
             this.handleIntent(this.context!!, binding.activity.intent)
         }
