@@ -207,15 +207,14 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
     }
 
     private fun processPendingDeeplinkEventsQueue() {
-        if (pendingDeeplinkEventsQueue.isEmpty() ||
-            this.context == null ||
+        if (this.context == null ||
             changeReceiver == null
         ) {
             return
         }
         while (pendingDeeplinkEventsQueue.isNotEmpty()) {
             val intent = pendingDeeplinkEventsQueue.poll()
-            changeReceiver?.onReceive(context, intent)
+            changeReceiver!!.onReceive(context, intent)
         }
     }
 
