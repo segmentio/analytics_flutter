@@ -3,7 +3,7 @@ import UIKit
 import Foundation
 
 public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, FlutterStreamHandler, FlutterApplicationLifeCycleDelegate {
-    private var pendingDeeplinkEventsQueue:[[String:String]] = []
+    private var pendingDeeplinkEventsQueue:[[String:String?]] = []
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         _eventSink = events
         processPendingDeeplinkEventsQueue();
@@ -16,29 +16,22 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
     }
     
     var _eventSink:FlutterEventSink?;
-    public func application(_ application: UIApplication, open url: URL, sourceApplication: String, annotation: Any) -> Bool {
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool{
+        let sourceApplication = options[.sourceApplication] as? String;
         if (_eventSink != nil) {
             _eventSink?(["url": url.absoluteString, "referringApplication": sourceApplication])
         }else{
             pendingDeeplinkEventsQueue.append(["url": url.absoluteString, "referringApplication": sourceApplication]);
         }
-        return true
+        return false
     }
-    public func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
-        if (_eventSink != nil) {
-            _eventSink?([url: url.absoluteString])
-        }else{
-            pendingDeeplinkEventsQueue.append(["url": url.absoluteString]);
-        }
-        return true
-    }
-    private func processPendingDeeplinkEventsQueue() -> Void{
 
-        if(_eventSink == nil || pendingDeeplinkEventsQueue.isEmpty){
+    private func processPendingDeeplinkEventsQueue() -> Void{
+        if(_eventSink == nil){
             return;
         }
         while(!pendingDeeplinkEventsQueue.isEmpty){
-            let eventData:[String:String] = pendingDeeplinkEventsQueue.removeFirst();
+            let eventData:[String:String?] = pendingDeeplinkEventsQueue.removeFirst();
             _eventSink?(eventData);
         }
     }
@@ -103,10 +96,12 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let messenger : FlutterBinaryMessenger = registrar.messenger()
-        let api : NativeContextApi & NSObjectProtocol & AnalyticsPlugin = AnalyticsPlugin.init()
+        let plugin = AnalyticsPlugin.init();
+        let api : NativeContextApi & NSObjectProtocol & AnalyticsPlugin = plugin
         NativeContextApiSetup.setUp(binaryMessenger: messenger, api: api)
         
         let channel:FlutterEventChannel = FlutterEventChannel(name: "analytics/deep_link_events", binaryMessenger: registrar.messenger())
         channel.setStreamHandler(api)
+        registrar.addApplicationDelegate(plugin)
     }
 }
