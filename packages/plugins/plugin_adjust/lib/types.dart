@@ -6,8 +6,18 @@ class AdjustSettings {
   final bool disabled;
   final String appToken;
   final bool? setEnvironmentProduction;
+  @Deprecated("""
+  this setting has been removed in the adjust sdk 
+  it will be removed in the next version of the plugin
+  and has currently no effect
+  """)
   final bool? setEventBufferingEnabled;
   final bool? trackAttributionData;
+  @Deprecated("""
+  this setting has been removed in the adjust sdk 
+  it will be removed in the next version of the plugin
+  and has currently no effect
+  """)
   final bool? setDelay;
   final Map<String, String>? customEvents;
   final int? delayTime;
