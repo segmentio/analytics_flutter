@@ -91,6 +91,17 @@ class AdjustDestination extends DestinationPlugin {
 
       final properties = event.properties;
       if (properties != null) {
+        final partnerParameterKey = adjustSettings!.partnerParameterKey;
+        if (partnerParameterKey != null) {
+          final partnerParameters = properties[partnerParameterKey];
+          properties.remove(partnerParameterKey);
+          if (partnerParameters is Map<String, dynamic>) {
+            for (final entry in partnerParameters.entries) {
+              adjEvent.addPartnerParameter(entry.key, entry.value);
+            }
+          }
+        }
+
         for (final entry in properties.entries) {
           adjEvent.addCallbackParameter(entry.key, entry.value.toString());
         }

@@ -22,14 +22,22 @@ class AdjustSettings {
   final Map<String, String>? customEvents;
   final int? delayTime;
 
-  AdjustSettings(this.appToken,
-      {this.disabled = false,
-      this.customEvents,
-      this.delayTime,
-      this.setDelay,
-      this.setEnvironmentProduction,
-      this.setEventBufferingEnabled,
-      this.trackAttributionData});
+  /// under which property key the partner parameters are stored
+  /// the map behind that key will then be forwarded to the adjust sdk
+  /// as partner parameters
+  final String? partnerParameterKey;
+
+  AdjustSettings(
+    this.appToken, {
+    this.disabled = false,
+    this.customEvents,
+    this.delayTime,
+    this.setDelay,
+    this.setEnvironmentProduction,
+    this.setEventBufferingEnabled,
+    this.trackAttributionData,
+    this.partnerParameterKey,
+  });
 
   factory AdjustSettings.fromJson(Map<String, dynamic> json) =>
       _$AdjustSettingsFromJson(json);
