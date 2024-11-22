@@ -57,32 +57,19 @@ class AdjustDestination extends DestinationPlugin {
       hasRegisteredCallback = true;
     }
 
-    final bufferingEnabled = adjustSettings!.setEventBufferingEnabled;
-    if (bufferingEnabled == true) {
-      adjustConfig.eventBufferingEnabled = bufferingEnabled;
-    }
-
-    final useDelay = adjustSettings!.setDelay;
-    if (useDelay == true) {
-      final delayTime = adjustSettings!.delayTime;
-      if (delayTime != null) {
-        adjustConfig.delayStart = delayTime.toDouble();
-      }
-    }
-
-    Adjust.start(adjustConfig);
+    Adjust.initSdk(adjustConfig);
   }
 
   @override
   identify(event) async {
     final userId = event.userId;
     if (userId != null && userId.isNotEmpty) {
-      Adjust.addSessionPartnerParameter('user_id', userId);
+      Adjust.addGlobalPartnerParameter('user_id', userId);
     }
 
     final anonId = event.anonymousId;
     if (anonId != null && anonId.isNotEmpty) {
-      Adjust.addSessionPartnerParameter('anonymous_id', anonId);
+      Adjust.addGlobalPartnerParameter('anonymous_id', anonId);
     }
     return event;
   }
@@ -91,7 +78,7 @@ class AdjustDestination extends DestinationPlugin {
   track(event) async {
     final anonId = event.anonymousId;
     if (anonId != null && anonId.isNotEmpty) {
-      Adjust.addSessionPartnerParameter('anonymous_id', anonId);
+      Adjust.addGlobalPartnerParameter('anonymous_id', anonId);
     }
 
     if (adjustSettings == null) {
@@ -104,6 +91,17 @@ class AdjustDestination extends DestinationPlugin {
 
       final properties = event.properties;
       if (properties != null) {
+        final partnerParameterKey = adjustSettings!.partnerParameterKey;
+        if (partnerParameterKey != null) {
+          final partnerParameters = properties[partnerParameterKey];
+          properties.remove(partnerParameterKey);
+          if (partnerParameters is Map<String, dynamic>) {
+            for (final entry in partnerParameters.entries) {
+              adjEvent.addPartnerParameter(entry.key, entry.value);
+            }
+          }
+        }
+
         for (final entry in properties.entries) {
           adjEvent.addCallbackParameter(entry.key, entry.value.toString());
         }
@@ -129,6 +127,6 @@ class AdjustDestination extends DestinationPlugin {
 
   @override
   reset() {
-    Adjust.resetSessionPartnerParameters();
+    Adjust.removeGlobalPartnerParameters();
   }
 }

@@ -41,6 +41,16 @@ class _MyAppState extends State<MyApp> {
 }
 ```
 
+### Settings
+
+#### Partner Parameters
+
+As Adjust `partnerParameters` cannot directly be extracted from the Segment payload, as its properties are forwarded as `callbackProperties` you can specify a specific key to extract the `partnerParameters` from instead of passing it to the `callbackParameters`.
+if a value is passed behind `partnerParametersKey` it has to be a map.
+
+```dart
+
+
 ## Support
 
 Please use Github issues, Pull Requests, or feel free to reach out to our [support team](https://segment.com/help/).
@@ -52,6 +62,7 @@ Interested in integrating your service with us? Check out our [Partners page](ht
 ## License
 
 ```
+
 MIT License
 
 Copyright (c) 2023 Segment
@@ -73,4 +84,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 ```
