@@ -39,3 +39,6 @@ launch.json
 
 #Coverage
 coverage/
+
+# FVM Version Cache
+.fvm/
