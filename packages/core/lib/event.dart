@@ -327,13 +327,14 @@ class Context extends JSONExtendableImpl {
   String locale;
   ContextNetwork network;
   ContextOS os;
+  String referrer;
   ContextScreen screen;
   String timezone;
   String? instanceId;
   UserTraits traits;
 
   Context(this.app, this.device, this.library, this.locale, this.network,
-      this.os, this.screen, this.timezone, this.traits,
+      this.os, this.referrer, this.screen, this.timezone, this.traits,
       {this.instanceId, super.custom});
   Context.fromNative(NativeContext nativeContext, this.traits)
       : app = nativeContext.app == null
@@ -355,6 +356,7 @@ class Context extends JSONExtendableImpl {
         os = nativeContext.os == null
             ? ContextOS("", "")
             : ContextOS.fromNative(nativeContext.os as NativeContextOS),
+        referrer = nativeContext.referrer ?? "",
         screen = nativeContext.screen == null
             ? ContextScreen(0, 0)
             : ContextScreen.fromNative(
@@ -372,6 +374,7 @@ class Context extends JSONExtendableImpl {
     "locale",
     "networm",
     "os",
+    "referrer",
     "screen",
     "timezone",
     "traits"
@@ -651,6 +654,7 @@ Context mergeContext(Context a, Context b) {
       a.locale,
       a.network,
       a.os,
+      a.referrer,
       mergeContextScreen(a.screen, b.screen),
       a.timezone,
       a.traits,
