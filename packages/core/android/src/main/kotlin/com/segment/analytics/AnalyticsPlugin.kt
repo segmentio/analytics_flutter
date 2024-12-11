@@ -182,13 +182,13 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
     private fun createChangeReceiver(events: EventSink): BroadcastReceiver {
         return object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
-                val referringApplication = intent.getStringExtra("referringApplication")
+                val referringApplication = intent.getStringExtra("referring_application")
                 // NOTE: assuming intent.getAction() is Intent.ACTION_VIEW
                 val dataString: String? = intent.dataString
                 if (dataString == null) {
                     events.error("UNAVAILABLE", "Link unavailable", null)
                 } else {
-                    val data = mapOf("url" to dataString, "referringApplication" to referringApplication)
+                    val data = mapOf("url" to dataString, "referring_application" to referringApplication)
                     events.success(data)
                 }
             }
@@ -234,7 +234,7 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
         if (this.context != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 binding.activity.intent.putExtra(
-                    "referringApplication",
+                    "referring_application",
                     binding.activity.referrer.toString()
                 )
             }

@@ -19,10 +19,12 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
     public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool{
         let sourceApplication = options[.sourceApplication] as? String;
         if (_eventSink != nil) {
-            _eventSink?(["url": url.absoluteString, "referringApplication": sourceApplication])
+            _eventSink?(["url": url.absoluteString, "referring_application": sourceApplication])
         }else{
-            pendingDeeplinkEventsQueue.append(["url": url.absoluteString, "referringApplication": sourceApplication]);
+            pendingDeeplinkEventsQueue.append(["url": url.absoluteString, "referring_application": sourceApplication]);
         }
+
+
         return false
     }
 
