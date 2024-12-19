@@ -35,15 +35,23 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 }
 
 DeepLinkData _$DeepLinkDataFromJson(Map<String, dynamic> json) => DeepLinkData(
-      json['referringApplication'] as String,
+      json['referring_application'] as String?,
       json['url'] as String,
     );
 
-Map<String, dynamic> _$DeepLinkDataToJson(DeepLinkData instance) =>
-    <String, dynamic>{
-      'referringApplication': instance.referringApplication,
-      'url': instance.url,
-    };
+Map<String, dynamic> _$DeepLinkDataToJson(DeepLinkData instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('referring_application', instance.referringApplication);
+  val['url'] = instance.url;
+  return val;
+}
 
 SegmentAPISettings _$SegmentAPISettingsFromJson(Map<String, dynamic> json) =>
     SegmentAPISettings(
