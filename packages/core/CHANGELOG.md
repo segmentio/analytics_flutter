@@ -1,3 +1,7 @@
+## 1.1.3
+
+- Fix Deep Linking for iOS and Android
+
 ## 1.1.2
 
 - Fix timestamp timezone
