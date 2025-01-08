@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Updating AppsFlyer SDK version
+
 ## 1.0.1
 
 - Updating dependencies
