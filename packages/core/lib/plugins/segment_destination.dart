@@ -35,10 +35,11 @@ class SegmentDestination extends DestinationPlugin with Flushable {
         final succeeded = await analytics?.httpClient.startBatchUpload(
             analytics!.state.configuration.state.writeKey, batch,
             host: _apiHost);
-        if (succeeded == null || !succeeded) {
+        if (succeeded == true) {
+          sentEvents.addAll(batch);
+        } else {
           numFailedEvents += batch.length;
         }
-        sentEvents.addAll(batch);
       } catch (e) {
         numFailedEvents += batch.length;
       } finally {
