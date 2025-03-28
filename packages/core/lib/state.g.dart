@@ -35,7 +35,7 @@ Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
 }
 
 DeepLinkData _$DeepLinkDataFromJson(Map<String, dynamic> json) => DeepLinkData(
-      json['referring_application'] as String?,
+      json['referringApplication'] as String?,
       json['url'] as String,
     );
 
@@ -48,7 +48,7 @@ Map<String, dynamic> _$DeepLinkDataToJson(DeepLinkData instance) {
     }
   }
 
-  writeNotNull('referring_application', instance.referringApplication);
+  writeNotNull('referringApplication', instance.referringApplication);
   val['url'] = instance.url;
   return val;
 }
