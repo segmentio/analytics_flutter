@@ -1,3 +1,7 @@
+## 1.1.4
+
+- Fix Network Context deserialization issue
+
 ## 1.1.3
 
 - Fix Deep Linking for iOS and Android
