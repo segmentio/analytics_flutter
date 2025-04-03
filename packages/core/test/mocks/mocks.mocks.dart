@@ -1772,24 +1772,24 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
       );
 
   @override
-  _i4.Future<void> handlePopRoute() => (super.noSuchMethod(
+  _i4.Future<bool> handlePopRoute() => (super.noSuchMethod(
         Invocation.method(
           #handlePopRoute,
           [],
         ),
         returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: _i4.Future<bool>.value(true),
+      ) as _i4.Future<bool>);
 
   @override
-  _i4.Future<void> handlePushRoute(String? route) => (super.noSuchMethod(
+  _i4.Future<bool> handlePushRoute(String? route) => (super.noSuchMethod(
         Invocation.method(
           #handlePushRoute,
           [route],
         ),
         returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: _i4.Future<bool>.value(true),
+      ) as _i4.Future<bool>);
 
   @override
   void handleAppLifecycleStateChanged(_i9.AppLifecycleState? state) =>
@@ -2173,15 +2173,6 @@ class MockWidgetsBinding extends _i1.Mock implements _i25.WidgetsBinding {
         Invocation.method(
           #removeTimingsCallback,
           [callback],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void resetLifecycleState() => super.noSuchMethod(
-        Invocation.method(
-          #resetLifecycleState,
-          [],
         ),
         returnValueForMissingStub: null,
       );
