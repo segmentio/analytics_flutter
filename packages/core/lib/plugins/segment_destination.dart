@@ -41,12 +41,11 @@ class SegmentDestination extends DestinationPlugin with Flushable {
         sentEvents.addAll(batch);
       } catch (e) {
         numFailedEvents += batch.length;
-      } finally {
-        _queuePlugin.dequeue(sentEvents);
       }
     });
 
     if (sentEvents.isNotEmpty) {
+      _queuePlugin.dequeue(sentEvents);
       log("Sent ${sentEvents.length} events", kind: LogFilterKind.debug);
     }
 
