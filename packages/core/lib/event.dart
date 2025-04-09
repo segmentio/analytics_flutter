@@ -55,7 +55,12 @@ abstract class RawEvent with JSONSerialisable {
   @JsonKey(name: "_metadata")
   DestinationMetadata? metadata;
 
-  RawEvent(this.type, {this.anonymousId, this.userId});
+  RawEvent(
+    this.type, {
+    this.anonymousId,
+    this.userId,
+    this.integrations,
+  });
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -79,7 +84,14 @@ class TrackEvent extends RawEvent {
   String event;
   Map<String, dynamic>? properties;
 
-  TrackEvent(this.event, {this.properties}) : super(EventType.track);
+  TrackEvent(
+    this.event, {
+    this.properties,
+    Map<String, dynamic>? integrations,
+  }) : super(
+          EventType.track,
+          integrations: integrations,
+        );
 
   factory TrackEvent.fromJson(Map<String, dynamic> json) =>
       _$TrackEventFromJson(json);
@@ -131,7 +143,14 @@ class ScreenEvent extends RawEvent {
   String name;
   Map<String, dynamic>? properties;
 
-  ScreenEvent(this.name, {this.properties}) : super(EventType.screen);
+  ScreenEvent(
+    this.name, {
+    this.properties,
+    Map<String, dynamic>? integrations,
+  }) : super(
+          EventType.screen,
+          integrations: integrations,
+        );
 
   factory ScreenEvent.fromJson(Map<String, dynamic> json) =>
       _$ScreenEventFromJson(json);

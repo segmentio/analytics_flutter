@@ -71,7 +71,7 @@ class Analytics with ClientMethods {
       addPlugin(segmentDestination);
     }
 
-    if(config.token != null) {
+    if (config.token != null) {
       _platformPlugins.add(InjectToken(config.token!));
     }
 
@@ -212,12 +212,20 @@ class Analytics with ClientMethods {
 
   @override
   Future track(String event, {Map<String, dynamic>? properties}) async {
-    await _process(TrackEvent(event, properties: properties ?? {}));
+    await _process(TrackEvent(
+      event,
+      properties: properties ?? {},
+      integrations: _state.integrations.state,
+    ));
   }
 
   @override
   Future screen(String name, {Map<String, dynamic>? properties}) async {
-    final event = ScreenEvent(name, properties: properties ?? {});
+    final event = ScreenEvent(
+      name,
+      properties: properties ?? {},
+      integrations: _state.integrations.state,
+    );
 
     await _process(event);
   }
