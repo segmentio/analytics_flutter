@@ -17,41 +17,25 @@ UserInfo _$UserInfoFromJson(Map<String, dynamic> json) => UserInfo(
           : UserTraits.fromJson(json['userTraits'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$UserInfoToJson(UserInfo instance) {
-  final val = <String, dynamic>{
-    'anonymousId': instance.anonymousId,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('userId', instance.userId);
-  writeNotNull('userTraits', instance.userTraits?.toJson());
-  writeNotNull('groupTraits', instance.groupTraits?.toJson());
-  return val;
-}
+Map<String, dynamic> _$UserInfoToJson(UserInfo instance) => <String, dynamic>{
+      'anonymousId': instance.anonymousId,
+      if (instance.userId case final value?) 'userId': value,
+      if (instance.userTraits?.toJson() case final value?) 'userTraits': value,
+      if (instance.groupTraits?.toJson() case final value?)
+        'groupTraits': value,
+    };
 
 DeepLinkData _$DeepLinkDataFromJson(Map<String, dynamic> json) => DeepLinkData(
       json['referringApplication'] as String?,
       json['url'] as String,
     );
 
-Map<String, dynamic> _$DeepLinkDataToJson(DeepLinkData instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('referringApplication', instance.referringApplication);
-  val['url'] = instance.url;
-  return val;
-}
+Map<String, dynamic> _$DeepLinkDataToJson(DeepLinkData instance) =>
+    <String, dynamic>{
+      if (instance.referringApplication case final value?)
+        'referringApplication': value,
+      'url': instance.url,
+    };
 
 SegmentAPISettings _$SegmentAPISettingsFromJson(Map<String, dynamic> json) =>
     SegmentAPISettings(
@@ -62,20 +46,12 @@ SegmentAPISettings _$SegmentAPISettingsFromJson(Map<String, dynamic> json) =>
               json['middlewareSettings'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$SegmentAPISettingsToJson(SegmentAPISettings instance) {
-  final val = <String, dynamic>{
-    'integrations': instance.integrations,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('middlewareSettings', instance.middlewareSettings?.toJson());
-  return val;
-}
+Map<String, dynamic> _$SegmentAPISettingsToJson(SegmentAPISettings instance) =>
+    <String, dynamic>{
+      'integrations': instance.integrations,
+      if (instance.middlewareSettings?.toJson() case final value?)
+        'middlewareSettings': value,
+    };
 
 MiddlewareSettings _$MiddlewareSettingsFromJson(Map<String, dynamic> json) =>
     MiddlewareSettings(
@@ -106,25 +82,16 @@ RoutingRule _$RoutingRuleFromJson(Map<String, dynamic> json) => RoutingRule(
           const [],
     );
 
-Map<String, dynamic> _$RoutingRuleToJson(RoutingRule instance) {
-  final val = <String, dynamic>{
-    'scope': instance.scope,
-    'target_type': instance.targetType,
-    'matchers': instance.matchers.map((e) => e.toJson()).toList(),
-    'transformers': instance.transformers
-        .map((e) => e.map((e) => e.toJson()).toList())
-        .toList(),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('destinationName', instance.destinationName);
-  return val;
-}
+Map<String, dynamic> _$RoutingRuleToJson(RoutingRule instance) =>
+    <String, dynamic>{
+      'scope': instance.scope,
+      'target_type': instance.targetType,
+      'matchers': instance.matchers.map((e) => e.toJson()).toList(),
+      'transformers': instance.transformers
+          .map((e) => e.map((e) => e.toJson()).toList())
+          .toList(),
+      if (instance.destinationName case final value?) 'destinationName': value,
+    };
 
 Matcher _$MatcherFromJson(Map<String, dynamic> json) => Matcher(
       json['type'] as String,
@@ -143,20 +110,11 @@ Transformer _$TransformerFromJson(Map<String, dynamic> json) => Transformer(
           : TransformerConfig.fromJson(json['config'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$TransformerToJson(Transformer instance) {
-  final val = <String, dynamic>{
-    'type': instance.type,
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('config', instance.config?.toJson());
-  return val;
-}
+Map<String, dynamic> _$TransformerToJson(Transformer instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      if (instance.config?.toJson() case final value?) 'config': value,
+    };
 
 TransformerConfig _$TransformerConfigFromJson(Map<String, dynamic> json) =>
     TransformerConfig(
@@ -178,21 +136,15 @@ TransformerConfig _$TransformerConfigFromJson(Map<String, dynamic> json) =>
               json['sample'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$TransformerConfigToJson(TransformerConfig instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('allow', instance.allow);
-  writeNotNull('drop', instance.drop);
-  writeNotNull('sample', instance.sample?.toJson());
-  writeNotNull('map', instance.map?.map((k, e) => MapEntry(k, e.toJson())));
-  return val;
-}
+Map<String, dynamic> _$TransformerConfigToJson(TransformerConfig instance) =>
+    <String, dynamic>{
+      if (instance.allow case final value?) 'allow': value,
+      if (instance.drop case final value?) 'drop': value,
+      if (instance.sample?.toJson() case final value?) 'sample': value,
+      if (instance.map?.map((k, e) => MapEntry(k, e.toJson()))
+          case final value?)
+        'map': value,
+    };
 
 TransformerConfigSample _$TransformerConfigSampleFromJson(
         Map<String, dynamic> json) =>
@@ -218,18 +170,10 @@ TransformerConfigMap _$TransformerConfigMapFromJson(
     );
 
 Map<String, dynamic> _$TransformerConfigMapToJson(
-    TransformerConfigMap instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('set', instance.set);
-  writeNotNull('copy', instance.copy);
-  writeNotNull('move', instance.move);
-  writeNotNull('to_string', instance.enableToString);
-  return val;
-}
+        TransformerConfigMap instance) =>
+    <String, dynamic>{
+      if (instance.set case final value?) 'set': value,
+      if (instance.copy case final value?) 'copy': value,
+      if (instance.move case final value?) 'move': value,
+      if (instance.enableToString case final value?) 'to_string': value,
+    };
