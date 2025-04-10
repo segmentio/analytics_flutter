@@ -1,3 +1,7 @@
+## 1.1.6
+
+- Fix error loading storage files
+
 ## 1.1.5
 
 - Update dependencies
