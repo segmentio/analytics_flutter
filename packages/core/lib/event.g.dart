@@ -459,7 +459,7 @@ ContextNetwork _$ContextNetworkFromJson(Map<String, dynamic> json) =>
     ContextNetwork(
       json['cellular'] as bool,
       json['wifi'] as bool,
-      json['bluetooth'] as bool,
+      json['bluetooth'] as bool? ?? false,
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
