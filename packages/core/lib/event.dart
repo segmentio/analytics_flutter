@@ -495,6 +495,7 @@ class ContextOS extends JSONExtendableImpl {
 class ContextNetwork extends JSONExtendableImpl {
   bool cellular;
   bool wifi;
+  @JsonKey(defaultValue: false)
   bool bluetooth;
 
   ContextNetwork(this.cellular, this.wifi, this.bluetooth, {super.custom});
