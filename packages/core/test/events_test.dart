@@ -25,12 +25,7 @@ class MockPlatform extends AnalyticsPlatform {
     return Future.value(mockNativeContext);
   }
 
-  final List<Object> contextObj = [
-    "build",
-    "name",
-    "namespace",
-    "version"
-  ];
+  final List<Object> contextObj = ["build", "name", "namespace", "version"];
 
   final List<Object> deviceObj = [
     "id",
@@ -44,27 +39,13 @@ class MockPlatform extends AnalyticsPlatform {
     "token"
   ];
 
-  final List<Object> libraryObj = [
-    "name",
-    "version"
-  ];
+  final List<Object> libraryObj = ["name", "version"];
 
-  final List<Object> networkObj = [
-    true,
-    false,
-    false
-  ];
+  final List<Object> networkObj = [true, false, false];
 
-  final List<Object> osObj = [
-    "name",
-    "version"
-  ];
+  final List<Object> osObj = ["name", "version"];
 
-  final List<Object> screenObj = [
-    100,
-    100,
-    5.5
-  ];
+  final List<Object> screenObj = [100, 100, 5.5];
 
   Object buildObject() {
     final List<Object> encondeObj = [
@@ -146,6 +127,18 @@ void main() {
           reverseContext.traits.custom["custom"]);
     });
 
+    test("NativeContext to/from json doesn't change values", () async {
+      var context = Context.fromNative(NativeContext(), UserTraits());
+      var tempJson = context.toJson();
+      for (var i = 0; i < 5; i++) {
+        final contextStr = jsonEncode(tempJson);
+        final reverseContextJson = jsonDecode(contextStr);
+        final reverseContext = Context.fromJson(reverseContextJson);
+        tempJson = reverseContext.toJson();
+      }
+      expect(context.toJson(), tempJson);
+    });
+
     test("Test encode method on NativeContext", () async {
       final context = await AnalyticsPlatform.instance.getContext();
       final contextEncode = context.encode();
@@ -186,6 +179,5 @@ void main() {
       final nativeContextApi = NativeContextApi();
       nativeContextApi.getContext(true);
     });
-    
   });
 }

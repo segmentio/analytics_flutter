@@ -459,6 +459,7 @@ ContextNetwork _$ContextNetworkFromJson(Map<String, dynamic> json) =>
     ContextNetwork(
       json['cellular'] as bool,
       json['wifi'] as bool,
+      json['bluetooth'] as bool? ?? false,
       custom: json['custom'] as Map<String, dynamic>?,
     );
 
@@ -467,6 +468,7 @@ Map<String, dynamic> _$ContextNetworkToJson(ContextNetwork instance) =>
       'custom': instance.custom,
       'cellular': instance.cellular,
       'wifi': instance.wifi,
+      'bluetooth': instance.bluetooth,
     };
 
 ContextScreen _$ContextScreenFromJson(Map<String, dynamic> json) =>
