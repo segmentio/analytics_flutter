@@ -583,5 +583,6 @@ Configuration setFlushPolicies(
       trackApplicationLifecycleEvents: a.trackApplicationLifecycleEvents,
       trackDeeplinks: a.trackDeeplinks,
       storageJson: a.storageJson,
-      token: a.token);
+      token: a.token,
+      collectDeviceId: a.collectDeviceId);
 }
