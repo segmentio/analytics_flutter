@@ -584,5 +584,5 @@ Configuration setFlushPolicies(
       trackDeeplinks: a.trackDeeplinks,
       storageJson: a.storageJson,
       token: a.token,
-      collectDeviceId: a.collectDeviceId);
+      collectDeviceId: a.collectDeviceId); //Patch for for Github issue #144
 }
