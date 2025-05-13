@@ -149,7 +149,8 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
                            (e.g., due to a missing label or other issues), the fallback value "Unknown" will be used
                            to ensure the app doesn't break due to a null value.
 
-                           // Patch for for Github issue #147 - Replaced name = packageInfo.applicationInfo.loadLabel(packageManager).toString(), with the line below
+                           Patch for for Github issue #147 - Replaced following line:
+                           name = packageInfo.applicationInfo.loadLabel(packageManager).toString(), with the line below
                          */
                         name = packageInfo.applicationInfo?.loadLabel(packageManager)?.toString() ?: "Unknown",
 
