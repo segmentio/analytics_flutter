@@ -44,7 +44,6 @@ apply plugin: 'kotlin-android'
 android {
     namespace 'com.segment.analytics'
     compileSdkVersion safeExtGet('compileSdkVersion', 35) //Patch for for Github issue #147
-    print "compileSdkVersion ${compileSdkVersion}"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
