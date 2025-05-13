@@ -1,6 +1,23 @@
 group 'com.segment.analytics'
 version '1.0-SNAPSHOT'
 
+/* Patch for for Github issue #147
+
+   safeExtGet is a Utility method to safely retrieve a value from the root project's extra properties.
+   This allows shared configuration values (like compileSdkVersion, minSdkVersion, etc.)
+   to be accessed across modules and plugins. If the property is not defined in rootProject.ext,
+   the provided fallback value will be used instead.
+
+   Note: The property must be defined in the root-level android/build.gradle file like so:
+
+   ext {
+         compileSdkVersion = 35
+         ...
+   }
+*/
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
 buildscript {
     ext.kotlin_version = '1.7.10'
     repositories {
@@ -26,7 +43,8 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.segment.analytics'
-    compileSdkVersion 31
+    compileSdkVersion safeExtGet('compileSdkVersion', 35) //Patch for for Github issue #147
+    print "compileSdkVersion ${compileSdkVersion}"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
