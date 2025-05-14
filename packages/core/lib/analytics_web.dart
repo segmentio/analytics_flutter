@@ -18,7 +18,7 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
       NativeContext(
         app: NativeContextApp(
           name: web.window.navigator.appName,
-          version: web.window.navigator.appVersion,
+          version: getAppVersion(),
           namespace: web.window.navigator.appCodeName,
         ),
         userAgent: web.window.navigator.userAgent,
@@ -28,6 +28,16 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
           width: web.window.screen.width,
         ),
       );
+      
+      /*
+          - Checks for <meta name="app-version" content="1.2.3"> in <root>/web/index.html 
+             and return the value inside 'content'
+          - Returns the browser version as fallback
+      */
+      String getAppVersion() {
+        final meta = web.document.querySelector('meta[name="app-version"]');
+        return meta?.getAttribute('content') ?? web.window.navigator.appVersion;
+      }
 }
 
 class AnalyticsWeb {
