@@ -18,7 +18,7 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
       NativeContext(
         app: NativeContextApp(
           name: web.window.navigator.appName,
-          version: getAppVersion(),
+          version: getAppVersion(), // Patch Github Issue #138
           namespace: web.window.navigator.appCodeName,
         ),
         userAgent: web.window.navigator.userAgent,
