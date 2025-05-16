@@ -55,7 +55,7 @@ abstract class RawEvent with JSONSerialisable {
   @JsonKey(name: "_metadata")
   DestinationMetadata? metadata;
 
-  RawEvent(this.type, {this.anonymousId, this.userId});
+  RawEvent(this.type, {this.anonymousId, this.userId, this.integrations,});
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -79,7 +79,7 @@ class TrackEvent extends RawEvent {
   String event;
   Map<String, dynamic>? properties;
 
-  TrackEvent(this.event, {this.properties}) : super(EventType.track);
+  TrackEvent(this.event, {this.properties, Map<String, dynamic>? integrations,}) : super(EventType.track, integrations: integrations,);
 
   factory TrackEvent.fromJson(Map<String, dynamic> json) =>
       _$TrackEventFromJson(json);
@@ -90,8 +90,8 @@ class TrackEvent extends RawEvent {
 @JsonSerializable(explicitToJson: true)
 class IdentifyEvent extends RawEvent {
   UserTraits? traits;
-  IdentifyEvent({this.traits, String? userId})
-      : super(EventType.identify, userId: userId);
+  IdentifyEvent({this.traits, String? userId, Map<String, dynamic>? integrations})
+      : super(EventType.identify, userId: userId, integrations: integrations);
 
   factory IdentifyEvent.fromJson(Map<String, dynamic> json) =>
       _$IdentifyEventFromJson(json);
@@ -105,7 +105,7 @@ class GroupEvent extends RawEvent {
   String groupId;
   GroupTraits? traits;
 
-  GroupEvent(this.groupId, {this.traits}) : super(EventType.group);
+  GroupEvent(this.groupId, {this.traits, Map<String, dynamic>? integrations}) : super(EventType.group, integrations: integrations);
 
   factory GroupEvent.fromJson(Map<String, dynamic> json) =>
       _$GroupEventFromJson(json);
@@ -117,8 +117,8 @@ class GroupEvent extends RawEvent {
 class AliasEvent extends RawEvent {
   String previousId;
 
-  AliasEvent(this.previousId, {String? userId})
-      : super(EventType.alias, userId: userId);
+  AliasEvent(this.previousId, {String? userId, Map<String, dynamic>? integrations})
+      : super(EventType.alias, userId: userId, integrations: integrations);
 
   factory AliasEvent.fromJson(Map<String, dynamic> json) =>
       _$AliasEventFromJson(json);
@@ -131,7 +131,10 @@ class ScreenEvent extends RawEvent {
   String name;
   Map<String, dynamic>? properties;
 
-  ScreenEvent(this.name, {this.properties}) : super(EventType.screen);
+  ScreenEvent(
+    this.name, {
+    this.properties,
+    Map<String, dynamic>? integrations}) : super(EventType.screen, integrations: integrations);
 
   factory ScreenEvent.fromJson(Map<String, dynamic> json) =>
       _$ScreenEventFromJson(json);
