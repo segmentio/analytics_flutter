@@ -350,7 +350,7 @@ class Context extends JSONExtendableImpl {
                 nativeContext.library as NativeContextLibrary),
         locale = nativeContext.locale ?? "",
         network = nativeContext.network == null
-            ? ContextNetwork(false, false)
+            ? ContextNetwork(false, false, false)
             : ContextNetwork.fromNative(
                 nativeContext.network as NativeContextNetwork),
         os = nativeContext.os == null
@@ -372,7 +372,7 @@ class Context extends JSONExtendableImpl {
     "device",
     "library",
     "locale",
-    "networm",
+    "network",
     "os",
     "referrer",
     "screen",
@@ -498,18 +498,21 @@ class ContextOS extends JSONExtendableImpl {
 class ContextNetwork extends JSONExtendableImpl {
   bool cellular;
   bool wifi;
+  @JsonKey(defaultValue: false)
+  bool bluetooth;
 
-  ContextNetwork(this.cellular, this.wifi, {super.custom});
+  ContextNetwork(this.cellular, this.wifi, this.bluetooth, {super.custom});
   ContextNetwork.fromNative(NativeContextNetwork nativeContextNetwork)
       : cellular = nativeContextNetwork.cellular ?? false,
-        wifi = nativeContextNetwork.wifi ?? false;
+        wifi = nativeContextNetwork.wifi ?? false,
+        bluetooth = nativeContextNetwork.bluetooth ?? false;
 
   factory ContextNetwork.fromJson(Map<String, dynamic> json) =>
       JSONExtendable.fromJson(
           json, _$ContextNetworkFromJson, ContextNetwork._builtInKeys);
   Map<String, dynamic> toJson() => _toJson(_$ContextNetworkToJson(this));
 
-  static final Set<String> _builtInKeys = {"cellular", "wifi"};
+  static final Set<String> _builtInKeys = {"cellular", "wifi", "bluetooth"};
 }
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
@@ -518,8 +521,7 @@ class ContextScreen extends JSONExtendableImpl {
   int width;
   double? density; // android only
 
-  ContextScreen(this.height, this.width,
-      {this.density, super.custom});
+  ContextScreen(this.height, this.width, {this.density, super.custom});
   ContextScreen.fromNative(NativeContextScreen nativeContextScreen)
       : height = nativeContextScreen.height ?? 0,
         width = nativeContextScreen.width ?? 0,
@@ -671,5 +673,5 @@ ContextDevice mergeContextDevice(ContextDevice a, ContextDevice b) {
 }
 
 ContextScreen mergeContextScreen(ContextScreen a, ContextScreen b) {
-  return ContextScreen(a.height, b.width, density: a.density ?? b.density);
+  return ContextScreen(a.height, a.width, density: a.density ?? b.density);
 }
