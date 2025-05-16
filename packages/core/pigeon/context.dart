@@ -7,6 +7,7 @@ class NativeContext {
   String? locale;
   NativeContextNetwork? network;
   NativeContextOS? os;
+  String? referrer;
   NativeContextScreen? screen;
   String? timezone;
   String? userAgent;

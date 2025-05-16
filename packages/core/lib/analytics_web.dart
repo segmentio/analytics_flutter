@@ -23,6 +23,7 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
         ),
         userAgent: web.window.navigator.userAgent,
         locale: web.window.navigator.language,
+        referrer: web.window.document.referrer, // SETH PLZ CHECK ME ON THIS
         screen: NativeContextScreen(
           height: web.window.screen.height,
           width: web.window.screen.width,
