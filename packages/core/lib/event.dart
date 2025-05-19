@@ -55,7 +55,7 @@ abstract class RawEvent with JSONSerialisable {
   @JsonKey(name: "_metadata")
   DestinationMetadata? metadata;
 
-  RawEvent(this.type, {this.anonymousId, this.userId, this.integrations,});
+  RawEvent(this.type, {this.anonymousId, this.userId, this.integrations,}); // Patch for Github Issue #152
 }
 
 @JsonSerializable(explicitToJson: true)
@@ -79,7 +79,7 @@ class TrackEvent extends RawEvent {
   String event;
   Map<String, dynamic>? properties;
 
-  TrackEvent(this.event, {this.properties, Map<String, dynamic>? integrations,}) : super(EventType.track, integrations: integrations,);
+  TrackEvent(this.event, {this.properties, Map<String, dynamic>? integrations,}) : super(EventType.track, integrations: integrations,); // Patch for Github Issue #152
 
   factory TrackEvent.fromJson(Map<String, dynamic> json) =>
       _$TrackEventFromJson(json);
@@ -91,7 +91,7 @@ class TrackEvent extends RawEvent {
 class IdentifyEvent extends RawEvent {
   UserTraits? traits;
   IdentifyEvent({this.traits, String? userId, Map<String, dynamic>? integrations})
-      : super(EventType.identify, userId: userId, integrations: integrations);
+      : super(EventType.identify, userId: userId, integrations: integrations); // Patch for Github Issue #152
 
   factory IdentifyEvent.fromJson(Map<String, dynamic> json) =>
       _$IdentifyEventFromJson(json);
@@ -105,7 +105,7 @@ class GroupEvent extends RawEvent {
   String groupId;
   GroupTraits? traits;
 
-  GroupEvent(this.groupId, {this.traits, Map<String, dynamic>? integrations}) : super(EventType.group, integrations: integrations);
+  GroupEvent(this.groupId, {this.traits, Map<String, dynamic>? integrations}) : super(EventType.group, integrations: integrations); // Patch for Github Issue #152
 
   factory GroupEvent.fromJson(Map<String, dynamic> json) =>
       _$GroupEventFromJson(json);
@@ -118,7 +118,7 @@ class AliasEvent extends RawEvent {
   String previousId;
 
   AliasEvent(this.previousId, {String? userId, Map<String, dynamic>? integrations})
-      : super(EventType.alias, userId: userId, integrations: integrations);
+      : super(EventType.alias, userId: userId, integrations: integrations); // Patch for Github Issue #152
 
   factory AliasEvent.fromJson(Map<String, dynamic> json) =>
       _$AliasEventFromJson(json);
@@ -134,7 +134,7 @@ class ScreenEvent extends RawEvent {
   ScreenEvent(
     this.name, {
     this.properties,
-    Map<String, dynamic>? integrations}) : super(EventType.screen, integrations: integrations);
+    Map<String, dynamic>? integrations}) : super(EventType.screen, integrations: integrations); // Patch for Github Issue #152
 
   factory ScreenEvent.fromJson(Map<String, dynamic> json) =>
       _$ScreenEventFromJson(json);
