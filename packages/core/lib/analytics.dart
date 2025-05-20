@@ -212,26 +212,30 @@ class Analytics with ClientMethods {
 
   @override
   Future track(String event, {Map<String, dynamic>? properties}) async {
-    await _process(TrackEvent(event, properties: properties ?? {}));
+    await _process(TrackEvent(event, properties: properties ?? {}, 
+    integrations: _state.integrations.state)); // Patch for Github Issue #152
   }
 
   @override
   Future screen(String name, {Map<String, dynamic>? properties}) async {
-    final event = ScreenEvent(name, properties: properties ?? {});
+    final event = ScreenEvent(name, properties: properties ?? {}, 
+    integrations: _state.integrations.state); // Patch for Github Issue #152
 
     await _process(event);
   }
 
   @override
   Future identify({String? userId, UserTraits? userTraits}) async {
-    final event = IdentifyEvent(userId: userId, traits: userTraits);
+    final event = IdentifyEvent(userId: userId, traits: userTraits, 
+    integrations: _state.integrations.state); // Patch for Github Issue #152
 
     await _process(event);
   }
 
   @override
   Future group(String groupId, {GroupTraits? groupTraits}) async {
-    final event = GroupEvent(groupId, traits: groupTraits);
+    final event = GroupEvent(groupId, traits: groupTraits, 
+    integrations: _state.integrations.state); // Patch for Github Issue #152
 
     await _process(event);
   }
@@ -240,7 +244,8 @@ class Analytics with ClientMethods {
   Future alias(String newUserId) async {
     final userInfo = await state.userInfo.state;
     final event =
-        AliasEvent(userInfo.userId ?? userInfo.anonymousId, userId: newUserId);
+        AliasEvent(userInfo.userId ?? userInfo.anonymousId, userId: newUserId, 
+        integrations: _state.integrations.state); // Patch for Github Issue #152
 
     await _process(event);
   }
