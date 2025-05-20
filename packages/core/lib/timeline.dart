@@ -99,7 +99,7 @@ class Timeline {
   Future<RawEvent?> applyPlugins(PluginType type, RawEvent event) async {
     RawEvent? result = event;
 
-    final plugins = List<Plugin>.from(_plugins[type] ?? []);
+    final plugins = List<Plugin>.from(_plugins[type] ?? []); //Patch for Github issue #157
       for (var plugin in plugins) {
         if (result != null) {
           try {
