@@ -1,5 +1,3 @@
-library analytics;
-
 import 'dart:async';
 
 import 'package:segment_analytics/client.dart';
