@@ -143,9 +143,17 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
                 NativeContext(
                     app = NativeContextApp(
                         build = appBuild,
-                        name = packageInfo.applicationInfo.loadLabel(
-                            packageManager
-                        ).toString(),
+
+                        /* Retrieves the application name from the package info, using the application's label
+                           (i.e., the app name displayed on the device). If the application name cannot be fetched
+                           (e.g., due to a missing label or other issues), the fallback value "Unknown" will be used
+                           to ensure the app doesn't break due to a null value.
+
+                           Patch for for Github issue #147 - Replaced following line:
+                           name = packageInfo.applicationInfo.loadLabel(packageManager).toString(), with the line below
+                         */
+                        name = packageInfo.applicationInfo?.loadLabel(packageManager)?.toString() ?: "Unknown",
+
                         namespace = packageInfo.packageName,
                         version = packageInfo.versionName
                     ),

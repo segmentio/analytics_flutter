@@ -1,1 +1,1 @@
-const segmentVersion = "1.1.6";
+const segmentVersion = "1.1.7";

@@ -1,3 +1,12 @@
+## 1.1.7
+
+- Fix for setFlushPolicies method is overwriting Configuration properties #144
+- Fix for Android build error on nullable receiver in sdk 35 #147
+- Fix for Context app version wrong on Flutter web #138
+- Fix for Integrations field is empty in segment analytics #152
+- Fix for AppsFlyer Destination not initializing properly #98
+- fix for Crash in Timeline.applyPlugins #157
+
 ## 1.1.6
 
 - Fix error loading storage files

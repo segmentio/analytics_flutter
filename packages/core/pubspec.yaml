@@ -1,6 +1,6 @@
 name: segment_analytics
 description: The hassle-free way to add Segment analytics to your Flutter app.
-version: 1.1.6
+version: 1.1.7
 homepage: https://github.com/segmentio/analytics_flutter#readme
 repository: https://github.com/segmentio/analytics_flutter/tree/main/packages/core#readme
 issue_tracker: https://github.com/segmentio/analytics_flutter/issues
@@ -30,9 +30,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   fake_async: ^1.0.0
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   json_serializable: ^6.8.0
-  pigeon: ^22.7.2
+  pigeon: ^25.3.1
   mockito: ^5.3.2
 
 flutter:
