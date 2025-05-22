@@ -38,6 +38,7 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
     private fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
     private val eventsChannel = "analytics/deep_link_events"
+    private val referrerUrl: String? = null
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         context = flutterPluginBinding.applicationContext
@@ -174,6 +175,7 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
                         name = "Android",
                         version = Build.VERSION.RELEASE,
                     ),
+                    referrer = referrerUrl,
                     screen = NativeContextScreen(
                         height = displayMetrics.heightPixels.toLong(),
                         width = displayMetrics.widthPixels.toLong(),
@@ -198,6 +200,7 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
                 } else {
                     val data = mapOf("url" to dataString, "referring_application" to referringApplication)
                     events.success(data)
+                    referrerUrl = dataString
                 }
             }
         }
