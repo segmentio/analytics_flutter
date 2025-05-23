@@ -9,7 +9,7 @@ This is a monorepo containing all Segment packages
 
 ## Core (`segment_analytics`)
 
-The main [`segment_analytics](http://pub.dev/packages/segment_analytics) package.
+The main [segment_analytics](http://pub.dev/packages/segment_analytics) package.
 
 [Pub.dev](http://pub.dev/packages/segment_analytics)
 
