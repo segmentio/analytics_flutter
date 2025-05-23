@@ -47,11 +47,11 @@ class SegmentDestination extends DestinationPlugin with Flushable {
 
     if (sentEvents.isNotEmpty) {
       _queuePlugin.dequeue(sentEvents);
-      log("Successfully Sent ${sentEvents.length} events.", kind: LogFilterKind.debug);
+      log("Successfully Sent ${sentEvents.length} events", kind: LogFilterKind.debug);
     }
 
     if (numFailedEvents > 0) {
-      log("Failed to send $numFailedEvents events.", kind: LogFilterKind.error);
+      log("Failed to send $numFailedEvents events", kind: LogFilterKind.error);
     }
 
     return;
