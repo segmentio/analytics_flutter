@@ -18,43 +18,57 @@ class SegmentDestination extends DestinationPlugin with Flushable {
     _queuePlugin = QueueFlushingPlugin(sendEvents);
   }
 
+  /// Splits a list of raw events into size-limited batches.
+  /// Sends them to the Segment API one by one.
+  /// Tracks which batches succeed or fail.
+  /// Only dequeues (removes) events that were successfully sent.
+  /// Logs everything for monitoring and debugging.
   Future sendEvents(List<RawEvent> events) async {
+
+    // If the events list is empty, the function exits early without doing anything.
     if (events.isEmpty) {
       return;
     }
 
+    // Break the list of events into smaller batches using the chunk() utility.
     final List<List<RawEvent>> chunkedEvents = chunk(events,
         analytics?.state.configuration.state.maxBatchSize ?? maxEventsPerBatch,
         maxKB: maxPayloadSizeInKb);
 
-    final List<RawEvent> sentEvents = [];
-    var numFailedEvents = 0;
+    final List<RawEvent> sentEvents = []; // a list to collect events that were successfully sent.
+    var numFailedEvents = 0; // a counter to keep track of how many events failed to send.
 
+    // Iterate over each batch in chunkedEvents sequentially using await
     await Future.forEach(chunkedEvents, (batch) async {
       try {
+        // Send the current batch to the server.
         final succeeded = await analytics?.httpClient.startBatchUpload(
             analytics!.state.configuration.state.writeKey, batch,
             host: _apiHost);
-        if (succeeded == null || !succeeded) {
-          numFailedEvents += batch.length;
+        // succeeded is true if the server confirms the batch was accepted.
+        if (succeeded == true) {
+          sentEvents.addAll(batch); // If the upload succeeded, all events in the batch are added to sentEvents.
+        } else {
+          numFailedEvents += batch.length; // If failed, increase the numFailedEvents counter by the number of events in the failed batch.
         }
-        sentEvents.addAll(batch);
       } catch (e) {
         numFailedEvents += batch.length;
-      } finally {
-        _queuePlugin.dequeue(sentEvents);
       }
     });
 
+    // After all batches have been processed
     if (sentEvents.isNotEmpty) {
-      log("Sent ${sentEvents.length} events", kind: LogFilterKind.debug);
+      // Remove successfully sent events from the queue and log them
+      _queuePlugin.dequeue(sentEvents);
+      log("Successfully Sent ${sentEvents.length} events.", kind: LogFilterKind.debug);
     }
 
     if (numFailedEvents > 0) {
-      log("Failed to send $numFailedEvents events", kind: LogFilterKind.error);
+      // If any events failed to send, log an error message indicating how many.
+      log("Failed to send $numFailedEvents events.", kind: LogFilterKind.error);
     }
 
-    return;
+    return; // No value is returned, but it signals that async processing is complete.
   }
 
   @override
