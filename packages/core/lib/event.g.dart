@@ -344,6 +344,7 @@ Context _$ContextFromJson(Map<String, dynamic> json) => Context(
       json['locale'] as String,
       ContextNetwork.fromJson(json['network'] as Map<String, dynamic>),
       ContextOS.fromJson(json['os'] as Map<String, dynamic>),
+      json['referrer'] as String,
       ContextScreen.fromJson(json['screen'] as Map<String, dynamic>),
       json['timezone'] as String,
       UserTraits.fromJson(json['traits'] as Map<String, dynamic>),
@@ -360,6 +361,7 @@ Map<String, dynamic> _$ContextToJson(Context instance) {
     'locale': instance.locale,
     'network': instance.network.toJson(),
     'os': instance.os.toJson(),
+    'referrer': instance.referrer,
     'screen': instance.screen.toJson(),
     'timezone': instance.timezone,
   };

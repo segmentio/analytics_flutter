@@ -39,6 +39,7 @@ struct NativeContext {
   var locale: String? = nil
   var network: NativeContextNetwork? = nil
   var os: NativeContextOS? = nil
+  var referrer: String? = nil
   var screen: NativeContextScreen? = nil
   var timezone: String? = nil
   var userAgent: String? = nil
@@ -65,12 +66,13 @@ struct NativeContext {
     if let osList = list[5] as? [Any?] {
       os = NativeContextOS.fromList(osList)
     }
+    let referrer = list[6] as? String
     var screen: NativeContextScreen? = nil
-    if let screenList = list[6] as? [Any?] {
+    if let screenList = list[7] as? [Any?] {
       screen = NativeContextScreen.fromList(screenList)
     }
-    let timezone = list[7] as? String 
-    let userAgent = list[8] as? String 
+    let timezone = list[8] as? String 
+    let userAgent = list[9] as? String 
 
     return NativeContext(
       app: app,
@@ -79,6 +81,7 @@ struct NativeContext {
       locale: locale,
       network: network,
       os: os,
+      referrer: referrer,
       screen: screen,
       timezone: timezone,
       userAgent: userAgent
@@ -92,6 +95,7 @@ struct NativeContext {
       locale,
       network?.toList(),
       os?.toList(),
+      referrer,
       screen?.toList(),
       timezone,
       userAgent,

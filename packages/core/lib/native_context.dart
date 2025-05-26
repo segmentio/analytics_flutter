@@ -16,6 +16,7 @@ class NativeContext {
     this.locale,
     this.network,
     this.os,
+    this.referrer,
     this.screen,
     this.timezone,
     this.userAgent,
@@ -33,6 +34,8 @@ class NativeContext {
 
   NativeContextOS? os;
 
+  String? referrer;
+
   NativeContextScreen? screen;
 
   String? timezone;
@@ -47,6 +50,7 @@ class NativeContext {
       locale,
       network?.encode(),
       os?.encode(),
+      referrer,
       screen?.encode(),
       timezone,
       userAgent,
@@ -72,11 +76,12 @@ class NativeContext {
       os: result[5] != null
           ? NativeContextOS.decode(result[5]! as List<Object?>)
           : null,
-      screen: result[6] != null
-          ? NativeContextScreen.decode(result[6]! as List<Object?>)
+      referrer: result[6] as String?,
+      screen: result[7] != null
+          ? NativeContextScreen.decode(result[7]! as List<Object?>)
           : null,
-      timezone: result[7] as String?,
-      userAgent: result[8] as String?,
+      timezone: result[8] as String?,
+      userAgent: result[9] as String?,
     );
   }
 }
