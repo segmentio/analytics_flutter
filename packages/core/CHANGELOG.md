@@ -1,3 +1,7 @@
+## 1.1.8
+
+- Reverting fix for #152
+
 ## 1.1.7
 
 - Fix for setFlushPolicies method is overwriting Configuration properties #144
