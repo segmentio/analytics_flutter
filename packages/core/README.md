@@ -578,6 +578,10 @@ See the [example app](../../example/README.md) to check a full test app of how t
 
 ## Release Notes
 
+### Version 1.1.8 (10 Jul 2025)
+
+Reverting fix for #152
+
 ### Version 1.1.7 (21 May 2025)
 
 1. **Fixes Github Issue [#144](https://github.com/segmentio/analytics_flutter/issues/144)** - Up to version 1.1.6, the `setFlushPolicies` method inadvertently overwrote the `Configuration.collectDeviceId`property. This issue has been resolved in version 1.1.7.
