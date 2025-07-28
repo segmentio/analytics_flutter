@@ -1,18 +1,14 @@
 library analytics_plugin_firebase;
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart' show FirebaseOptions, Firebase;
 import 'package:segment_analytics/event.dart';
 import 'package:segment_analytics/logger.dart';
-import 'package:segment_analytics/plugin.dart';
 import 'package:segment_analytics/map_transform.dart';
-
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart'
-    show FirebaseOptions, Firebase;
-
-export 'package:firebase_core/firebase_core.dart'
-    show FirebaseOptions, Firebase;
-
+import 'package:segment_analytics/plugin.dart';
 import 'package:segment_analytics_plugin_firebase/properties.dart';
+
+export 'package:firebase_core/firebase_core.dart' show FirebaseOptions, Firebase;
 
 class FirebaseDestination extends DestinationPlugin {
   final Future<void> firebaseFuture;
@@ -27,15 +23,26 @@ class FirebaseDestination extends DestinationPlugin {
 
   @override
   Future<RawEvent?> identify(IdentifyEvent event) async {
+    // Set user ID if provided
     if (event.userId != null) {
-      await FirebaseAnalytics.instance.setUserId(id: event.userId!);
+      await FirebaseAnalytics.instance.setUserId(id: event.userId);
     }
+
+    // Set user properties from traits if provided
     if (event.traits != null) {
-      await Future.wait(event.traits!.toJson().entries.map((entry) async {
-        await FirebaseAnalytics.instance
-            .setUserProperty(name: entry.key, value: entry.value.toString());
-      }));
+      // Transform and cast traits to the required format
+      final transformedTraits = recurseMapper(event.traits?.toJson(), mappings);
+      final userProperties = castParameterType(transformedTraits as Map<String, Object?>);
+
+      // Set each user property individually
+      for (final entry in userProperties.entries) {
+        await FirebaseAnalytics.instance.setUserProperty(
+          name: entry.key,
+          value: entry.value.toString(),
+        );
+      }
     }
+
     return event;
   }
 
@@ -48,44 +55,37 @@ class FirebaseDestination extends DestinationPlugin {
       switch (event.event) {
         case 'Product Clicked':
           if (!(properties.containsKey('list_id') ||
-              properties.containsKey('list_name') || 
+              properties.containsKey('list_name') ||
               properties.containsKey('name') ||
-              properties.containsKey('itemId')) ) {
+              properties.containsKey('itemId'))) {
             throw Exception("Missing properties: list_name, list_id, name and itemID");
           }
 
-          AnalyticsEventItem itemClicked = AnalyticsEventItem(
-                              itemName: properties['name'].toString(), 
-                              itemId: properties['itemId'].toString());
+          AnalyticsEventItem itemClicked =
+              AnalyticsEventItem(itemName: properties['name'].toString(), itemId: properties['itemId'].toString());
 
           await FirebaseAnalytics.instance.logSelectItem(
-              itemListName: properties['list_name'].toString(),
-              itemListId: properties['list_id'].toString(),
-              items:[itemClicked],
+            itemListName: properties['list_name'].toString(),
+            itemListId: properties['list_id'].toString(),
+            items: [itemClicked],
           );
           break;
         case 'Product Viewed':
           await FirebaseAnalytics.instance.logViewItem(
               currency: properties["currency"]?.toString(),
-              items: event.properties == null
-                  ? null
-                  : [AnalyticsEventItemJson(event.properties!)],
+              items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
               value: double.tryParse(properties["value"].toString()));
           break;
         case 'Product Added':
           await FirebaseAnalytics.instance.logAddToCart(
               currency: properties["currency"]?.toString(),
-              items: event.properties == null
-                  ? null
-                  : [AnalyticsEventItemJson(event.properties!)],
+              items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
               value: double.tryParse(properties["value"].toString()));
           break;
         case 'Product Removed':
           await FirebaseAnalytics.instance.logRemoveFromCart(
               currency: properties["currency"]?.toString(),
-              items: event.properties == null
-                  ? null
-                  : [AnalyticsEventItemJson(event.properties!)],
+              items: event.properties == null ? null : [AnalyticsEventItemJson(event.properties!)],
               value: double.tryParse(properties["value"].toString()));
           break;
         case 'Checkout Started':
@@ -147,12 +147,10 @@ class FirebaseDestination extends DestinationPlugin {
               value: double.tryParse(properties["value"].toString()));
           break;
         case 'Cart Shared':
-          if (event.properties == null ||
-              event.properties!['products'] == null) {
+          if (event.properties == null || event.properties!['products'] == null) {
             log("Error tracking event '${event.event}' for Firebase: products property must be a list of products");
           } else if (event.properties!['products'] is List) {
-            await Future.wait(
-                (event.properties!['products'] as List).map((product) async {
+            await Future.wait((event.properties!['products'] as List).map((product) async {
               final productProperties = mapProperties(product, mappings);
               if (productProperties.containsKey("contentType") &&
                   productProperties.containsKey("itemId") &&
@@ -189,20 +187,18 @@ class FirebaseDestination extends DestinationPlugin {
               searchTerm: properties["searchTerm"].toString(),
               destination: properties["destination"]?.toString(),
               endDate: properties["endDate"]?.toString(),
-              numberOfNights:
-                  int.tryParse(properties["numberOfNights"].toString()),
-              numberOfPassengers:
-                  int.tryParse(properties["numberOfPassengers"].toString()),
-              numberOfRooms:
-                  int.tryParse(properties["numberOfRooms"].toString()),
+              numberOfNights: int.tryParse(properties["numberOfNights"].toString()),
+              numberOfPassengers: int.tryParse(properties["numberOfPassengers"].toString()),
+              numberOfRooms: int.tryParse(properties["numberOfRooms"].toString()),
               origin: properties["origin"]?.toString(),
               startDate: properties["startDate"]?.toString(),
               travelClass: properties["travelClass"]?.toString());
           break;
         default:
           await FirebaseAnalytics.instance.logEvent(
-              name: sanitizeEventName(event.event),
-              parameters: castParameterType(properties));
+            name: sanitizeEventName(event.event),
+            parameters: castParameterType(properties),
+          );
           break;
       }
     } catch (error) {
@@ -213,8 +209,15 @@ class FirebaseDestination extends DestinationPlugin {
 
   @override
   Future<RawEvent?> screen(ScreenEvent event) async {
-    FirebaseAnalytics.instance
-        .logScreenView(screenClass: event.name, screenName: event.name);
+    // Transform and cast properties to the required format
+    final transformedProperties = recurseMapper(event.properties, mappings);
+    final parameters = castParameterType(transformedProperties as Map<String, Object?>);
+
+    FirebaseAnalytics.instance.logScreenView(
+      screenClass: event.name,
+      screenName: event.name,
+      parameters: parameters,
+    );
     return event;
   }
 
