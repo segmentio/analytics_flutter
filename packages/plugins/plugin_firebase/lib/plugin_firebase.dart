@@ -100,7 +100,7 @@ class FirebaseDestination extends DestinationPlugin {
               creativeName: properties["creativeName"]?.toString(),
               creativeSlot: properties["creativeSlot"]?.toString(),
               items: properties["items"] as List<AnalyticsEventItemJson>,
-              locationId: properties["locationdId"]?.toString(),
+              locationId: properties["locationId"]?.toString(),
               promotionId: properties["promotionId"]?.toString(),
               promotionName: properties["promotionName"]?.toString());
           break;
