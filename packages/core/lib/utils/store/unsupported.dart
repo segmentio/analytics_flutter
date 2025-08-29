@@ -16,6 +16,11 @@ class StoreImpl with Store {
   Future setPersisted(String key, Map<String, dynamic> value) {
     throw PlatformNotSupportedError();
   }
+  
+  @override
+  Future deletePersisted(String key) {
+    throw PlatformNotSupportedError();
+  }
 
   @override
   void dispose() {

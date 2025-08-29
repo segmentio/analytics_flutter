@@ -21,6 +21,14 @@ class StoreImpl with Store {
   Future setPersisted(String key, Map<String, dynamic> value) {
     return _writeFile(key, value);
   }
+  
+  @override
+  Future deletePersisted(String key) async {
+    final file = File(await _fileName(key));
+    if (await file.exists()) {
+      await file.delete();
+    }
+  }
 
   Future _writeFile(String fileKey, Map<String, dynamic> data) async {
     RandomAccessFile file =

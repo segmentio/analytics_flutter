@@ -20,6 +20,12 @@ class StoreImpl implements Store {
     _writeToStorage(key, value);
     return Future.value();
   }
+  
+  @override
+  Future deletePersisted(String key) {
+    localStorage.removeItem(_getFileName(key));
+    return Future.value();
+  }
 
   String _getFileName(String fileKey) {
     return "analytics-flutter-$fileKey.json";
