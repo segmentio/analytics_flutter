@@ -12,6 +12,6 @@ mixin Store {
   void dispose();
 }
 
-StoreImpl storeFactory() {
-  return StoreImpl();
+StoreImpl storeFactory({bool storageJson = true}) {
+  return StoreImpl(storageJson: storageJson);
 }

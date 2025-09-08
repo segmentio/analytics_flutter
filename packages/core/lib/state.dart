@@ -162,52 +162,39 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
   void init(ErrorHandler errorHandler, bool storageJson) {
     this._errorHandler = errorHandler;
     addListener((state) {
-      // Only persist state if storageJson is true
-      if (storageJson) {
-        if (_persistance != null) {
-          _hasUpdated = true;
-        } else {
-          _persistance = _store
-              .setPersisted(_key, toJson(state))
-              .whenComplete(_whenPersistenceComplete);
-        }
+      if (_persistance != null) {
+        _hasUpdated = true;
+      } else {
+        print("storageJson = $storageJson");
+        _persistance = storageJson
+            ? _store
+                .setPersisted(_key, toJson(state))
+                .whenComplete(_whenPersistenceComplete)
+            : null;
       }
     });
     _store.ready.then<void>((_) async {
-      // If storage is disabled, delete any existing files to prevent data leakage
-      if (!storageJson) {
-        try {
-          await _store.deletePersisted(_key);
-        } catch (e) {
-          // Ignore deletion errors, as the file might not exist
-        }
-      }
-      
       Map<String, dynamic>? rawV;
-      // Only read from storage if storageJson is true
-      if (storageJson) {
-        try {
-          rawV = await _store.getPersisted(_key);
-        } on FormatException catch (e) {
-          // Addressing https://github.com/segmentio/analytics_flutter/issues/74
-          // File corruption should be less likely with removal of async code in writes
-          // Existing corrupted files are cleaned up here without failing initialization
-          _store.setPersisted(_key, {});
-          log("Clean file $_key with format error", kind: LogFilterKind.warning);
-          final wrappedError = ErrorLoadingStorage(e);
-          errorHandler(wrappedError);
-        }
+      try {
+        rawV = await _store.getPersisted(_key);
+      } on FormatException catch (e) {
+        // Addressing https://github.com/segmentio/analytics_flutter/issues/74
+        // File corruption should be less likely with removal of async code in writes
+        // Existing corrupted files are cleaned up here without failing initialization
+        _store.setPersisted(_key, {});
+        log("Clean file $_key with format error", kind: LogFilterKind.warning);
+        final wrappedError = ErrorLoadingStorage(e);
+        errorHandler(wrappedError);
       }
       T v;
 
       if (rawV == null) {
         final init = await _initialiser();
-        // Only persist if storageJson is true
-        if (storageJson) {
-          _persistance = _store
-              .setPersisted(_key, toJson(init))
-              .whenComplete(_whenPersistenceComplete);
-        }
+        _persistance = storageJson
+            ? _store
+                .setPersisted(_key, toJson(init))
+                .whenComplete(_whenPersistenceComplete)
+            : null;
         _notifier.nonNullState = init;
         v = init;
       } else {

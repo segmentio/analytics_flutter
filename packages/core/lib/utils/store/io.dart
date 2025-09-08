@@ -9,8 +9,11 @@ import 'package:segment_analytics/utils/store/store.dart';
 import 'package:path_provider/path_provider.dart';
 
 class StoreImpl with Store {
+  final bool storageJson;
+  StoreImpl({this.storageJson = true});
   @override
   Future<Map<String, dynamic>?> getPersisted(String key) {
+    if (!storageJson) return Future.value(null);
     return _readFile(key);
   }
 
@@ -19,11 +22,13 @@ class StoreImpl with Store {
 
   @override
   Future setPersisted(String key, Map<String, dynamic> value) {
+    if (!storageJson) return Future.value();
     return _writeFile(key, value);
   }
   
   @override
   Future deletePersisted(String key) async {
+    if (!storageJson) return;
     final file = File(await _fileName(key));
     if (await file.exists()) {
       await file.delete();
