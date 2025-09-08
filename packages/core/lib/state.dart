@@ -165,7 +165,6 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
       if (_persistance != null) {
         _hasUpdated = true;
       } else {
-        print("storageJson = $storageJson");
         _persistance = storageJson
             ? _store
                 .setPersisted(_key, toJson(state))
