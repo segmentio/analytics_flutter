@@ -4,6 +4,8 @@ import 'package:segment_analytics/errors.dart';
 import 'store.dart';
 
 class StoreImpl with Store {
+  final bool storageJson;
+  StoreImpl({this.storageJson = true});
   @override
   Future<Map<String, dynamic>?> getPersisted(String key) {
     throw PlatformNotSupportedError();
@@ -27,3 +29,6 @@ class StoreImpl with Store {
     throw PlatformNotSupportedError();
   }
 }
+
+// StoreImpl createStoreImpl({bool storageJson = true}) => StoreImpl(storageJson: storageJson);
+// }
