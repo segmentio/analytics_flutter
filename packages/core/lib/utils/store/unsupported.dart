@@ -29,6 +29,3 @@ class StoreImpl with Store {
     throw PlatformNotSupportedError();
   }
 }
-
-// StoreImpl createStoreImpl({bool storageJson = true}) => StoreImpl(storageJson: storageJson);
-// }
