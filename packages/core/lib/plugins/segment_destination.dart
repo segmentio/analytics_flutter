@@ -30,24 +30,25 @@ class SegmentDestination extends DestinationPlugin with Flushable {
     final List<RawEvent> sentEvents = [];
     var numFailedEvents = 0;
 
+    // Iterate over each batch in chunkedEvents sequentially
     await Future.forEach(chunkedEvents, (batch) async {
       try {
         final succeeded = await analytics?.httpClient.startBatchUpload(
             analytics!.state.configuration.state.writeKey, batch,
             host: _apiHost);
-        if (succeeded == null || !succeeded) {
+        if (succeeded == true) { // If the upload succeeded, all events in the batch are added to sentEvents.
+          sentEvents.addAll(batch);
+        } else { // If it failed, increase the numFailedEvents counter by the number of events in the failed batch.
           numFailedEvents += batch.length;
         }
-        sentEvents.addAll(batch);
       } catch (e) {
         numFailedEvents += batch.length;
-      } finally {
-        _queuePlugin.dequeue(sentEvents);
       }
     });
 
     if (sentEvents.isNotEmpty) {
-      log("Sent ${sentEvents.length} events", kind: LogFilterKind.debug);
+      _queuePlugin.dequeue(sentEvents); // Removed events that were successfully sent from the internal queue
+      log("Successfully Sent ${sentEvents.length} events", kind: LogFilterKind.debug);
     }
 
     if (numFailedEvents > 0) {
