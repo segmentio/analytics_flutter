@@ -15,6 +15,8 @@ The main [segment_analytics](http://pub.dev/packages/segment_analytics) package.
 
 [Docs](packages/core#readme)
 
+[Changelog](packages/core/CHANGELOG.md)
+
 ## Plugins
 
 ### Adjust (`segment_analytics_plugin_adjust`)
@@ -61,10 +63,6 @@ Some destination plugins might not support all platform functionality. Refer to 
 ## Example App
 
 See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
-
-## Release Notes
-
-See our [Changelog](./CHANGELOG.md) for release notes.
 
 ## Contributing
 
