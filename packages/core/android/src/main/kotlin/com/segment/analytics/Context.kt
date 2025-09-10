@@ -30,6 +30,7 @@ data class NativeContext (
   val locale: String? = null,
   val network: NativeContextNetwork? = null,
   val os: NativeContextOS? = null,
+  val referrer: String? = null,
   val screen: NativeContextScreen? = null,
   val timezone: String? = null,
   val userAgent: String? = null
@@ -54,12 +55,13 @@ data class NativeContext (
       val os: NativeContextOS? = (list[5] as? List<Any?>)?.let {
         NativeContextOS.fromList(it)
       }
-      val screen: NativeContextScreen? = (list[6] as? List<Any?>)?.let {
+      val referrer = list[6] as? String
+      val screen: NativeContextScreen? = (list[7] as? List<Any?>)?.let {
         NativeContextScreen.fromList(it)
       }
-      val timezone = list[7] as? String
-      val userAgent = list[8] as? String
-      return NativeContext(app, device, library, locale, network, os, screen, timezone, userAgent)
+      val timezone = list[8] as? String
+      val userAgent = list[9] as? String
+      return NativeContext(app, device, library, locale, network, os, referrer, screen, timezone, userAgent)
     }
   }
   fun toList(): List<Any?> {
@@ -70,6 +72,7 @@ data class NativeContext (
       locale,
       network?.toList(),
       os?.toList(),
+      referrer,
       screen?.toList(),
       timezone,
       userAgent,
