@@ -90,7 +90,7 @@ class StoreImpl with Store {
 
   Future<Directory> _getDocumentDir() async {
     try {
-      return await getApplicationDocumentsDirectory();
+      return await getApplicationSupportDirectory();
     } catch (err) {
       throw PlatformNotSupportedError();
     }
