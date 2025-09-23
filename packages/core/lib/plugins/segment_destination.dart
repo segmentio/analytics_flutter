@@ -30,7 +30,7 @@ class SegmentDestination extends DestinationPlugin with Flushable {
     final List<RawEvent> sentEvents = [];
     var numFailedEvents = 0;
 
-    // FIXED: Only dequeue successfully sent events
+    // FIXED: Only dequeue successfully sent events 
     await Future.forEach(chunkedEvents, (batch) async {
       try {
         final succeeded = await analytics?.httpClient.startBatchUpload(
