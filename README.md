@@ -15,6 +15,8 @@ The main [segment_analytics](http://pub.dev/packages/segment_analytics) package.
 
 [Docs](packages/core#readme)
 
+[Changelog](packages/core/CHANGELOG.md)
+
 ## Plugins
 
 ### Adjust (`segment_analytics_plugin_adjust`)
@@ -61,26 +63,6 @@ Some destination plugins might not support all platform functionality. Refer to 
 ## Example App
 
 See the [example app](./example/README.md) to check a full test app of how to integrate Analytics-Flutter into your own Flutter app.
-
-## Release Notes
-
-### Version 1.1.7
-
-1. **Release Date** - 21<sup>st</sup> May 2025.
-
-2. **Fixes Github Issue [#144](https://github.com/segmentio/analytics_flutter/issues/144)** - Up to version 1.1.6, the `setFlushPolicies` method inadvertently overwrote the `Configuration.collectDeviceId`property. This issue has been resolved in version 1.1.7.
-
-3. **Fixes Github Issue [#147](https://github.com/segmentio/analytics_flutter/issues/147)** - The `compileSdkVersion` in the `build.gradle` file has been updated from 31 to 35. Previously, this caused the following error:  
-`Android build error "Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'android.content.pm.ApplicationInfo?"` . This update resolves the issue with `compileSdkVersion 35`.
-
-4. **Fixes Github Issue [#138](https://github.com/segmentio/analytics_flutter/issues/138)** - Prior to version 1.1.7, the version field returned the browser's version string instead of the app version from `pubspec.yaml`. Since `pubspec.yaml` is a build-time configuration file and not accessible at runtime (especially in browser environments), this was expected behavior.  
-As of version 1.1.7, if the following tag is added to `<project-root>/web/index.html`: `<meta name="app-version" content="1.2.3">`
-the app will return the value in the `content` attribute. 
-**Note:** This value should be manually synchronized with the version in `pubspec.yaml`.
-
-5. **Fixes Github Issue [#152](https://github.com/segmentio/analytics_flutter/issues/152) and [#98](https://github.com/segmentio/analytics_flutter/issues/98)** - Until version 1.1.6, the `integrations: {}` field was missing in the data payload sent to the Segment server. This has been addressed in version 1.1.7.
-
-6. **Fixes Github Issue [#157](https://github.com/segmentio/analytics_flutter/issues/157)** - Resolves the `Concurrent modification during iteration: Instance(length: 6) of '_GrowableList'` error that occurred when multiple plugins were added simultaneously.
 
 ## Contributing
 
