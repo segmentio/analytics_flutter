@@ -17,6 +17,7 @@ class MockPlatform extends AnalyticsPlatform {
     mockNativeContext.os = NativeContextOS();
     mockNativeContext.os!.name = "iOS";
     mockNativeContext.os!.version = "14.1";
+    mockNativeContext.referrer = "referrer";
     mockNativeContext.screen = NativeContextScreen();
     mockNativeContext.screen!.height = 800;
     mockNativeContext.screen!.width = 600;
@@ -55,6 +56,7 @@ class MockPlatform extends AnalyticsPlatform {
       "en_EN",
       networkObj,
       osObj,
+      "referrer",
       screenObj,
       "timezone",
       "userAgent"
