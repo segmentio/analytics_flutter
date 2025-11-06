@@ -159,7 +159,7 @@ class StoreImpl with Store {
             }
           }
 
-          // If no events left, try to write an empty queue and then give up
+          // If no events left, try to write an empty queue
           if (events.isEmpty) {
             final emptyBuf = utf8.encode(json.encode({_kQueueField: []}));
             try {
@@ -186,7 +186,7 @@ class StoreImpl with Store {
                 } catch (_) {}
               }
             } on FileSystemException {
-              // Give up; rethrow original error
+              // rethrow original error
               rethrow;
             }
           }
@@ -260,12 +260,12 @@ class StoreImpl with Store {
       file.closeSync();
       final contentText = utf8.decode(buffer);
       if (contentText == "{}") {
-        return null; // Prefer null to empty map, because we'll want to initialise a valid empty value.
+        return null; // empty file
       }
 
       return json.decode(contentText) as Map<String, dynamic>;
     } on FileSystemException {
-      // Can't read the file (maybe corrupted or locked) -> return null for safety
+      // Can't read the file -> return null for safety
       try {
         file?.unlockSync();
       } catch (_) {}
@@ -361,14 +361,12 @@ class StoreImpl with Store {
                 await entity.copy(destPath);
                 await entity.delete();
               } catch (_) {
-                // ignore - migration must be best-effort
               }
             }
           }
         }
       }
     } catch (_) {
-      // swallow errors; migration is optional and should not block initialization
       return;
     }
   }
