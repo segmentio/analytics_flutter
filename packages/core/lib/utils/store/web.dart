@@ -5,10 +5,13 @@ import 'package:segment_analytics/utils/store/store.dart';
 import 'package:web/web.dart' as web;
 
 class StoreImpl implements Store {
+  final bool storageJson;
+  StoreImpl({this.storageJson = true});
   web.Storage get localStorage => web.window.localStorage;
 
   @override
   Future<Map<String, dynamic>?> getPersisted(String key) {
+    if (!storageJson) return Future.value(null);
     return _readFromStorage(key);
   }
 
@@ -17,7 +20,15 @@ class StoreImpl implements Store {
 
   @override
   Future setPersisted(String key, Map<String, dynamic> value) {
+    if (!storageJson) return Future.value();
     _writeToStorage(key, value);
+    return Future.value();
+  }
+  
+  @override
+  Future deletePersisted(String key) {
+    if (!storageJson) return Future.value();
+    localStorage.removeItem(_getFileName(key));
     return Future.value();
   }
 
