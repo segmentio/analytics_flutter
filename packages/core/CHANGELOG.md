@@ -1,3 +1,7 @@
+## 1.1.10
+
+- Migrating storage to proper application data directory
+
 ## 1.1.9
 
 - Fix for storageJson configuration properly enabling/disabling writing of files on all platforms #171
