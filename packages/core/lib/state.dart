@@ -33,18 +33,19 @@ class StateManager {
     deepLinkData.init(errorHandler, storageJson);
     userInfo.init(errorHandler, storageJson);
     context.init(errorHandler, storageJson);
+    integrations.init(errorHandler, storageJson);
   }
 
   StateManager(Store store, System system, Configuration configuration)
       : system = SystemState(system),
         configuration = ConfigurationState(configuration),
-        integrations = IntegrationsState({}),
+        integrations = IntegrationsState(store),
         filters = FiltersState(store),
         deepLinkData = DeepLinkDataState(store),
         userInfo = UserInfoState(store),
         context = ContextState(store, configuration) {
     _ready = Future.wait<void>(
-            [filters.ready, deepLinkData.ready, userInfo.ready, context.ready])
+            [filters.ready, deepLinkData.ready, userInfo.ready, context.ready, integrations.ready])
         .then((_) => _isReady = true);
   }
 }
@@ -500,18 +501,49 @@ class TransformerConfigMap {
 }
 
 class IntegrationsState extends StateNotifier<Map<String, dynamic>> {
-  IntegrationsState(super.integrations);
+  final Store _store;
+  final String _key = "integrations";
+  Map<String, dynamic>? _cachedState;
+
+  IntegrationsState(this._store) : super({});
 
   @override
   Map<String, dynamic> get state => super.state;
 
   @override
-  set state(Map<String, dynamic> state) => super.state = state;
+  set state(Map<String, dynamic> newState) {
+    super.state = newState;
+    // Persist to store when state is updated
+    _store.setPersisted(_key, newState);
+  }
 
   void addIntegration(String key, Map<String, dynamic> settings) {
     final integrations = state;
     integrations[key] = settings;
     state = integrations;
+  }
+
+  // Load cached settings from store
+  Future<Map<String, dynamic>> loadCachedSettings() async {
+    if (_cachedState != null) {
+      return _cachedState!;
+    }
+
+    final cachedSettings = await _store.getPersisted(_key);
+    if (cachedSettings != null) {
+      _cachedState = cachedSettings;
+      // Update in-memory state with cached settings
+      super.state = cachedSettings;
+      return cachedSettings;
+    }
+
+    return {};
+  }
+
+  // For compatibility with the ready mechanism
+  Future<void> get ready => Future.value();
+  void init(ErrorHandler errorHandler, bool storageJson) {
+    loadCachedSettings();
   }
 }
 
