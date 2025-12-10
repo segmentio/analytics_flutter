@@ -353,18 +353,37 @@ class Analytics with ClientMethods {
   }
 
   Future _fetchSettings() async {
+    // Try to fetch settings from network
     final settings =
         await httpClient.settingsFor(state.configuration.state.writeKey);
-    if (settings == null) {
-      log("""Could not receive settings from Segment. ${state.configuration.state.defaultIntegrationSettings != null ? 'Will use the default settings.' : 'Device mode destinations will be ignored unless you specify default settings in the client config.'}""",
-          kind: LogFilterKind.warning);
 
-      state.integrations.state =
-          state.configuration.state.defaultIntegrationSettings ?? {};
-    } else {
+    if (settings != null) {
+      // Priority 1: Newly fetched settings from network
       final integrations = settings.integrations;
-      log("Received settings from Segment succesfully.");
+      log("Received settings from Segment successfully.");
       state.integrations.state = integrations;
+      return;
+    }
+
+    // Network fetch failed, check for cached settings
+    final cachedSettings = await state.integrations.loadCachedSettings();
+
+    if (cachedSettings.isNotEmpty) {
+      // Priority 2: Use cached settings if available
+      log("Could not receive settings from Segment. Using cached settings.",
+          kind: LogFilterKind.warning);
+      // No need to set state.integrations.state as loadCachedSettings already updated it
+    } else if (state.configuration.state.defaultIntegrationSettings != null) {
+      // Priority 3: Fall back to default settings if no cache
+      log("Could not receive settings from Segment. Using default settings.",
+          kind: LogFilterKind.warning);
+      state.integrations.state =
+          state.configuration.state.defaultIntegrationSettings!;
+    } else {
+      // Priority 4: Last resort - empty map
+      log("Could not receive settings from Segment. Device mode destinations will not be used unless you specify default settings in the client config.",
+          kind: LogFilterKind.warning);
+      state.integrations.state = {};
     }
   }
 

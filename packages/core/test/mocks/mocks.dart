@@ -11,6 +11,8 @@ import 'package:segment_analytics/utils/store/store.dart';
 import 'package:http/http.dart';
 import 'package:mockito/annotations.dart';
 
+import 'mock_store.dart';
+
 @GenerateNiceMocks([
   MockSpec<LogTarget>(),
   MockSpec<Request>(),
@@ -35,6 +37,12 @@ class MockPlatform extends AnalyticsPlatform {
         os: NativeContextOS(),
         screen: NativeContextScreen()));
   }
+
+  @override
+  Stream<Map<String, dynamic>> get linkStream {
+    // Return an empty stream for testing
+    return Stream<Map<String, dynamic>>.empty();
+  }
 }
 
 class Mocks {
@@ -43,6 +51,9 @@ class Mocks {
   static MockStreamSubscription<T> streamSubscription<T>() =>
       MockStreamSubscription<T>();
   static MockHTTPClient httpClient() => MockHTTPClient();
-  static MockStore store() => MockStore();
+  static Store store() => InMemoryStore(storageJson: true);
+
+  // If tests need a mockito mock for specific verification
+  static MockStore mockStore() => MockStore();
   static MockFlushPolicy flushPolicy() => MockFlushPolicy();
 }
