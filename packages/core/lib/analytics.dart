@@ -86,11 +86,15 @@ class Analytics with ClientMethods {
   /// @param isReady
   void _onStateReady() {
     if (state.configuration.state.trackDeeplinks) {
-      AnalyticsPlatform.instance.linkStream.listen((event) {
-        if (state.configuration.state.trackDeeplinks) {
-          _trackDeepLinkEvent(DeepLinkData.fromJson(event));
-        }
-      });
+      try {
+        AnalyticsPlatform.instance.linkStream.listen((event) {
+          if (state.configuration.state.trackDeeplinks) {
+            _trackDeepLinkEvent(DeepLinkData.fromJson(event));
+          }
+        });
+      } on UnimplementedError {
+        // Deep link tracking not available on this platform (e.g. web)
+      }
     }
 
     for (var plugin in _pluginsToAdd) {

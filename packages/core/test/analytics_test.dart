@@ -1,6 +1,5 @@
 import 'package:segment_analytics/analytics.dart';
 import 'package:segment_analytics/analytics_platform_interface.dart';
-import 'package:segment_analytics/client.dart';
 import 'package:segment_analytics/event.dart';
 import 'package:segment_analytics/flush_policies/count_flush_policy.dart';
 import 'package:segment_analytics/flush_policies/flush_policy.dart';
@@ -128,14 +127,36 @@ void main() {
       );
     });
 
-    test("it createClient", () async {
-      Analytics analytics = createClient(Configuration("123",
-              debug: false,
+    test("it creates Analytics with trackDeeplinks and lifecycle events enabled", () async {
+      final analytics = Analytics(
+          Configuration("123",
               trackApplicationLifecycleEvents: true,
               trackDeeplinks: true,
-              token: "abcdef12345")
-              );
+              token: "abcdef12345"),
+          Mocks.store(),
+          httpClient: (_) => httpClient);
+      await analytics.init();
       expect(analytics, isA<Analytics>());
+    });
+
+    test("trackDeeplinks should not crash on platform without linkStream", () async {
+      // Reproduces https://github.com/segmentio/analytics_flutter/issues/191
+      // MockPlatform does not override linkStream, simulating web platform behavior
+      AnalyticsPlatform.instance = MockPlatform();
+
+      final analytics = Analytics(
+          Configuration("123",
+              trackApplicationLifecycleEvents: false,
+              trackDeeplinks: true),
+          Mocks.store(),
+          httpClient: (_) => httpClient);
+      await analytics.init();
+
+      // Allow _onStateReady to fire via state.ready.then()
+      await Future.delayed(Duration(milliseconds: 100));
+
+      // If we get here without UnimplementedError, the test passes
+      analytics.track("test event after deeplink init");
     });
   });
 }
