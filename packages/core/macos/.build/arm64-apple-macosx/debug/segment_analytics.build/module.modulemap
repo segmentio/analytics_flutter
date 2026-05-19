@@ -1,0 +1,4 @@
+module segment_analytics {
+    header "/Users/sprajapati/Documents/GitHub/analytics_flutter/packages/core/macos/.build/arm64-apple-macosx/debug/segment_analytics.build/segment_analytics-Swift.h"
+    requires objc
+}
