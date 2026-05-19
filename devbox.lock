@@ -1,0 +1,57 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "flutter@3.29.2-sdk-links": {
+      "last_modified": "2025-04-17T05:47:26Z",
+      "resolved": "github:NixOS/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c#flutter",
+      "source": "devbox-search",
+      "version": "3.29.2-sdk-links",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/794lymy0hm702i1sh3gh2n1yxlzf9pcm-flutter-wrapped-3.29.2-sdk-links",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/794lymy0hm702i1sh3gh2n1yxlzf9pcm-flutter-wrapped-3.29.2-sdk-links"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4gm4n0pj4dj6hcrkf13dn94vf25wm505-flutter-wrapped-3.29.2-sdk-links",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/4gm4n0pj4dj6hcrkf13dn94vf25wm505-flutter-wrapped-3.29.2-sdk-links"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lwwg75lpllgacss5xjs4wfcnrri6biza-flutter-wrapped-3.29.2-sdk-links",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lwwg75lpllgacss5xjs4wfcnrri6biza-flutter-wrapped-3.29.2-sdk-links"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/g32kahvyc0lxy8zl8kfrcffv7nvb6fkd-flutter-wrapped-3.29.2-sdk-links",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/g32kahvyc0lxy8zl8kfrcffv7nvb6fkd-flutter-wrapped-3.29.2-sdk-links"
+        }
+      }
+    },
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2026-05-06T02:58:03Z",
+      "resolved": "github:NixOS/nixpkgs/ed67bc86e84e51d4a88e73c7fd36006dc876476f?lastModified=1778036283&narHash=sha256-62EWg6lI0qyzm7oAx5cAnGkLutvJsRBe0KkEW2JDZCE%3D"
+    }
+  }
+}

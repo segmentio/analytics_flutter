@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": {
+    "flutter": "3.29.2-sdk-links"
+  },
+  "shell": {
+    "init_hook": [
+      "export PROJECT_ROOT=\"$(git rev-parse --show-toplevel 2>/dev/null || echo $DEVBOX_PROJECT_ROOT)\""
+    ],
+    "scripts": {
+      "get": ["cd \"$PROJECT_ROOT/packages/core\" && flutter pub get"],
+      "analyze": ["cd \"$PROJECT_ROOT/packages/core\" && flutter analyze"],
+      "test": ["cd \"$PROJECT_ROOT/packages/core\" && flutter test --coverage"],
+      "check": [
+        "devbox run get",
+        "devbox run analyze",
+        "devbox run test"
+      ],
+      "codegen": ["cd \"$PROJECT_ROOT/packages/core\" && bash build_json_models.sh"],
+      "pigeon": ["cd \"$PROJECT_ROOT/packages/core\" && bash build_pigeon_plugins.sh"]
+    }
+  }
+}
