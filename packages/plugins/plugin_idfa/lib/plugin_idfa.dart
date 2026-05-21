@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:segment_analytics/event.dart';
 import 'package:segment_analytics/plugin.dart';
 import 'package:segment_analytics_plugin_idfa/native_idfa.dart';
 
@@ -15,6 +16,8 @@ class IdfaData {
 }
 
 class PluginIdfa extends Plugin {
+  Future<IdfaData>? _trackingStatusFuture;
+
   PluginIdfa({bool shouldAskPermission = true}) : super(PluginType.enrichment) {
     if (kIsWeb) {
       return;
@@ -23,15 +26,24 @@ class PluginIdfa extends Plugin {
       return;
     }
     if (shouldAskPermission) {
-      getTrackingStatus();
+      _trackingStatusFuture = getTrackingStatus();
     }
+  }
+
+  @override
+  Future<RawEvent?> execute(RawEvent event) async {
+    // Wait for the initial IDFA fetch to complete before allowing events through,
+    // so that Application Installed / Application Opened are stamped with IDFA data.
+    await _trackingStatusFuture;
+    return event;
   }
 
   /// `requestTrackingPermission()` will prompt the user for
   /// tracking permission and returns a promise you can use to
   /// make additional tracking decisions based on the user response
   Future<bool> requestTrackingPermission() async {
-    final idfaData = await getTrackingStatus();
+    _trackingStatusFuture = getTrackingStatus();
+    final idfaData = await _trackingStatusFuture!;
     return idfaData.adTrackingEnabled;
   }
 

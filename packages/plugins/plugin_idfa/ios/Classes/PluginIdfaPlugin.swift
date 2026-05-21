@@ -7,11 +7,11 @@ public class PluginIdfaPlugin: NSObject, FlutterPlugin, NativeIdfaApi {
   func getTrackingAuthorizationStatus(completion: @escaping (Result<NativeIdfaData, Error>) -> Void) {
     if #available(iOS 14, *) {
         ATTrackingManager.requestTrackingAuthorization { status in
-            let idfa = status == .authorized ? ASIdentifierManager.shared().advertisingIdentifier.uuidString : self.fallbackValue
+            let idfa = status == .authorized ? ASIdentifierManager.shared().advertisingIdentifier.uuidString : "00000000-0000-0000-0000-000000000000"
 
             completion(.success(NativeIdfaData(
               adTrackingEnabled: status == .authorized,
-              advertisingId: idfa!,
+              advertisingId: idfa,
               trackingStatus: status == .authorized ? TrackingStatus.authorized : status == .denied ? TrackingStatus.denied : status == .notDetermined ? TrackingStatus.notDetermined : status == .restricted ? TrackingStatus.restricted : TrackingStatus.unknown //self.statusToString(status)
             )));
         }
