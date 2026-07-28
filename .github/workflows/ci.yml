@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
+
+jobs:
+  test:
+    name: Test - ${{ matrix.package }}
+    runs-on: ${{ github.event.pull_request.head.repo.fork && 'ubuntu-latest' || 'ubuntu-x64' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - core
+          - plugins/plugin_adjust
+          - plugins/plugin_advertising_id
+          - plugins/plugin_amplitude
+          - plugins/plugin_appsflyer
+          - plugins/plugin_firebase
+          - plugins/plugin_idfa
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          flutter-version: 3.29.2
+
+      - name: Authenticate with Artifactory
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        uses: ./.github/actions/artifactory-oidc
+
+      - name: Get dependencies
+        run: flutter pub get
+        working-directory: packages/${{ matrix.package }}
+
+      - name: Analyze
+        run: flutter analyze
+        working-directory: packages/${{ matrix.package }}
+
+      - name: Run tests
+        run: flutter test --coverage
+        working-directory: packages/${{ matrix.package }}
+
+  all-checks:
+    name: All Checks Passed
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check all job statuses
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "One or more checks failed"
+            exit 1
+          fi

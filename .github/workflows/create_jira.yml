@@ -1,9 +1,12 @@
 name: Create Jira Ticket
 
-on: 
+on:
   issues:
     types:
       - opened
+
+permissions:
+  contents: read
 
 jobs:
   create_jira:
@@ -11,29 +14,28 @@ jobs:
     runs-on: ubuntu-latest
     environment: IssueTracker
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: Login
-      uses: atlassian/gajira-login@master
-      env:
-        JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
-        JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
-        JIRA_API_TOKEN: ${{ secrets.JIRA_TOKEN }}
-        JIRA_EPIC_KEY: ${{ secrets.JIRA_EPIC_KEY }}
-        JIRA_PROJECT: ${{ secrets.JIRA_PROJECT }}
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-    - name: Create
-      id: create
-      uses: atlassian/gajira-create@master
-      with:
-        project: ${{ secrets.JIRA_PROJECT }}
-        issuetype: Bug
-        summary: |
-          [${{ github.event.repository.name }}] (${{ github.event.issue.number }}): ${{ github.event.issue.title }}
-        description: |
-          Github Link: ${{ github.event.issue.html_url }}
-          ${{ github.event.issue.body }}
-        fields: '{"parent": {"key": "${{ secrets.JIRA_EPIC_KEY }}"}}'
+      - name: Login
+        uses: atlassian/gajira-login@c22a5debd482401472b285de4f6deedf70ddbb92 # master
+        env:
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_USER_EMAIL: ${{ secrets.JIRA_USER_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_TOKEN }}
 
-    - name: Log created issue
-      run: echo "Issue ${{ steps.create.outputs.issue }} was created"
+      - name: Create
+        id: create
+        uses: atlassian/gajira-create@1c54357fdde9dab6273a0e26d67cb175ffffe498 # master
+        with:
+          project: ${{ secrets.JIRA_PROJECT }}
+          issuetype: Bug
+          summary: |
+            [${{ github.event.repository.name }}] (${{ github.event.issue.number }}): ${{ github.event.issue.title }}
+          description: |
+            Github Link: ${{ github.event.issue.html_url }}
+            ${{ github.event.issue.body }}
+          fields: '{"parent": {"key": "${{ secrets.JIRA_EPIC_KEY }}"}}'
+
+      - name: Log created issue
+        run: echo "Issue ${{ steps.create.outputs.issue }} was created"
