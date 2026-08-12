@@ -9,14 +9,16 @@ let package = Package(
         .iOS("12.0"),
     ],
     products: [
-        .library(name: "segment_analytics", targets: ["segment_analytics"]),
+        .library(name: "segment-analytics", type: .static, targets: ["segment_analytics"]),
     ],
-    dependencies: [],
     targets: [
         .target(
             name: "segment_analytics",
             dependencies: [],
-            path: "Classes"
+            path: "Classes",
+            linkerSettings: [
+                .linkedFramework("Flutter", .when(platforms: [.iOS])),
+            ]
         ),
     ]
 )
