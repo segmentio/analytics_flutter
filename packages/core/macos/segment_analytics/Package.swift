@@ -9,15 +9,16 @@ let package = Package(
         .macOS("10.14"),
     ],
     products: [
-        .library(name: "segment-analytics", type: .static, targets: ["segment_analytics"]),
+        .library(name: "segment-analytics", targets: ["segment_analytics"]),
+    ],
+    dependencies: [
+        .package(name: "FlutterFramework", path: "../FlutterFramework"),
     ],
     targets: [
         .target(
             name: "segment_analytics",
-            dependencies: [],
-            path: "Classes",
-            linkerSettings: [
-                .linkedFramework("FlutterMacOS", .when(platforms: [.macOS])),
+            dependencies: [
+                .product(name: "FlutterFramework", package: "FlutterFramework"),
             ]
         ),
     ]

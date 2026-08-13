@@ -14,7 +14,7 @@ Analytics Flutter MacOS plugin.
   s.author           = { 'Christy Haragan' => 'charagan@twilio.com' }
 
   s.source           = { :path => '.' }
-  s.source_files     = 'Classes/**/*'
+  s.source_files     = 'segment_analytics/Sources/segment_analytics/**/*.swift'
   s.dependency 'FlutterMacOS'
 
   s.platform = :osx, '10.11'
