@@ -89,6 +89,16 @@ class StoreImpl implements Store {
         }
       }
     }
+
+    if (anonymousId != null) {
+      try {
+        final decoded = json.decode(anonymousId);
+        if (decoded is String) {
+          anonymousId = decoded;
+        }
+      } catch (_) {}
+    }
+
     return anonymousId ?? '';
   }
 }
