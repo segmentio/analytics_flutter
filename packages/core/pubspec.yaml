@@ -21,7 +21,7 @@ dependencies:
   http: ">=0.13.6 <2.0.0"
   logger: ^2.4.0
   path_provider: ^2.1.4
-  flutter_fgbg: ^0.7.1
+  flutter_fgbg: ^0.8.0
   shared_preferences: ^2.2.2
   web: ^1.1.1
 
