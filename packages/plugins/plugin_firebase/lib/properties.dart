@@ -46,28 +46,42 @@ Map<String, Object> castParameterType(Map<String, Object?> properties) {
 class AnalyticsEventItemJson extends AnalyticsEventItem {
   AnalyticsEventItemJson(Map<String, Object?> json)
       : super(
-          affiliation: json['affiliation'].toString(),
-          currency: json['currency'].toString(),
-          coupon: json['coupon'].toString(),
-          creativeName: json['creativeName'].toString(),
-          creativeSlot: json['creativeSlot'].toString(),
-          discount: num.tryParse(json['discount'].toString()),
-          index: int.tryParse(json['index'].toString()),
-          itemBrand: json['itemBrand'].toString(),
-          itemCategory: json['itemCategory'].toString(),
-          itemCategory2: json['itemCategory2'].toString(),
-          itemCategory3: json['itemCategory3'].toString(),
-          itemCategory4: json['itemCategory4'].toString(),
-          itemCategory5: json['itemCategory5'].toString(),
-          itemId: json['itemId'].toString(),
-          itemListId: json['itemListId'].toString(),
-          itemListName: json['itemListName'].toString(),
-          itemName: json['itemName'].toString(),
-          itemVariant: json['itemVariant'].toString(),
-          locationId: json['locationId'].toString(),
-          price: num.tryParse(json['price'].toString()),
-          promotionId: json['promotionId'].toString(),
-          promotionName: json['promotionName'].toString(),
-          quantity: int.tryParse(json['quantity'].toString()),
+          affiliation: json['affiliation']?.toString(),
+          currency: json['currency']?.toString(),
+          coupon: json['coupon']?.toString(),
+          creativeName: json['creativeName']?.toString(),
+          creativeSlot: json['creativeSlot']?.toString(),
+          discount: _parseNum(json['discount']),
+          index: _parseInt(json['index']),
+          itemBrand: json['itemBrand']?.toString(),
+          itemCategory: json['itemCategory']?.toString(),
+          itemCategory2: json['itemCategory2']?.toString(),
+          itemCategory3: json['itemCategory3']?.toString(),
+          itemCategory4: json['itemCategory4']?.toString(),
+          itemCategory5: json['itemCategory5']?.toString(),
+          itemId: json['itemId']?.toString(),
+          itemListId: json['itemListId']?.toString(),
+          itemListName: json['itemListName']?.toString(),
+          itemName: json['itemName']?.toString(),
+          itemVariant: json['itemVariant']?.toString(),
+          locationId: json['locationId']?.toString(),
+          price: _parseNum(json['price']),
+          promotionId: json['promotionId']?.toString(),
+          promotionName: json['promotionName']?.toString(),
+          quantity: _parseInt(json['quantity']),
         );
+
+  // Helper to safely parse num values
+  static num? _parseNum(Object? value) {
+    if (value == null) return null;
+    if (value is num) return value;
+    return num.tryParse(value.toString());
+  }
+
+  // Helper to safely parse int values
+  static int? _parseInt(Object? value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    return int.tryParse(value.toString());
+  }
 }
