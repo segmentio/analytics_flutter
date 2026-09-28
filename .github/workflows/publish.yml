@@ -16,11 +16,13 @@ permissions:
 
 env:
   ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
+  FLUTTER_SUPPRESS_ANALYTICS: "true"
+  FLUTTER_VERSION: "3.29.2"
 
 jobs:
   test:
     name: Pre-publish tests
-    runs-on: ubuntu-x64
+    runs-on: ubuntu-latest-large
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -30,10 +32,11 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
         with:
-          channel: stable
-          flutter-version: 3.29.2
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sha256: 6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4
 
       - name: Authenticate with Artifactory
         uses: ./.github/actions/artifactory-oidc
@@ -48,17 +51,18 @@ jobs:
 
   publish:
     name: Publish to pub.dev
-    runs-on: ubuntu-x64
+    runs-on: ubuntu-latest-large
     needs: [test]
     environment: production
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
         with:
-          channel: stable
-          flutter-version: 3.29.2
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sha256: 6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4
 
       - name: Publish to pub.dev (Trusted Publishing)
         run: dart pub publish --force
