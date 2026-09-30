@@ -64,8 +64,13 @@ runs:
         echo "::add-mask::$ART_TOKEN"
 
         HOST=$(echo "${ARTIFACTORY_URL}" | sed -E 's#^https?://##')
-        PUB_HOSTED_URL="https://:${ART_TOKEN}@${HOST}/artifactory/api/pub/${PUB_REPO}"
+        PUB_URL="https://${HOST}/artifactory/api/pub/${PUB_REPO}"
 
-        echo "::add-mask::${PUB_HOSTED_URL}"
-        echo "PUB_HOSTED_URL=${PUB_HOSTED_URL}" >> "$GITHUB_ENV"
+        # pub rejects credentials embedded in the URL ("user-info is not
+        # supported in url"), unlike pip and composer. The token goes into pub's
+        # own credential store instead, over stdin so it stays out of the job
+        # environment. Requires dart on PATH — Setup Flutter runs before this.
+        printf '%s' "${ART_TOKEN}" | dart pub token add "${PUB_URL}"
+
+        echo "PUB_HOSTED_URL=${PUB_URL}" >> "$GITHUB_ENV"
         echo "Configured pub to resolve through Artifactory (${PUB_REPO})"
