@@ -58,8 +58,15 @@ jobs:
         run: flutter analyze
         working-directory: packages/${{ matrix.package }}
 
+      # Only core ships tests; the plugin packages have no test/ directory and
+      # `flutter test` treats that as an error rather than a no-op.
       - name: Run tests
-        run: flutter test --coverage
+        run: |
+          if [ -d test ]; then
+            flutter test --coverage
+          else
+            echo "No test/ directory in ${{ matrix.package }} — nothing to run."
+          fi
         working-directory: packages/${{ matrix.package }}
 
   all-checks:
