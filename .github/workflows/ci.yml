@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
+  FLUTTER_SUPPRESS_ANALYTICS: "true"
+  FLUTTER_VERSION: "3.29.2"
+
+jobs:
+  test:
+    name: Test - ${{ matrix.package }}
+    runs-on: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork && 'ubuntu-latest' || 'ubuntu-latest-large' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - core
+          - plugins/plugin_adjust
+          - plugins/plugin_advertising_id
+          - plugins/plugin_amplitude
+          - plugins/plugin_appsflyer
+          - plugins/plugin_firebase
+          - plugins/plugin_idfa
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          sha256: 6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4
+
+      - name: Authenticate with Artifactory
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        uses: ./.github/actions/artifactory-oidc
+
+      - name: Get dependencies
+        run: flutter pub get
+        working-directory: packages/${{ matrix.package }}
+
+      - name: Analyze
+        run: flutter analyze
+        working-directory: packages/${{ matrix.package }}
+
+      # Only core ships tests; the plugin packages have no test/ directory and
+      # `flutter test` treats that as an error rather than a no-op.
+      - name: Run tests
+        run: |
+          if [ -d test ]; then
+            flutter test --coverage
+          else
+            echo "No test/ directory in ${{ matrix.package }} — nothing to run."
+          fi
+        working-directory: packages/${{ matrix.package }}
+
+  all-checks:
+    name: All Checks Passed
+    needs: [test]
+    # Bare ubuntu-latest gets no runner in this org, so this job queued forever
+    # and the whole workflow never concluded.
+    runs-on: ubuntu-latest-large
+    if: always()
+    steps:
+      - name: Check all job statuses
+        run: |
+          if [ "${{ needs.test.result }}" != "success" ]; then
+            echo "One or more checks failed"
+            exit 1
+          fi
