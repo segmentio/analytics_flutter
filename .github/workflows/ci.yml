@@ -65,7 +65,9 @@ jobs:
   all-checks:
     name: All Checks Passed
     needs: [test]
-    runs-on: ubuntu-latest
+    # Bare ubuntu-latest gets no runner in this org, so this job queued forever
+    # and the whole workflow never concluded.
+    runs-on: ubuntu-latest-large
     if: always()
     steps:
       - name: Check all job statuses
