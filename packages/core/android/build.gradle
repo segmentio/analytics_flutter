@@ -25,7 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace 'com.segment.analytics'
+    namespace 'com.segment.analytics.flutter'
     compileSdkVersion 35 //Patch for for Github issue #147
 
     compileOptions {
