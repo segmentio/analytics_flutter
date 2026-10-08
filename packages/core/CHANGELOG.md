@@ -1,3 +1,11 @@
+## 1.1.13
+
+- Fixed Swift Package Manager support for iOS and macOS: the package now uses the layout Flutter 3.44+ expects (#213)
+- Allow `flutter_fgbg` 0.8.x, which adds Swift Package Manager support, on Dart 3.8+ (#218)
+- Android: changed the plugin namespace to `com.segment.analytics.flutter` so it no longer collides with analytics-kotlin under AGP 9 (#215)
+- Web: the anonymousId read from analytics.js localStorage no longer includes surrounding quotes. Affected users' anonymousId will now match analytics.js (#197)
+- Fixed `context.library.version` and the User-Agent reporting 1.1.11 in 1.1.12
+
 ## 1.1.12
 
 - Added Swift Package Manager support for iOS and macOS
