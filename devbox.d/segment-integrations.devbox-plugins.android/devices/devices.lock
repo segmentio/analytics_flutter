@@ -1,0 +1,19 @@
+{
+  "devices": [
+    {
+      "name": "medium_phone_api36",
+      "api": "36.1",
+      "device": "medium_phone",
+      "tag": "google_apis_playstore",
+      "filename": "max"
+    },
+    {
+      "name": "pixel_api21",
+      "api": 21,
+      "device": "pixel",
+      "tag": "google_apis",
+      "filename": "min"
+    }
+  ],
+  "checksum": "d489119af00ea8562a5bbb190b7fced74981b36a4ffbb8bf70b2e5ed20536d2a"
+}
