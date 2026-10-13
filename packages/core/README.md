@@ -58,6 +58,8 @@ Run:
 
 `flutter pub add segment_analytics`
 
+> **Flutter version compatibility:** `segment_analytics` 1.2.0 and newer require Flutter 3.38+ (iOS UIScene life cycle support). If you are on an older Flutter version, pin `segment_analytics: 1.1.12`.
+
 ```dart
 import 'package:segment_analytics/client.dart';
 ```
