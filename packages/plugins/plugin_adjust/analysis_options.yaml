@@ -1,3 +1,10 @@
+analyzer:
+  exclude:
+    # types.g.dart is generated and references this package's own @Deprecated
+    # fields, which trips deprecated_member_use_from_same_package. The findings
+    # are not actionable without regenerating away the deprecation itself.
+    - "**/*.g.dart"
+
 include: package:flutter_lints/flutter.yaml
 
 # Additional information about this file can be found at
