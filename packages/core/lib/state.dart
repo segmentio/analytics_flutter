@@ -160,7 +160,7 @@ abstract class PersistedState<T> implements AsyncStateNotifier<T> {
   }
 
   void init(ErrorHandler errorHandler, bool storageJson) {
-    this._errorHandler = errorHandler;
+    _errorHandler = errorHandler;
     addListener((state) {
       if (_persistance != null) {
         _hasUpdated = true;

@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import Foundation
 
-public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, FlutterStreamHandler, FlutterApplicationLifeCycleDelegate {
+public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, FlutterStreamHandler, FlutterApplicationLifeCycleDelegate, FlutterSceneLifeCycleDelegate {
     private var pendingDeeplinkEventsQueue:[[String:String?]] = []
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         _eventSink = events
@@ -16,15 +16,26 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
     }
     
     var _eventSink:FlutterEventSink?;
-    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool{
-        let sourceApplication = options[.sourceApplication] as? String;
+    private func handleDeeplink(url: URL, sourceApplication: String?) {
+        let event: [String:String?] = ["url": url.absoluteString, "referring_application": sourceApplication]
         if (_eventSink != nil) {
-            _eventSink?(["url": url.absoluteString, "referring_application": sourceApplication])
-        }else{
-            pendingDeeplinkEventsQueue.append(["url": url.absoluteString, "referring_application": sourceApplication]);
+            _eventSink?(event)
+        } else {
+            pendingDeeplinkEventsQueue.append(event)
         }
+    }
 
+    // UIApplicationDelegate path (apps that have not adopted the UIScene life cycle).
+    public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool{
+        handleDeeplink(url: url, sourceApplication: options[.sourceApplication] as? String)
+        return false
+    }
 
+    // UIScene path: Flutter forwards both warm URLs and the cold-start launch URL here.
+    public func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) -> Bool {
+        for context in URLContexts {
+            handleDeeplink(url: context.url, sourceApplication: context.options.sourceApplication)
+        }
         return false
     }
 
@@ -105,5 +116,6 @@ public class AnalyticsPlugin: NSObject, FlutterPlugin, NativeContextApi, Flutter
         let channel:FlutterEventChannel = FlutterEventChannel(name: "analytics/deep_link_events", binaryMessenger: registrar.messenger())
         channel.setStreamHandler(api)
         registrar.addApplicationDelegate(plugin)
+        registrar.addSceneDelegate(plugin)
     }
 }

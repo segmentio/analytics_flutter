@@ -8,7 +8,7 @@ Manually add this package to your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
-  analytics_plugin_adjust:
+  segment_analytics_plugin_adjust:
     git:
       url: https://github.com/segmentio/analytics_flutter
       ref: main

@@ -13,7 +13,7 @@ The hassle-free way to add Segment analytics to your Flutter app.
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Segment' => 'support@segment.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
+  s.source_files = 'segment_analytics/Sources/segment_analytics/**/*.swift'
   s.dependency 'Flutter'
   s.platform = :ios, '9.0'
 

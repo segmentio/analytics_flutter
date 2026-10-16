@@ -1,13 +1,13 @@
 name: segment_analytics
 description: The hassle-free way to add Segment analytics to your Flutter app.
-version: 1.1.7
+version: 1.2.0
 homepage: https://github.com/segmentio/analytics_flutter#readme
 repository: https://github.com/segmentio/analytics_flutter/tree/main/packages/core#readme
 issue_tracker: https://github.com/segmentio/analytics_flutter/issues
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
-  flutter: ">=3.16.0"
+  flutter: ">=3.38.0"
 
 dependencies:
   flutter:
@@ -21,7 +21,7 @@ dependencies:
   http: ">=0.13.6 <2.0.0"
   logger: ^2.4.0
   path_provider: ^2.1.4
-  flutter_fgbg: ^0.7.1
+  flutter_fgbg: ">=0.7.1 <0.9.0"
   shared_preferences: ^2.2.2
   web: ^1.1.1
 

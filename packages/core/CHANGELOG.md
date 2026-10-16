@@ -1,11 +1,48 @@
+## 1.2.0
+
+- Added iOS UIScene life cycle support (deep links are now received via `scene(_:openURLContexts:)`)
+- **Breaking:** requires Flutter 3.38 or newer. Apps on an older Flutter version should stay on `segment_analytics: 1.1.13`
+
+## 1.1.13
+
+- Fixed Swift Package Manager support for iOS and macOS: the package now uses the layout Flutter 3.44+ expects (#213)
+- Allow `flutter_fgbg` 0.8.x, which adds Swift Package Manager support, on Dart 3.8+ (#218)
+- Android: changed the plugin namespace to `com.segment.analytics.flutter` so it no longer collides with analytics-kotlin under AGP 9 (#215)
+- Web: the anonymousId read from analytics.js localStorage no longer includes surrounding quotes. Affected users' anonymousId will now match analytics.js (#197)
+- Fixed `context.library.version` and the User-Agent reporting 1.1.11 in 1.1.12
+
+## 1.1.12
+
+- Added Swift Package Manager support for iOS and macOS
+
+## 1.1.11
+
+- Introduces file size checks on analytics-flutter-queue_flushing_plugin.json file so that the SDK avoids queuing events that would push the on-disk queue file above 512 KB.
+
+## 1.1.10
+
+- Migrating storage to proper application data directory
+
+## 1.1.9
+
+- Fix for storageJson configuration properly enabling/disabling writing of files on all platforms #171
+
+## 1.1.8
+
+- Reverting fix for #152 - The `integrations` field is vestigial and remains available for SDK users to populate to suppress extra events from server side destinations.
+
 ## 1.1.7
 
-- Fix for setFlushPolicies method is overwriting Configuration properties #144
-- Fix for Android build error on nullable receiver in sdk 35 #147
-- Fix for Context app version wrong on Flutter web #138
-- Fix for Integrations field is empty in segment analytics #152
+- Fix for setFlushPolicies method is overwriting Configuration properties #144 - Up to version 1.1.6, the `setFlushPolicies` method inadvertently overwrote the `Configuration.collectDeviceId`property.
+- Fix for Android build error on nullable receiver in sdk 35 #147  - The `compileSdkVersion` in the `build.gradle` file has been updated from 31 to 35. Previously, this caused the following error:  
+`Android build error "Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'android.content.pm.ApplicationInfo?"`.
+- Fix for Context app version wrong on Flutter web #138 - Prior to version 1.1.7, the version field returned the browser's version string instead of the app version from `pubspec.yaml`. Since `pubspec.yaml` is a build-time configuration file and not accessible at runtime (especially in browser environments), this was expected behavior.  
+As of version 1.1.7, if the following tag is added to `<project-root>/web/index.html`: `<meta name="app-version" content="1.2.3">`
+the app will return the value in the `content` attribute. 
+**Note:** This value should be manually synchronized with the version in `pubspec.yaml`.
+- Fix for Integrations field is empty in segment analytics #152 - Until version 1.1.6, the `integrations: {}` field was missing in the data payload sent to the Segment server.
 - Fix for AppsFlyer Destination not initializing properly #98
-- fix for Crash in Timeline.applyPlugins #157
+- fix for Crash in Timeline.applyPlugins #157 - Resolves the `Concurrent modification during iteration: Instance(length: 6) of '_GrowableList'` error that occurred when multiple plugins were added simultaneously.
 
 ## 1.1.6
 

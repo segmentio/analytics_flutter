@@ -12,7 +12,9 @@ class AnalyticsPlatformImpl extends AnalyticsPlatform {
   /// Constructs a AnalyticsWeb
   AnalyticsPlatformImpl();
 
-  /// Returns a [String] containing the version of the platform.
+  @override
+  Stream<Map<String, dynamic>> get linkStream => const Stream.empty();
+
   @override
   Future<NativeContext> getContext({bool collectDeviceId = false}) async =>
       NativeContext(

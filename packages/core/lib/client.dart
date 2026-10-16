@@ -19,7 +19,10 @@ Analytics createClient(Configuration configuration) {
     configuration = setFlushPolicies(configuration, defaultFlushPolicies);
   }
 
-  final analytics = Analytics(configuration, storeFactory());
+  final analytics = Analytics(
+    configuration,
+    storeFactory(storageJson: configuration.storageJson ?? true),
+  );
 
   if (configuration.debug) {
     analytics.addPlugin(EventLogger());
