@@ -1,3 +1,8 @@
+## 1.2.0
+
+- Added iOS UIScene life cycle support (deep links are now received via `scene(_:openURLContexts:)`)
+- **Breaking:** requires Flutter 3.38 or newer. Apps on an older Flutter version should stay on `segment_analytics: 1.1.13`
+
 ## 1.1.13
 
 - Fixed Swift Package Manager support for iOS and macOS: the package now uses the layout Flutter 3.44+ expects (#213)

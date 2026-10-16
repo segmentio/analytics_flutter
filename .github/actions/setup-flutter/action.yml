@@ -9,7 +9,7 @@ inputs:
   flutter-version:
     description: "Flutter SDK version to install from the stable channel"
     required: false
-    default: "3.29.2"
+    default: "3.38.0"
   sha256:
     description: "Expected SHA-256 of the Linux SDK archive. Empty skips verification."
     required: false
