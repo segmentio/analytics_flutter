@@ -1,6 +1,6 @@
 # Releasing
 
-This repository is a monorepo of independently versioned packages published to [pub.dev](https://pub.dev). Publishing runs in CI (`.github/workflows/publish.yml`) using pub.dev [automated publishing](https://dart.dev/tools/pub/automated-publishing) (OIDC, no stored credentials). Nobody runs `dart pub publish` from a laptop.
+This repository is a monorepo of independently versioned packages published to [pub.dev](https://pub.dev). Pushing a package-qualified tag publishes that package from CI (`.github/workflows/publish.yml`) using pub.dev [automated publishing](https://dart.dev/tools/pub/automated-publishing) (OIDC, no stored credentials).
 
 ## Packages
 
@@ -40,26 +40,37 @@ Plugins depend on core through a pub.dev constraint (`segment_analytics: ^1.x`),
    dart pub publish --dry-run
    ```
 
-3. **Publish.** Core: publish a GitHub Release on `main` with tag `segment_analytics-vX.Y.Z`. That fires `publish.yml`, which always publishes `packages/core`; the tag does not select the package. A plugin: run the **Publish to pub.dev** workflow manually (`workflow_dispatch`) with `package` set to its path under `packages/`, e.g. `plugins/plugin_firebase`.
-4. **Approve** the `publish` job if the `production` environment requires review. The workflow runs the package's tests first and publishes only if they pass.
+3. **Tag and push** from `main` at the merged release commit:
+
+   ```bash
+   git tag segment_analytics-vX.Y.Z
+   git push origin segment_analytics-vX.Y.Z
+   ```
+
+   The tag is `<pubspec name>-v<version>`, e.g. `segment_analytics_plugin_firebase-v1.0.2` for a plugin. The tag alone selects the package.
+4. **Approve** the `publish` job when it pauses on the `production` environment. Before that, the workflow checks that the tag, `pubspec.yaml`, the newest `CHANGELOG.md` section and (for core) `lib/version.dart` agree, that the commit is on `main`, and that the package's tests pass. A failure there publishes nothing.
 5. **Verify** the version appears on the package's pub.dev page and that a fresh `flutter pub add <package>` resolves it.
 
-When releasing several packages, wait for core to appear on pub.dev before publishing a plugin that needs it.
+When releasing several packages, wait for core to appear on pub.dev before tagging a plugin that needs it.
 
-## Tags
+## Re-running a failed publish
 
-Use `<package>-v<version>` (`segment_analytics-v1.2.0`, `segment_analytics_plugin_firebase-v1.0.2`). Packages version independently, so a bare `vX.Y.Z` is ambiguous. The tag pattern configured under each package's **Admin → Automated publishing** on pub.dev must match this format.
+If the tag-triggered run failed for a transient reason, re-run it from the Actions tab. If the tag points at the wrong commit, fix `main`, then delete and recreate the tag.
 
-## One-time setup per package (pub.dev)
+The **Publish to pub.dev** workflow can also be started by hand (`workflow_dispatch`) with `package` set to `core` or `plugins/plugin_<name>`. It runs the same checks. Do not tag afterwards: the tag would start a second publish of a version that already exists, which fails.
 
-On each package's **Admin** tab, under **Automated publishing**, choose **Publishing from GitHub Actions** (not the Google Cloud service account option) and set:
+## One-time setup
+
+**GitHub:** the `production` environment (Settings → Environments) needs required reviewers, and its deployment branches and tags limited to `main` and the tag patterns `segment_analytics-v*` and `segment_analytics_plugin_*-v*`. The pub.dev environment requirement below only checks that the job names the environment; the reviewers are what make it a gate.
+
+**pub.dev, per package:** on the package's **Admin** tab, under **Automated publishing**, choose **Publishing from GitHub Actions** (not the Google Cloud service account option) and set:
 
 - **Repository:** `segmentio/analytics_flutter`
-- **Tag pattern:** `<package>-v{{version}}` (see Tags above)
-- **`workflow_dispatch`:** enabled, so plugins can be released from the manual trigger
-- **Environment:** `production`, exactly as named in `publish.yml`. A mismatch fails every publish with an authorization error.
+- **Tag pattern:** `<package>-v{{version}}`, matching the tag above
+- **Push** and **`workflow_dispatch`:** both enabled
+- **Environment:** `production`, exactly as named in `publish.yml`
 
-A package without this fails at the publish step with an authorization error.
+Without this the publish step fails with an authorization error.
 
 ## Changing the Flutter version
 
@@ -73,4 +84,4 @@ Take the checksum for the `stable/linux/flutter_linux_<version>-stable.tar.xz` a
 
 ## Break-glass
 
-If automated publishing is unavailable, a pub.dev publisher can run `dart pub publish` locally from the package directory after `dart pub login`. Record the release in the CHANGELOG as usual and tag it afterwards.
+If automated publishing is unavailable, a pub.dev uploader can run `dart pub publish` locally from the package directory after `dart pub login`. Tag the release afterwards, noting that pushing the tag starts the workflow, which will fail on the already-published version; that is harmless.
