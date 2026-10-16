@@ -52,7 +52,14 @@ Use `<package>-v<version>` (`segment_analytics-v1.2.0`, `segment_analytics_plugi
 
 ## One-time setup per package (pub.dev)
 
-On each package's **Admin** tab, enable automated publishing from GitHub Actions for repository `segmentio/analytics_flutter` with the tag pattern above. A package without this fails at the publish step with an authorization error.
+On each package's **Admin** tab, under **Automated publishing**, choose **Publishing from GitHub Actions** (not the Google Cloud service account option) and set:
+
+- **Repository:** `segmentio/analytics_flutter`
+- **Tag pattern:** `<package>-v{{version}}` (see Tags above)
+- **`workflow_dispatch`:** enabled, so plugins can be released from the manual trigger
+- **Environment:** `production`, exactly as named in `publish.yml`. A mismatch fails every publish with an authorization error.
+
+A package without this fails at the publish step with an authorization error.
 
 ## Changing the Flutter version
 
