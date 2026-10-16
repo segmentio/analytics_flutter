@@ -13,9 +13,6 @@ import Foundation
 
 import SystemConfiguration
 import UIKit
-#if !os(tvOS)
-import WebKit
-#endif
 
 internal class iOSVendorSystem: VendorSystem {
     private let device = UIDevice.current
@@ -64,23 +61,21 @@ internal class iOSVendorSystem: VendorSystem {
     }
     
     override var userAgent: String? {
-        #if !os(tvOS)
-        var userAgent: String?
-        
-        if Thread.isMainThread {
-            userAgent = WKWebView().value(forKey: "userAgent") as? String
-        } else {
-            DispatchQueue.main.sync {
-              userAgent = WKWebView().value(forKey: "userAgent") as? String
-            }
-        }
-
-        return userAgent
-        #else
-        // webkit isn't on tvos
-        return "unknown"
-        #endif
+        return iOSVendorSystem.generatedUserAgent
     }
+    
+    private static let generatedUserAgent: String = {
+        #if os(tvOS)
+        return "unknown"
+        #else
+        let v = ProcessInfo.processInfo.operatingSystemVersion
+        let version = v.patchVersion > 0
+            ? "\(v.majorVersion)_\(v.minorVersion)_\(v.patchVersion)"
+            : "\(v.majorVersion)_\(v.minorVersion)"
+        let model = UIDevice.current.model.contains("iPhone") ? "iPhone" : "iPad"
+        return "Mozilla/5.0 (\(model); CPU \(model) OS \(version) like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148"
+        #endif
+    }()
     
     override var connection: ConnectionStatus {
         return connectionStatus()
@@ -186,7 +181,6 @@ internal class watchOSVendorSystem: VendorSystem {
 #if os(macOS)
 
 import Cocoa
-import WebKit
 
 internal class MacOSVendorSystem: VendorSystem {
     private let device = ProcessInfo.processInfo
@@ -230,16 +224,7 @@ internal class MacOSVendorSystem: VendorSystem {
     }
     
     override var userAgent: String? {
-        var userAgent: String?
-        if Thread.isMainThread {
-            userAgent = WKWebView().value(forKey: "userAgent") as? String
-        } else {
-            DispatchQueue.main.sync {
-              userAgent = WKWebView().value(forKey: "userAgent") as? String
-            }
-        }
-        
-        return userAgent
+        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
     }
     
     override var connection: ConnectionStatus {

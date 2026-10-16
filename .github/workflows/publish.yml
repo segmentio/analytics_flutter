@@ -23,7 +23,7 @@ permissions:
 env:
   ARTIFACTORY_URL: ${{ vars.ARTIFACTORY_URL }}
   FLUTTER_SUPPRESS_ANALYTICS: "true"
-  FLUTTER_VERSION: "3.29.2"
+  FLUTTER_VERSION: "3.38.0"
 
 jobs:
   meta:
@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/setup-flutter
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          sha256: 6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4
+          sha256: c9cc746283f02dbad5da2785b4837b62f7956e3135fa9af87c7dde2d2bd6c5a6
 
       - name: Authenticate with Artifactory
         uses: ./.github/actions/artifactory-oidc
@@ -89,7 +89,7 @@ jobs:
         uses: ./.github/actions/setup-flutter
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
-          sha256: 6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4
+          sha256: c9cc746283f02dbad5da2785b4837b62f7956e3135fa9af87c7dde2d2bd6c5a6
 
       - name: Publish to pub.dev (Trusted Publishing)
         run: dart pub publish --force
