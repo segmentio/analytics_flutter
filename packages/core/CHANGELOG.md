@@ -1,7 +1,9 @@
-## 1.2.0
+## 2.0.0
 
-- Added iOS UIScene life cycle support (deep links are now received via `scene(_:openURLContexts:)`)
-- **Breaking:** requires Flutter 3.38 or newer. Apps on an older Flutter version should stay on `segment_analytics: 1.1.13`
+- **Breaking:** requires Flutter 3.38 or newer on every platform. Apps on an older Flutter version should stay on `segment_analytics: 1.1.13` (#220)
+- iOS: added UIScene life cycle support. Deep links are now also received via `scene(_:openURLContexts:)`, so `trackDeeplinks` keeps working in apps that adopt UIScene (#220)
+- iOS: the User-Agent is now generated the same way as analytics-swift instead of being read from a `WKWebView`, which blocked the main thread for up to ~300 ms at launch. It now reports the real OS version (e.g. `iPhone OS 26_4_1` rather than WebKit's frozen `18_7`), and iPads report `CPU iPad OS` (#222)
+- Web: fixed persistence under WebAssembly builds (`flutter build web --wasm`), which fell back to an unsupported storage stub (#165)
 
 ## 1.1.13
 

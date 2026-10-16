@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Allow `segment_analytics` 2.x
+
 ## 1.0.1
 
 - Updated dependencies
