@@ -1,12 +1,18 @@
 name: Publish to pub.dev
 
+# pub.dev automated publishing accepts only tag pushes and workflow_dispatch; a
+# `release` event is rejected. The tag selects the package (see
+# .github/scripts/check-release-metadata.sh). workflow_dispatch is for re-running
+# a publish whose tag-triggered run failed.
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'segment_analytics-v[0-9]+.[0-9]+.[0-9]+*'
+      - 'segment_analytics_plugin_*-v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
     inputs:
       package:
-        description: "Package to publish (e.g. core, plugins/plugin_firebase)"
+        description: "Package to publish (core, or plugins/plugin_<name>)"
         required: true
         default: "core"
 
@@ -20,9 +26,29 @@ env:
   FLUTTER_VERSION: "3.38.0"
 
 jobs:
+  meta:
+    name: Resolve package and check release metadata
+    runs-on: ubuntu-latest-large
+    outputs:
+      package: ${{ steps.check.outputs.package }}
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Check release metadata
+        id: check
+        run: .github/scripts/check-release-metadata.sh
+        env:
+          EVENT: ${{ github.event_name }}
+          TAG: ${{ github.ref_name }}
+          PACKAGE: ${{ github.event.inputs.package }}
+
   test:
     name: Pre-publish tests
     runs-on: ubuntu-latest-large
+    needs: [meta]
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -43,16 +69,17 @@ jobs:
 
       - name: Get dependencies
         run: flutter pub get
-        working-directory: packages/${{ github.event.inputs.package || 'core' }}
+        working-directory: packages/${{ needs.meta.outputs.package }}
 
       - name: Run tests
-        run: flutter test
-        working-directory: packages/${{ github.event.inputs.package || 'core' }}
+        run: |
+          if [ -d test ]; then flutter test; else echo "no test/ directory, skipping"; fi
+        working-directory: packages/${{ needs.meta.outputs.package }}
 
   publish:
     name: Publish to pub.dev
     runs-on: ubuntu-latest-large
-    needs: [test]
+    needs: [meta, test]
     environment: production
 
     steps:
@@ -66,4 +93,4 @@ jobs:
 
       - name: Publish to pub.dev (Trusted Publishing)
         run: dart pub publish --force
-        working-directory: packages/${{ github.event.inputs.package || 'core' }}
+        working-directory: packages/${{ needs.meta.outputs.package }}
