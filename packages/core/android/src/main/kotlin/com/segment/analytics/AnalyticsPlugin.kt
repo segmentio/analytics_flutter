@@ -24,6 +24,10 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.PluginRegistry
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 import java.util.*
 
@@ -89,101 +93,103 @@ class AnalyticsPlugin : FlutterPlugin, NativeContextApi, EventChannel.StreamHand
         collectDeviceId: Boolean,
         callback: (Result<NativeContext>) -> Unit
     ) {
-        val displayMetrics = context!!.resources.displayMetrics
-        val packageManager = context!!.packageManager
-        val packageInfo = packageManager.getPackageInfo(context!!.packageName, 0)
-        val appBuild = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            packageInfo.longVersionCode.toString()
-        } else {
-            @Suppress("DEPRECATION")
-            packageInfo.versionCode.toString()
-        }
-        val deviceId = if (collectDeviceId) {
-            getUniqueId()
-        } else {
-            null
-        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val displayMetrics = context!!.resources.displayMetrics
+            val packageManager = context!!.packageManager
+            val packageInfo = packageManager.getPackageInfo(context!!.packageName, 0)
+            val appBuild = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.longVersionCode.toString()
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.versionCode.toString()
+            }
+            val deviceId = if (collectDeviceId) {
+                getUniqueId()
+            } else {
+                null
+            }
 
-        var wifiConnected: Boolean? = null
-        var cellularConnected: Boolean? = null
-        var bluetoothConnected: Boolean? = null
+            var wifiConnected: Boolean? = null
+            var cellularConnected: Boolean? = null
+            var bluetoothConnected: Boolean? = null
 
-        if (context!!.checkCallingOrSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-            val connectivityManager =
-                getSystemService<ConnectivityManager>(context!!, Context.CONNECTIVITY_SERVICE)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) @Suppress("DEPRECATION") {
-                connectivityManager.allNetworks.forEach {
-                    val capabilities = connectivityManager.getNetworkCapabilities(it)
-                    // we don't know which network is which at this point, so using
-                    // the or-map allows us to capture the value across all networks
-                    wifiConnected =
-                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
-                    cellularConnected =
-                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
-                    bluetoothConnected =
-                        capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ?: false
+            if (context!!.checkCallingOrSelfPermission(Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+                val connectivityManager =
+                    getSystemService<ConnectivityManager>(context!!, Context.CONNECTIVITY_SERVICE)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) @Suppress("DEPRECATION") {
+                    connectivityManager.allNetworks.forEach {
+                        val capabilities = connectivityManager.getNetworkCapabilities(it)
+                        // we don't know which network is which at this point, so using
+                        // the or-map allows us to capture the value across all networks
+                        wifiConnected =
+                            capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ?: false
+                        cellularConnected =
+                            capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ?: false
+                        bluetoothConnected =
+                            capabilities?.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ?: false
+                    }
+                } else @Suppress("DEPRECATION") {
+                    val wifiInfo =
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                    wifiConnected = wifiInfo?.isConnected ?: false
+
+                    val bluetoothInfo =
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH)
+                    bluetoothConnected = bluetoothInfo?.isConnected ?: false
+
+                    val cellularInfo =
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+                    cellularConnected = cellularInfo?.isConnected ?: false
                 }
-            } else @Suppress("DEPRECATION") {
-                val wifiInfo =
-                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                wifiConnected = wifiInfo?.isConnected ?: false
+            }
 
-                val bluetoothInfo =
-                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_BLUETOOTH)
-                bluetoothConnected = bluetoothInfo?.isConnected ?: false
+            val result = NativeContext(
+                app = NativeContextApp(
+                    build = appBuild,
 
-                val cellularInfo =
-                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-                cellularConnected = cellularInfo?.isConnected ?: false
+                    /* Retrieves the application name from the package info, using the application's label
+                       (i.e., the app name displayed on the device). If the application name cannot be fetched
+                       (e.g., due to a missing label or other issues), the fallback value "Unknown" will be used
+                       to ensure the app doesn't break due to a null value.
+
+                       Patch for for Github issue #147 - Replaced following line:
+                       name = packageInfo.applicationInfo.loadLabel(packageManager).toString(), with the line below
+                     */
+                    name = packageInfo.applicationInfo?.loadLabel(packageManager)?.toString() ?: "Unknown",
+
+                    namespace = packageInfo.packageName,
+                    version = packageInfo.versionName
+                ),
+                device = NativeContextDevice(
+                    id = deviceId,
+                    manufacturer = Build.MANUFACTURER,
+                    model = Build.MODEL,
+                    name = Build.DEVICE,
+                    type = "android"
+                ),
+                locale = Locale.getDefault().language + "-" + Locale.getDefault().country,
+                network = NativeContextNetwork(
+                    cellular = cellularConnected,
+                    wifi = wifiConnected,
+                    bluetooth = bluetoothConnected,
+                ),
+                os = NativeContextOS(
+                    name = "Android",
+                    version = Build.VERSION.RELEASE,
+                ),
+                screen = NativeContextScreen(
+                    height = displayMetrics.heightPixels.toLong(),
+                    width = displayMetrics.widthPixels.toLong(),
+                    density = displayMetrics.density.toDouble(),
+                ),
+                timezone = TimeZone.getDefault().id,
+                userAgent = System.getProperty("http.agent")
+            )
+
+            withContext(Dispatchers.Main) {
+                callback(Result.success(result))
             }
         }
-
-        callback(
-            Result.success(
-                NativeContext(
-                    app = NativeContextApp(
-                        build = appBuild,
-
-                        /* Retrieves the application name from the package info, using the application's label
-                           (i.e., the app name displayed on the device). If the application name cannot be fetched
-                           (e.g., due to a missing label or other issues), the fallback value "Unknown" will be used
-                           to ensure the app doesn't break due to a null value.
-
-                           Patch for for Github issue #147 - Replaced following line:
-                           name = packageInfo.applicationInfo.loadLabel(packageManager).toString(), with the line below
-                         */
-                        name = packageInfo.applicationInfo?.loadLabel(packageManager)?.toString() ?: "Unknown",
-
-                        namespace = packageInfo.packageName,
-                        version = packageInfo.versionName
-                    ),
-                    device = NativeContextDevice(
-                        id = deviceId,
-                        manufacturer = Build.MANUFACTURER,
-                        model = Build.MODEL,
-                        name = Build.DEVICE,
-                        type = "android"
-                    ),
-                    locale = Locale.getDefault().language + "-" + Locale.getDefault().country,
-                    network = NativeContextNetwork(
-                        cellular = cellularConnected,
-                        wifi = wifiConnected,
-                        bluetooth = bluetoothConnected,
-                    ),
-                    os = NativeContextOS(
-                        name = "Android",
-                        version = Build.VERSION.RELEASE,
-                    ),
-                    screen = NativeContextScreen(
-                        height = displayMetrics.heightPixels.toLong(),
-                        width = displayMetrics.widthPixels.toLong(),
-                        density = displayMetrics.density.toDouble(),
-                    ),
-                    timezone = TimeZone.getDefault().id,
-                    userAgent = System.getProperty("http.agent")
-                )
-            )
-        )
     }
 
     @NonNull
