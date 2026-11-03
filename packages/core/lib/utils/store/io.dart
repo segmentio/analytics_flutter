@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:segment_analytics/errors.dart';
 import 'package:segment_analytics/utils/store/store.dart';
 import 'package:path_provider/path_provider.dart';
@@ -61,31 +62,11 @@ class StoreImpl with Store {
   }
 
   Future _writeFile(String fileKey, Map<String, dynamic> data) async {
-    // Serialize once; may be replaced by trimmed version below
-    String serialized = json.encode(data);
-    List<int> buffer = utf8.encode(serialized);
-
-    // If this is the queue file, enforce size limits by trimming oldest events
-    if (fileKey == _kQueueFileKey) {
-      // Ensure we operate against the configured queue field name.
-      final currentEvents = <dynamic>[];
-      if (data[_kQueueField] is List) {
-        currentEvents.addAll(data[_kQueueField] as List);
-      }
-
-      // If the serialized payload is already too large, attempt trim before writing
-      if (buffer.length > _kMaxQueueBytes) {
-        final trimmed = _trimQueueToTargetMap(data, _kTargetQueueBytes, _kQueueField);
-        serialized = json.encode(trimmed);
-        buffer = utf8.encode(serialized);
-
-        // If still too big after trimming to target, write empty queue as last resort
-        if (buffer.length > _kMaxQueueBytes) {
-          serialized = json.encode({_kQueueField: []});
-          buffer = utf8.encode(serialized);
-        }
-      }
-    }
+    final queue = data[_kQueueField];
+    final String serialized = fileKey == _kQueueFileKey && queue is List
+        ? encodeQueue(queue, _kQueueField, _kMaxQueueBytes, _kTargetQueueBytes)
+        : json.encode(data);
+    final List<int> buffer = utf8.encode(serialized);
 
     RandomAccessFile? file;
     try {
@@ -208,40 +189,6 @@ class StoreImpl with Store {
         file?.closeSync();
       } catch (_) {}
     }
-  }
-
-  /// Trim the queue in [data] (expected to be a map containing an array under [queueField])
-  /// until the serialized size is <= targetBytes. Returns a new Map containing
-  /// the trimmed queue list.
-  Map<String, dynamic> _trimQueueToTargetMap(
-      Map<String, dynamic> data, int targetBytes, String queueField) {
-    final events = <dynamic>[];
-    if (data[queueField] is List) {
-      events.addAll(data[queueField] as List);
-    }
-
-    // If no events or not a list, return minimal representation
-    if (events.isEmpty) {
-      return {queueField: []};
-    }
-
-    // Fast path: if current serialized size is already small enough, return input
-    var candidate = {queueField: events};
-    var s = json.encode(candidate);
-    var b = utf8.encode(s);
-    if (b.length <= targetBytes) {
-      return candidate;
-    }
-
-    // Iteratively remove oldest events until serialized size <= targetBytes or no events left
-    while (b.length > targetBytes && events.isNotEmpty) {
-      events.removeAt(0);
-      candidate = {queueField: events};
-      s = json.encode(candidate);
-      b = utf8.encode(s);
-    }
-
-    return {queueField: events};
   }
 
   Future<Map<String, dynamic>?> _readFile(String fileKey) async {
@@ -370,4 +317,25 @@ class StoreImpl with Store {
       return;
     }
   }
+}
+
+/// Encodes `{queueField: events}`. If that would exceed [maxBytes], the oldest
+/// events are dropped so the result fits in [targetBytes].
+@visibleForTesting
+String encodeQueue(
+    List<dynamic> events, String queueField, int maxBytes, int targetBytes) {
+  final parts = <String>[];
+  var bytes = utf8.encode(json.encode({queueField: []})).length;
+  int? fitsTarget;
+  for (var i = events.length - 1; i >= 0; i--) {
+    final part = json.encode(events[i]);
+    bytes += utf8.encode(part).length + (parts.isEmpty ? 0 : 1);
+    if (bytes > targetBytes) fitsTarget ??= parts.length;
+    if (bytes > maxBytes) {
+      parts.length = fitsTarget!;
+      break;
+    }
+    parts.add(part);
+  }
+  return '{${json.encode(queueField)}:[${parts.reversed.join(',')}]}';
 }
