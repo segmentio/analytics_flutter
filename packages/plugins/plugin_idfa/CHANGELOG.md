@@ -1,3 +1,7 @@
+## 1.0.4
+
+- Allow `segment_analytics` 2.x
+
 ## 1.0.3
 
 - Fixed Swift Package Manager support for iOS: the package now uses the layout Flutter 3.44+ expects
