@@ -81,6 +81,9 @@ jobs:
     runs-on: ubuntu-latest-large
     needs: [meta, test]
     environment: production
+    # Without credentials `dart pub publish` waits for an interactive browser
+    # login that can never complete on a runner; fail instead of hanging.
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -91,6 +94,20 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           sha256: c9cc746283f02dbad5da2785b4837b62f7956e3135fa9af87c7dde2d2bd6c5a6
 
+      # `dart pub publish` does not request the GitHub OIDC token itself.
+      # dart-lang/setup-dart does this (createPubOIDCToken), but org policy only
+      # admits actions/*, so it is done here the same way.
       - name: Publish to pub.dev (Trusted Publishing)
-        run: dart pub publish --force
+        run: |
+          PUB_TOKEN=$(curl -sSf \
+            -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://pub.dev" | jq -r '.value')
+          if [ -z "$PUB_TOKEN" ] || [ "$PUB_TOKEN" = "null" ]; then
+            echo "::error::could not obtain a GitHub OIDC token for pub.dev"
+            exit 1
+          fi
+          echo "::add-mask::$PUB_TOKEN"
+          export PUB_TOKEN
+          dart pub token add https://pub.dev --env-var PUB_TOKEN
+          dart pub publish --force
         working-directory: packages/${{ needs.meta.outputs.package }}
