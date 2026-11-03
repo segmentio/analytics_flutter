@@ -1,20 +1,16 @@
 name: Publish to pub.dev
 
-# pub.dev automated publishing accepts only tag pushes and workflow_dispatch; a
-# `release` event is rejected. The tag selects the package (see
-# .github/scripts/check-release-metadata.sh). workflow_dispatch is for re-running
-# a publish whose tag-triggered run failed.
+# pub.dev automated publishing accepts only tag pushes and workflow_dispatch, and
+# only from a tag ref: a dispatch on a branch is rejected ("this token has
+# 'branch' refType"). The tag selects the package (see
+# .github/scripts/check-release-metadata.sh). workflow_dispatch re-runs a release
+# tag's publish: gh workflow run publish.yml --ref <tag>.
 on:
   push:
     tags:
       - 'segment_analytics-v[0-9]+.[0-9]+.[0-9]+*'
       - 'segment_analytics_plugin_*-v[0-9]+.[0-9]+.[0-9]+*'
   workflow_dispatch:
-    inputs:
-      package:
-        description: "Package to publish (core, or plugins/plugin_<name>)"
-        required: true
-        default: "core"
 
 permissions:
   id-token: write
@@ -41,9 +37,8 @@ jobs:
         id: check
         run: .github/scripts/check-release-metadata.sh
         env:
-          EVENT: ${{ github.event_name }}
+          REF_TYPE: ${{ github.ref_type }}
           TAG: ${{ github.ref_name }}
-          PACKAGE: ${{ github.event.inputs.package }}
 
   test:
     name: Pre-publish tests
