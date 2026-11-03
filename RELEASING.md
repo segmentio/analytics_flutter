@@ -55,13 +55,21 @@ When releasing several packages, wait for core to appear on pub.dev before taggi
 
 ## Re-running a failed publish
 
-If the tag-triggered run failed for a transient reason, re-run it from the Actions tab. If the tag points at the wrong commit, fix `main`, then delete and recreate the tag.
+pub.dev only accepts publishes from a tag ref. A run dispatched on a branch, `main` included, fails with "this token has 'branch' refType".
 
-The **Publish to pub.dev** workflow can also be started by hand (`workflow_dispatch`) with `package` set to `core` or `plugins/plugin_<name>`. It runs the same checks. Do not tag afterwards: the tag would start a second publish of a version that already exists, which fails.
+- **Transient failure:** re-run the tag's run from the Actions tab, or `gh workflow run publish.yml --ref <tag>`. Both use the workflow and code as of the tag.
+- **Wrong commit, or the workflow itself needed a fix:** fix `main`, then delete and recreate the tag on it. This is safe only while the version is not on pub.dev.
+
+```
+git push origin --delete <tag>
+git tag -d <tag>
+git tag <tag>            # on the updated main
+git push origin <tag>
+```
 
 ## One-time setup
 
-**GitHub:** the `production` environment (Settings → Environments) needs required reviewers, and its deployment branches and tags limited to `main` and the tag patterns `segment_analytics-v*` and `segment_analytics_plugin_*-v*`. The pub.dev environment requirement below only checks that the job names the environment; the reviewers are what make it a gate.
+**GitHub:** the `production` environment (Settings → Environments) needs required reviewers, and its deployment branches and tags limited to the tag patterns `segment_analytics-v*` and `segment_analytics_plugin_*-v*`. The pub.dev environment requirement below only checks that the job names the environment; the reviewers are what make it a gate.
 
 **pub.dev, per package:** on the package's **Admin** tab, under **Automated publishing**, choose **Publishing from GitHub Actions** (not the Google Cloud service account option) and set:
 
